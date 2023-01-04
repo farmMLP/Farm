@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProductsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProductsRepository::class)]
@@ -21,6 +23,18 @@ class Products
 
     #[ORM\Column]
     private ?int $stock = null;
+
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Batch::class, orphanRemoval: true)]
+    private Collection $batches;
+
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: MedicalSamples::class, orphanRemoval: true)]
+    private Collection $medicalSamples;
+
+    public function __construct()
+    {
+        $this->batches = new ArrayCollection();
+        $this->medicalSamples = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -59,6 +73,66 @@ class Products
     public function setStock(int $stock): self
     {
         $this->stock = $stock;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Batch>
+     */
+    public function getBatches(): Collection
+    {
+        return $this->batches;
+    }
+
+    public function addBatch(Batch $batch): self
+    {
+        if (!$this->batches->contains($batch)) {
+            $this->batches->add($batch);
+            $batch->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBatch(Batch $batch): self
+    {
+        if ($this->batches->removeElement($batch)) {
+            // set the owning side to null (unless already changed)
+            if ($batch->getProduct() === $this) {
+                $batch->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MedicalSamples>
+     */
+    public function getMedicalSamples(): Collection
+    {
+        return $this->medicalSamples;
+    }
+
+    public function addMedicalSample(MedicalSamples $medicalSample): self
+    {
+        if (!$this->medicalSamples->contains($medicalSample)) {
+            $this->medicalSamples->add($medicalSample);
+            $medicalSample->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMedicalSample(MedicalSamples $medicalSample): self
+    {
+        if ($this->medicalSamples->removeElement($medicalSample)) {
+            // set the owning side to null (unless already changed)
+            if ($medicalSample->getProduct() === $this) {
+                $medicalSample->setProduct(null);
+            }
+        }
 
         return $this;
     }

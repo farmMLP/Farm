@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\OrdersRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OrdersRepository::class)]
@@ -18,6 +20,26 @@ class Orders
 
     #[ORM\Column(length: 255)]
     private ?string $memo = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Status $status = null;
+
+    #[ORM\ManyToOne(inversedBy: 'orders')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?HealthCenter $healthCenter = null;
+
+    #[ORM\OneToMany(mappedBy: 'petition', targetEntity: ProductsByOrder::class, orphanRemoval: true)]
+    private Collection $productsByOrders;
+
+    public function __construct()
+    {
+        $this->productsByOrders = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -47,4 +69,71 @@ class Orders
 
         return $this;
     }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getStatus(): ?Status
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?Status $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getHealthCenter(): ?HealthCenter
+    {
+        return $this->healthCenter;
+    }
+
+    public function setHealthCenter(?HealthCenter $healthCenter): self
+    {
+        $this->healthCenter = $healthCenter;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProductsByOrder>
+     */
+    public function getProductsByOrders(): Collection
+    {
+        return $this->productsByOrders;
+    }
+
+    public function addProductsByOrder(ProductsByOrder $productsByOrder): self
+    {
+        if (!$this->productsByOrders->contains($productsByOrder)) {
+            $this->productsByOrders->add($productsByOrder);
+            $productsByOrder->setPetition($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductsByOrder(ProductsByOrder $productsByOrder): self
+    {
+        if ($this->productsByOrders->removeElement($productsByOrder)) {
+            // set the owning side to null (unless already changed)
+            if ($productsByOrder->getPetition() === $this) {
+                $productsByOrder->setPetition(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

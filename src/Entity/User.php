@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -28,6 +30,18 @@ class User
 
     #[ORM\Column(length: 255)]
     private ?string $email = null;
+
+    #[ORM\OneToMany(mappedBy: 'idUser', targetEntity: Orders::class)]
+    private Collection $orders;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Batch::class)]
+    private Collection $batches;
+
+    public function __construct()
+    {
+        $this->orders = new ArrayCollection();
+        $this->batches = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -90,6 +104,66 @@ class User
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Orders>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Orders $order): self
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setIdUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Orders $order): self
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getIdUser() === $this) {
+                $order->setIdUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Batch>
+     */
+    public function getBatches(): Collection
+    {
+        return $this->batches;
+    }
+
+    public function addBatch(Batch $batch): self
+    {
+        if (!$this->batches->contains($batch)) {
+            $this->batches->add($batch);
+            $batch->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBatch(Batch $batch): self
+    {
+        if ($this->batches->removeElement($batch)) {
+            // set the owning side to null (unless already changed)
+            if ($batch->getUser() === $this) {
+                $batch->setUser(null);
+            }
+        }
 
         return $this;
     }

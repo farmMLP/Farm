@@ -19,6 +19,14 @@ class MedicalSamples
     #[ORM\Column]
     private ?\DateTimeImmutable $expirationDate = null;
 
+    #[ORM\ManyToOne(inversedBy: 'medicalSamples')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?HealthCenter $healthCenter = null;
+
+    #[ORM\ManyToOne(inversedBy: 'medicalSamples')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Products $product = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +52,30 @@ class MedicalSamples
     public function setExpirationDate(\DateTimeImmutable $expirationDate): self
     {
         $this->expirationDate = $expirationDate;
+
+        return $this;
+    }
+
+    public function getHealthCenter(): ?HealthCenter
+    {
+        return $this->healthCenter;
+    }
+
+    public function setHealthCenter(?HealthCenter $healthCenter): self
+    {
+        $this->healthCenter = $healthCenter;
+
+        return $this;
+    }
+
+    public function getProduct(): ?Products
+    {
+        return $this->product;
+    }
+
+    public function setProduct(?Products $product): self
+    {
+        $this->product = $product;
 
         return $this;
     }

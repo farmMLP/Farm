@@ -25,6 +25,14 @@ class Batch
     #[ORM\Column(length: 255)]
     private ?string $code = null;
 
+    #[ORM\ManyToOne(inversedBy: 'batches')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
+    #[ORM\ManyToOne(inversedBy: 'batches')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Products $product = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +82,30 @@ class Batch
     public function setCode(string $code): self
     {
         $this->code = $code;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getProduct(): ?Products
+    {
+        return $this->product;
+    }
+
+    public function setProduct(?Products $product): self
+    {
+        $this->product = $product;
 
         return $this;
     }
