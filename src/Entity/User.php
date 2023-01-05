@@ -3,97 +3,42 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $lastname = null;
+    #[ORM\Column(length: 180, unique: true)]
+    private ?string $email = null;
+
+    #[ORM\Column]
+    private array $roles = [];
+
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column]
+    private ?string $password = null;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(type: Types::BIGINT)]
-    private ?string $dni = null;
-
     #[ORM\Column(length: 255)]
-    private ?string $password = null;
+    private ?string $lastname = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $email = null;
-
-    #[ORM\OneToMany(mappedBy: 'idUser', targetEntity: Orders::class)]
-    private Collection $orders;
-
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Batch::class)]
-    private Collection $batches;
-
-    public function __construct()
-    {
-        $this->orders = new ArrayCollection();
-        $this->batches = new ArrayCollection();
-    }
+    #[ORM\Column]
+    private ?int $dni = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getLastname(): ?string
-    {
-        return $this->lastname;
-    }
-
-    public function setLastname(string $lastname): self
-    {
-        $this->lastname = $lastname;
-
-        return $this;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    public function getDni(): ?string
-    {
-        return $this->dni;
-    }
-
-    public function setDni(string $dni): self
-    {
-        $this->dni = $dni;
-
-        return $this;
-    }
-
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
-
-        return $this;
     }
 
     public function getEmail(): ?string
@@ -109,63 +54,91 @@ class User
     }
 
     /**
-     * @return Collection<int, Orders>
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
      */
-    public function getOrders(): Collection
+    public function getUserIdentifier(): string
     {
-        return $this->orders;
+        return (string) $this->email;
     }
 
-    public function addOrder(Orders $order): self
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
     {
-        if (!$this->orders->contains($order)) {
-            $this->orders->add($order);
-            $order->setIdUser($this);
-        }
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
 
-        return $this;
+        return array_unique($roles);
     }
 
-    public function removeOrder(Orders $order): self
+    public function setRoles(array $roles): self
     {
-        if ($this->orders->removeElement($order)) {
-            // set the owning side to null (unless already changed)
-            if ($order->getIdUser() === $this) {
-                $order->setIdUser(null);
-            }
-        }
+        $this->roles = $roles;
 
         return $this;
     }
 
     /**
-     * @return Collection<int, Batch>
+     * @see PasswordAuthenticatedUserInterface
      */
-    public function getBatches(): Collection
+    public function getPassword(): string
     {
-        return $this->batches;
+        return $this->password;
     }
 
-    public function addBatch(Batch $batch): self
+    public function setPassword(string $password): self
     {
-        if (!$this->batches->contains($batch)) {
-            $this->batches->add($batch);
-            $batch->setUser($this);
-        }
+        $this->password = $password;
 
         return $this;
     }
 
-    public function removeBatch(Batch $batch): self
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
     {
-        if ($this->batches->removeElement($batch)) {
-            // set the owning side to null (unless already changed)
-            if ($batch->getUser() === $this) {
-                $batch->setUser(null);
-            }
-        }
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }
 
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): self
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function getDni(): ?int
+    {
+        return $this->dni;
+    }
+
+    public function setDni(int $dni): self
+    {
+        $this->dni = $dni;
+
+        return $this;
+    }
 }
