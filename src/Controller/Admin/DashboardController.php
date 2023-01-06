@@ -12,6 +12,7 @@ use App\Entity\Products;
 use App\Entity\HealthCenter;
 use App\Entity\MedicalSamples;
 use App\Entity\Batch;
+use App\Entity\Orders;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 
 
@@ -93,6 +94,12 @@ class DashboardController extends AbstractDashboardController
             //   MenuItem::linkToCrud('Create product', 'fas fa-plus', ProductoCrudController::class)->setAction(Crud::PAGE_NEW),
               MenuItem::linkToCrud('Ver muestras médicas', 'fas fa-eye', MedicalSamples::class),
               MenuItem::linkToCrud('Crear muestras médicas', 'fas fa-plus', MedicalSamples::class)->setAction(Crud::PAGE_NEW)
+            ]); 
+        yield MenuItem::section('Pedidos');
+        yield MenuItem::subMenu('Acciones', 'fas fa-bars')->setSubItems([
+            //   MenuItem::linkToCrud('Create product', 'fas fa-plus', ProductoCrudController::class)->setAction(Crud::PAGE_NEW),
+              MenuItem::linkToCrud('Ver Pedidos', 'fas fa-eye', Orders::class),
+              MenuItem::linkToCrud('Crear Pedidos', 'fas fa-plus', Orders::class)->setAction(Crud::PAGE_NEW)
             ]); 
     }
 }
