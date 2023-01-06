@@ -10,6 +10,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use App\Entity\Products;
 use App\Entity\HealthCenter;
+use App\Entity\MedicalSamples;
+use App\Entity\Batch;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 
 
@@ -73,12 +75,24 @@ class DashboardController extends AbstractDashboardController
               MenuItem::linkToCrud('Crear producto', 'fas fa-plus', Products::class)->setAction(Crud::PAGE_NEW)
             ]);
 
-
-            yield MenuItem::section('Centros de salud');
-            yield MenuItem::subMenu('Acciones', 'fas fa-bars')->setSubItems([
-                //   MenuItem::linkToCrud('Create product', 'fas fa-plus', ProductoCrudController::class)->setAction(Crud::PAGE_NEW),
-                  MenuItem::linkToCrud('Ver centros', 'fas fa-eye', HealthCenter::class),
-                  MenuItem::linkToCrud('Crear centros', 'fas fa-plus', HealthCenter::class)->setAction(Crud::PAGE_NEW)
-                ]);       
+        yield MenuItem::section('Centros de salud');
+        yield MenuItem::subMenu('Acciones', 'fas fa-bars')->setSubItems([
+            //   MenuItem::linkToCrud('Create product', 'fas fa-plus', ProductoCrudController::class)->setAction(Crud::PAGE_NEW),
+              MenuItem::linkToCrud('Ver centros', 'fas fa-eye', HealthCenter::class),
+              MenuItem::linkToCrud('Crear centros', 'fas fa-plus', HealthCenter::class)->setAction(Crud::PAGE_NEW)
+            ]);
+        
+        yield MenuItem::section('Lotes');
+        yield MenuItem::subMenu('Acciones', 'fas fa-bars')->setSubItems([
+            //   MenuItem::linkToCrud('Create product', 'fas fa-plus', ProductoCrudController::class)->setAction(Crud::PAGE_NEW),
+              MenuItem::linkToCrud('Ver Lotes', 'fas fa-eye', Batch::class),
+              MenuItem::linkToCrud('Crear Lotes', 'fas fa-plus', Batch::class)->setAction(Crud::PAGE_NEW)
+            ]);
+        yield MenuItem::section('Muestras médicas');
+        yield MenuItem::subMenu('Acciones', 'fas fa-bars')->setSubItems([
+            //   MenuItem::linkToCrud('Create product', 'fas fa-plus', ProductoCrudController::class)->setAction(Crud::PAGE_NEW),
+              MenuItem::linkToCrud('Ver muestras médicas', 'fas fa-eye', MedicalSamples::class),
+              MenuItem::linkToCrud('Crear muestras médicas', 'fas fa-plus', MedicalSamples::class)->setAction(Crud::PAGE_NEW)
+            ]); 
     }
 }

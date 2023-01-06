@@ -4,9 +4,7 @@ namespace App\Controller\Admin;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
-use App\Entity\Week;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\HealthCenter;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -23,11 +21,11 @@ class HealthCenterCrudController extends AbstractCrudController
     {
         return [
             // IdField::new('id'),
-            TextField::new('name'),
-            TextField::new('address'),
-            NumberField::new('phonenumber'),
-            AssociationField::new('user'),
-            AssociationField::new('shipmentDay')
+            TextField::new('name', 'Nombre del Centro de salud'),
+            TextField::new('address', 'Dirección'),
+            NumberField::new('phonenumber', 'Teléfono'),
+            AssociationField::new('user', 'Usuario encargado del centro'),
+            AssociationField::new('shipmentDay', 'Dia de entrega asociado al centro')
         ];
     }
     
