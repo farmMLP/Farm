@@ -13,6 +13,7 @@ use App\Entity\HealthCenter;
 use App\Entity\MedicalSamples;
 use App\Entity\Batch;
 use App\Entity\Orders;
+use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 
 
@@ -32,11 +33,11 @@ class DashboardController extends AbstractDashboardController
     {
         // return parent::index();
 
-        $url = $this->adminUrlGenerator
-        ->setController(UserCrudController::class)
-        ->generateUrl();
+        // $url = $this->adminUrlGenerator
+        // ->setController(UserCrudController::class)
+        // ->generateUrl();
 
-        return $this->redirect($url);
+        // return $this->redirect($url);
 
 
 
@@ -55,7 +56,7 @@ class DashboardController extends AbstractDashboardController
         // Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
         // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
         //
-        // return $this->render('some/path/my-dashboard.html.twig');
+        return $this->render('admin/dashboard.html.twig');
     }
 
     public function configureDashboard(): Dashboard
@@ -66,8 +67,42 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        yield MenuItem::linkToDashboard('Inicio', 'fa fa-home');
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
+
+        yield MenuItem::section('Usuarios');
+        yield MenuItem::subMenu('Acciones', 'fas fa-bars')->setSubItems([
+            //   MenuItem::linkToCrud('Create product', 'fas fa-plus', ProductoCrudController::class)->setAction(Crud::PAGE_NEW),
+              MenuItem::linkToCrud('Ver usuarios', 'fas fa-eye', User::class),
+              MenuItem::linkToCrud('Crear usuario', 'fas fa-plus', User::class)->setAction(Crud::PAGE_NEW)
+           ]);
+
+        yield MenuItem::section('Pedidos');
+        yield MenuItem::subMenu('Acciones', 'fas fa-bars')->setSubItems([
+            //   MenuItem::linkToCrud('Create product', 'fas fa-plus', ProductoCrudController::class)->setAction(Crud::PAGE_NEW),
+              MenuItem::linkToCrud('Ver Pedidos', 'fas fa-eye', Orders::class),
+              MenuItem::linkToCrud('Crear pedido', 'fas fa-plus', Orders::class)->setAction('main')
+            ]); 
+
+        yield MenuItem::section('Centros de salud');
+        yield MenuItem::subMenu('Acciones', 'fas fa-bars')->setSubItems([
+            //   MenuItem::linkToCrud('Create product', 'fas fa-plus', ProductoCrudController::class)->setAction(Crud::PAGE_NEW),
+              MenuItem::linkToCrud('Ver centros', 'fas fa-eye', HealthCenter::class),
+              MenuItem::linkToCrud('Crear centro', 'fas fa-plus', HealthCenter::class)->setAction(Crud::PAGE_NEW)
+            ]);
+        
+        yield MenuItem::section('Lotes');
+        yield MenuItem::subMenu('Acciones', 'fas fa-bars')->setSubItems([
+            //   MenuItem::linkToCrud('Create product', 'fas fa-plus', ProductoCrudController::class)->setAction(Crud::PAGE_NEW),
+              MenuItem::linkToCrud('Ver Lotes', 'fas fa-eye', Batch::class),
+              MenuItem::linkToCrud('Crear lote', 'fas fa-plus', Batch::class)->setAction(Crud::PAGE_NEW)
+            ]);
+        yield MenuItem::section('Muestras médicas');
+        yield MenuItem::subMenu('Acciones', 'fas fa-bars')->setSubItems([
+            //   MenuItem::linkToCrud('Create product', 'fas fa-plus', ProductoCrudController::class)->setAction(Crud::PAGE_NEW),
+              MenuItem::linkToCrud('Ver muestras médicas', 'fas fa-eye', MedicalSamples::class),
+              MenuItem::linkToCrud('Crear muestra médica', 'fas fa-plus', MedicalSamples::class)->setAction(Crud::PAGE_NEW)
+            ]); 
 
         yield MenuItem::section('Productos');
         yield MenuItem::subMenu('Acciones', 'fas fa-bars')->setSubItems([
@@ -75,31 +110,5 @@ class DashboardController extends AbstractDashboardController
               MenuItem::linkToCrud('Ver productos', 'fas fa-eye', Products::class),
               MenuItem::linkToCrud('Crear producto', 'fas fa-plus', Products::class)->setAction(Crud::PAGE_NEW)
             ]);
-
-        yield MenuItem::section('Centros de salud');
-        yield MenuItem::subMenu('Acciones', 'fas fa-bars')->setSubItems([
-            //   MenuItem::linkToCrud('Create product', 'fas fa-plus', ProductoCrudController::class)->setAction(Crud::PAGE_NEW),
-              MenuItem::linkToCrud('Ver centros', 'fas fa-eye', HealthCenter::class),
-              MenuItem::linkToCrud('Crear centros', 'fas fa-plus', HealthCenter::class)->setAction(Crud::PAGE_NEW)
-            ]);
-        
-        yield MenuItem::section('Lotes');
-        yield MenuItem::subMenu('Acciones', 'fas fa-bars')->setSubItems([
-            //   MenuItem::linkToCrud('Create product', 'fas fa-plus', ProductoCrudController::class)->setAction(Crud::PAGE_NEW),
-              MenuItem::linkToCrud('Ver Lotes', 'fas fa-eye', Batch::class),
-              MenuItem::linkToCrud('Crear Lotes', 'fas fa-plus', Batch::class)->setAction(Crud::PAGE_NEW)
-            ]);
-        yield MenuItem::section('Muestras médicas');
-        yield MenuItem::subMenu('Acciones', 'fas fa-bars')->setSubItems([
-            //   MenuItem::linkToCrud('Create product', 'fas fa-plus', ProductoCrudController::class)->setAction(Crud::PAGE_NEW),
-              MenuItem::linkToCrud('Ver muestras médicas', 'fas fa-eye', MedicalSamples::class),
-              MenuItem::linkToCrud('Crear muestras médicas', 'fas fa-plus', MedicalSamples::class)->setAction(Crud::PAGE_NEW)
-            ]); 
-        yield MenuItem::section('Pedidos');
-        yield MenuItem::subMenu('Acciones', 'fas fa-bars')->setSubItems([
-            //   MenuItem::linkToCrud('Create product', 'fas fa-plus', ProductoCrudController::class)->setAction(Crud::PAGE_NEW),
-              MenuItem::linkToCrud('Ver Pedidos', 'fas fa-eye', Orders::class),
-              MenuItem::linkToCrud('Crear Pedidos', 'fas fa-plus', Orders::class)->setAction(Crud::PAGE_NEW)
-            ]); 
     }
 }

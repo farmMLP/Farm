@@ -40,43 +40,43 @@ class UserController extends AbstractController
         ]);
     }
 
-        #[Route('/pedido', name: 'app_pedido')]
-    public function pedido(Request $request,ManagerRegistry $doctrine): Response
-    {
+    //     #[Route('/pedido', name: 'app_pedido')]
+    // public function pedido(Request $request,ManagerRegistry $doctrine): Response
+    // {
 
-        if (isset($request->request->all()['producto'])) {
+    //     if (isset($request->request->all()['producto'])) {
 
-            $order = new Orders();
-            $order->setCreatedAt(new \DateTimeImmutable);
-            $order->setUser($this->getUser());
-            $order->setMemo('no se que es');
-            $order->setStatus($doctrine->getRepository(Status::class)->findOneById(1));
-            $order->setHealthCenter($doctrine->getRepository(HealthCenter::class)->findOneById(1));
-            $this->em->persist($order);
-            $this->em->flush();
+    //         $order = new Orders();
+    //         $order->setCreatedAt(new \DateTimeImmutable);
+    //         $order->setUser($this->getUser());
+    //         $order->setMemo('no se que es');
+    //         $order->setStatus($doctrine->getRepository(Status::class)->findOneById(1));
+    //         $order->setHealthCenter($doctrine->getRepository(HealthCenter::class)->findOneById(1));
+    //         $this->em->persist($order);
+    //         $this->em->flush();
 
-            foreach ($request->request->all()['producto'] as $key => $value) {
-                if ($request->request->all()['cantidad'][$key]!='') {
+    //         foreach ($request->request->all()['producto'] as $key => $value) {
+    //             if ($request->request->all()['cantidad'][$key]!='') {
                 
-                $productsByOrder= new ProductsByOrder();
-                $productsByOrder->setProduct($doctrine->getRepository(Products::class)->findOneById($value));
-                $productsByOrder->setQuantityRequested($request->request->all()['cantidad'][$key]);
-                $productsByOrder->setPetition($order);
-                $this->em->persist($productsByOrder);
-                }
-            }
-            $this->em->flush();
+    //             $productsByOrder= new ProductsByOrder();
+    //             $productsByOrder->setProduct($doctrine->getRepository(Products::class)->findOneById($value));
+    //             $productsByOrder->setQuantityRequested($request->request->all()['cantidad'][$key]);
+    //             $productsByOrder->setPetition($order);
+    //             $this->em->persist($productsByOrder);
+    //             }
+    //         }
+    //         $this->em->flush();
 
 
-            }
+    //         }
            
 
-        $productos = $doctrine->getRepository(Products::class)->findAll();
+    //     $productos = $doctrine->getRepository(Products::class)->findAll();
 
-        return $this->render('user/pedido.html.twig', [
-            'productos' => $productos,
-        ]);
-    }
+    //     return $this->render('user/pedido.html.twig', [
+    //         'productos' => $productos,
+    //     ]);
+    // }
 
 
 }

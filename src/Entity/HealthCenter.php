@@ -24,7 +24,7 @@ class HealthCenter
     #[ORM\Column]
     private ?int $phonenumber = null;
 
-    #[ORM\OneToMany(mappedBy: 'healthCenter', targetEntity: Orders::class)]
+    #[ORM\OneToMany(mappedBy: 'healthCenter', targetEntity: Orders::class, orphanRemoval: true)]
     private Collection $orders;
 
     #[ORM\ManyToOne]
@@ -35,7 +35,7 @@ class HealthCenter
     #[ORM\JoinColumn(nullable: false)]
     private ?Week $shipmentDay = null;
 
-    #[ORM\OneToMany(mappedBy: 'healthCenter', targetEntity: MedicalSamples::class)]
+    #[ORM\OneToMany(mappedBy: 'healthCenter', targetEntity: MedicalSamples::class, orphanRemoval: true)]
     private Collection $medicalSamples;
 
     public function __construct()
