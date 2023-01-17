@@ -16,7 +16,7 @@ class ProductsByOrder
     #[ORM\Column]
     private ?int $quantityRequested = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $quantitySent = null;
 
     #[ORM\ManyToOne]
