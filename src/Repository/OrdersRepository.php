@@ -39,6 +39,19 @@ class OrdersRepository extends ServiceEntityRepository
         }
     }
 
+    public function getOrder($orderId) {
+      $qb = $this->createQueryBuilder('o')
+                  ->where('o.id = :orderId');
+                  // ->select('o.createdAt','o.memo','s.description');
+      //             $qb->leftJoin('App\Entity\Status', 's', \Doctrine\ORM\Query\Expr\Join::WITH,
+      // 's.id = o.id');
+      $qb->setParameter('orderId', $orderId);
+                  
+      // $qb->leftJoin('App\Entity\User', 'u', \Doctrine\ORM\Query\Expr\Join::WITH,
+      // 'p.author = u.id');
+      // $qb->orderBy('p.id','ASC');
+      return $qb->getQuery()->getResult();
+    }
 //    /**
 //     * @return Orders[] Returns an array of Orders objects
 //     */

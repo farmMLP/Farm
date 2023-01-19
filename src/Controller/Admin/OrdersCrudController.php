@@ -7,9 +7,13 @@ use App\Entity\Orders;
 use App\Entity\Status;
 use App\Entity\HealthCenter;
 use App\Entity\ProductsByOrder;
+
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
+
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -17,9 +21,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use Symfony\Component\HttpFoundation\Response;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+
+use App\Repository\OrdersRepository;
+use App\Repository\ProductsByOrderRepository;
 
 class OrdersCrudController extends AbstractCrudController
 {
@@ -30,13 +36,25 @@ class OrdersCrudController extends AbstractCrudController
 
     private $em;
 
-    public function __construct(EntityManagerInterface $em){
+    public function __construct(EntityManagerInterface $em, OrdersRepository $orders, ProductsByOrderRepository $products){
       $this->em= $em;
+      $this->orders = $orders;
+      $this->products = $products;
     }
 
     public function configureCrud(Crud $crud): Crud
     {
       return $crud->showEntityActionsInlined();
+    }
+
+    public function configureFields(string $pageName): iterable
+    {
+        return [
+            IdField::new('id')->hideOnForm(),
+            DateTimeField::new('createdAt', 'creado'),
+            TextField::new('memo', 'memo'),
+            TextField::new('healthcenter', 'healthcenter'),
+        ];
     }
 
     public function configureActions(Actions $actions): Actions
@@ -56,58 +74,27 @@ class OrdersCrudController extends AbstractCrudController
       });
     }
 
-    public function detail(AdminContext $context) : Response {
-      return $this->render('admin/showOrder.html.twig');
+    public function detail(AdminContext $context): Response 
+    {
+      $orderId = $context->getRequest()->query->get('entityId');
+      $order = $this->orders->findOneById($orderId);
+      $products = $this->products->findByPetition($orderId);
+      // dd($products);
+      return $this->render('admin/showOrder.html.twig', [
+        "order" => $order,
+        "products" => $products
+      ]);
     }
-
-    // public function new(AdminContext $context, Request $request, ManagerRegistry $doctrine): Response
-    // {
-    //     if (isset($request->request->all()['producto'])) {
-    //       // dd($request);
-    //         $order = new Orders();
-    //         $order->setCreatedAt(new \DateTimeImmutable);
-    //         $order->setUser($this->getUser());
-    //         $order->setMemo('no se que es');
-    //         $order->setStatus($doctrine->getRepository(Status::class)->findOneById(1));
-            
-    //         $order->setHealthCenter($doctrine->getRepository(HealthCenter::class)->findOneById($request->request->get('healthCenter')));
-    //         $this->em->persist($order);
-    //         $this->em->flush();
-
-    //         foreach ($request->request->all()['producto'] as $key => $value) {
-    //             if ($request->request->all()['cantidad'][$key]!='') {
-                
-    //             $productsByOrder= new ProductsByOrder();
-    //             $productsByOrder->setProduct($doctrine->getRepository(Products::class)->findOneById($value));
-    //             $productsByOrder->setQuantityRequested($request->request->all()['cantidad'][$key]);
-    //             $productsByOrder->setPetition($order);
-    //             $this->em->persist($productsByOrder);
-    //             }
-    //         }
-    //         $this->em->flush();
-
-
-    //         }
-           
-    //     $productos = $doctrine->getRepository(Products::class)->findAll();
-    //     $healthCenters = $doctrine->getRepository(HealthCenter::class)->findAll();
-
-    //     return $this->render('admin/createOrder.html.twig', [
-    //         'productos' => $productos,
-    //         'healthCenters' => $healthCenters
-    //     ]);
-    // }
 
     public function main(AdminContext $context, Request $request, ManagerRegistry $doctrine): Response
     {
         if (isset($request->request->all()['producto'])) {
-          // dd($request);
+            // dd($request);
             $order = new Orders();
             $order->setCreatedAt(new \DateTimeImmutable);
             $order->setUser($this->getUser());
-            $order->setMemo('no se que es');
+            $order->setMemo($request->request->get('memo'));
             $order->setStatus($doctrine->getRepository(Status::class)->findOneById(1));
-            
             $order->setHealthCenter($doctrine->getRepository(HealthCenter::class)->findOneById($request->request->get('healthCenter')));
             $this->em->persist($order);
             $this->em->flush();

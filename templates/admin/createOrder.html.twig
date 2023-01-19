@@ -3,39 +3,54 @@
 {# {% block title %}Hello UserController!{% endblock %} #}
 
 {% block main %}
-<style>
+{# <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+</style> #}
 <div class="example-wrapper">
+  <h1>Crear Pedido</h1>
+
   <form id="elform" action="" method="post">
 
-    <select class="form-control"  name="producto[]">
-      <option value="">Seleccione Producto</option>
-      {% for producto in productos %}
-        <option value="{{producto.id}}">{{producto.name}}</option>
-      {% endfor %}
-    </select>
+    <div class="mb-3">
+      <label for="healthCenter" class="form-label d-block">Seleccionar Centro que solicita el pedido</label>
+      <select name="healthCenter" class="p-2 rounded-1" id="healthCenter">
+        <option value="" style="color:gray">Seleccionar centro</option>
+        {% for healthCenter in healthCenters %}
+          <option value="{{healthCenter.id}}">{{healthCenter.name}}</option>
+        {% endfor %}
+      </select>
+    </div>
 
-    <input type="number" name="cantidad[]">
+    <div>
+      <label for="producto" class="form-label d-block">Añadir Productos</label>
+      <div class="d-flex gap-3 my-1">
+        <select name="producto[]" class="p-1 w-100 rounded-1" style="border: 1px solid gray" id="product">
+          <option value="" style="color:gray">Seleccione un producto</option>
+          {% for producto in productos %}
+            <option value="{{producto.id}}">{{producto.name}}</option>
+          {% endfor %}
+        </select>
+        <input type="number" name="cantidad[]">
+      </div>
+    </div>
+    
+    <div id="eldiv"></div>
 
-    <select name="healthCenter">
-      <option value="">seleccione centro que realiza pedido</option>
-      {% for healthCenter in healthCenters %}
-        <option value="{{healthCenter.id}}">{{healthCenter.name}}</option>
-      {% endfor %}
-    </select>
+    <button type="button" onclick="add()" class="mt-1 p-1 rounded-1 border-secondary">Añadir producto</button>
+    <div class="my-3">
+      <label for="memo" class="form-label">Añadir memo</label>
+      <textarea class="form-control" name="memo" id="memo" rows="2" style="background-color:transparent; border-color:gray;"></textarea>
+    </div>
+    <input type="submit" value="Submit"  class="mt-1"/>
+  </form>
+</div>
 
-  <div id="eldiv"></div>
-    <input type="submit" value="Submit" />
-    </form>
-    <button onclick="add()">Añadir producto</button>
-  </div>
   <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
   <script type="text/javascript">
   function add(){
     $('#eldiv').append(
-    '<select class="form-control"  name="producto[]" ><option value="">Seleccione Producto</option>{% for producto in productos %}<option value="{{producto.id}}">{{producto.name}}</option>{% endfor %}</select><input type="number" name="cantidad[]"><br><br>');
+    '<div class="d-flex gap-3 my-1"><select name="producto[]" class="p-1 w-100 rounded-1" style="border: 1px solid gray"><option value="" style="color:gray">Seleccione un producto</option>{% for producto in productos %}<option value="{{producto.id}}">{{producto.name}}</option>{% endfor %}</select><input type="number" name="cantidad[]"></div>');
   }
   </script>
 {% endblock %}
