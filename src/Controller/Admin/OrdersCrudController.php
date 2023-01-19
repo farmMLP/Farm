@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
@@ -54,7 +55,17 @@ class OrdersCrudController extends AbstractCrudController
             DateTimeField::new('createdAt', 'Fecha de solicitud'),
             TextField::new('memo', 'Memo'),
             TextField::new('healthcenter', 'Centro de salud'),
+            AssociationField::new('status','Estado')
         ];
+    }
+
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add('memo')
+            ->add('user')
+            ->add('status')
+        ;
     }
 
     public function configureActions(Actions $actions): Actions
@@ -67,9 +78,7 @@ class OrdersCrudController extends AbstractCrudController
       ->update(Crud::PAGE_INDEX,Action::DETAIL,function(Action $action){
         return $action->setIcon('fa fa-eye')->addCssClass('btn btn-info')->setLabel('Ver');
         })
-      ->update(Crud::PAGE_INDEX,Action::EDIT,function(Action $action){
-        return $action->setIcon('fa fa-edit')->addCssClass('btn btn-success')->setLabel('Editar');
-        })
+      ->disable(Action::EDIT)
       ->update(Crud::PAGE_INDEX,Action::DELETE,function(Action $action){
         return $action->setIcon('fa fa-trash')->addCssClass('btn btn-danger text-white')->setLabel('Eliminar');
       });
@@ -122,5 +131,9 @@ class OrdersCrudController extends AbstractCrudController
             'productos' => $productos,
             'healthCenters' => $healthCenters
         ]);
+    }
+
+    public function AutorizarPedido(){
+      dd('test');
     }
 }
