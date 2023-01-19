@@ -27,15 +27,27 @@ class HealthCenterCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
       return $actions
+      ->update(Crud::PAGE_INDEX, Action::NEW, function(Action $action){
+        return $action->setIcon('fa fa-plus')->addCssClass('btn btn-primary')->setLabel('Agregar nuevo Centro de Salud')->linkToCrudAction('new');
+      })
       ->add(Crud::PAGE_INDEX, Action::DETAIL)
       ->update(Crud::PAGE_INDEX,Action::DETAIL,function(Action $action){
-        return $action->setIcon('fa fa-eye')->addCssClass('btn btn-info');
+        return $action->setIcon('fa fa-eye')->addCssClass('btn btn-info')->setLabel('Ver');
         })
       ->update(Crud::PAGE_INDEX,Action::EDIT,function(Action $action){
-        return $action->setIcon('fa fa-edit')->addCssClass('btn btn-success');
+        return $action->setIcon('fa fa-edit')->addCssClass('btn btn-success')->setLabel('Editar');
         })
       ->update(Crud::PAGE_INDEX,Action::DELETE,function(Action $action){
-        return $action->setIcon('fa fa-trash')->addCssClass('btn btn-danger text-white');
+        return $action->setIcon('fa fa-trash')->addCssClass('btn btn-danger text-white')->setLabel('Eliminar');
+      })
+      ->update(Crud::PAGE_DETAIL,Action::DELETE,function(Action $action){
+        return $action->setIcon('fa fa-trash')->addCssClass('btn btn-danger text-white')->setLabel('Eliminar');
+      })
+      ->update(Crud::PAGE_DETAIL,Action::INDEX,function(Action $action){
+        return $action->setIcon('fa fa-eye')->setLabel('Volver');
+      })
+      ->update(Crud::PAGE_DETAIL,Action::EDIT,function(Action $action){
+        return $action->setIcon('fa fa-edit')->setLabel('Editar')->addCssClass('btn btn-success');
       });
     }
     
