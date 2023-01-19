@@ -47,6 +47,12 @@ class ProductsCrudController extends AbstractCrudController
       })
       ->update(Crud::PAGE_DETAIL,Action::EDIT,function(Action $action){
         return $action->setIcon('fa fa-edit')->setLabel('Editar')->addCssClass('btn btn-success');
+      })
+      ->update(Crud::PAGE_EDIT,Action::SAVE_AND_RETURN,function(Action $action){
+        return $action->setIcon('fa fa-edit')->setLabel('Guardar')->addCssClass('btn btn-secondary');
+      })
+      ->update(Crud::PAGE_EDIT,Action::SAVE_AND_CONTINUE,function(Action $action){
+        return $action->setIcon('fa fa-edit')->setLabel('Guardar y seguir editando')->addCssClass('btn btn-secondary');
       });
     }
 

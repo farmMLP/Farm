@@ -29,7 +29,7 @@ class UserCrudController extends AbstractCrudController
     {
       return $actions
       ->update(Crud::PAGE_INDEX, Action::NEW, function(Action $action){
-        return $action->setIcon('fa fa-eye')->addCssClass('btn btn-primary')->setLabel('Crear nuevo Usuario')->linkToCrudAction('new');
+        return $action->setIcon('fa fa-plus')->addCssClass('btn btn-primary')->setLabel('Crear nuevo Usuario')->linkToCrudAction('new');
       })
       ->add(Crud::PAGE_INDEX, Action::DETAIL)
       ->update(Crud::PAGE_INDEX,Action::DETAIL,function(Action $action){
@@ -49,6 +49,12 @@ class UserCrudController extends AbstractCrudController
       })
       ->update(Crud::PAGE_DETAIL,Action::EDIT,function(Action $action){
         return $action->setIcon('fa fa-edit')->setLabel('Editar')->addCssClass('btn btn-success');
+      })
+      ->update(Crud::PAGE_EDIT,Action::SAVE_AND_RETURN,function(Action $action){
+        return $action->setIcon('fa fa-edit')->setLabel('Guardar')->addCssClass('btn btn-secondary');
+      })
+      ->update(Crud::PAGE_EDIT,Action::SAVE_AND_CONTINUE,function(Action $action){
+        return $action->setIcon('fa fa-edit')->setLabel('Guardar y seguir editando')->addCssClass('btn btn-secondary');
       });
     }
 
