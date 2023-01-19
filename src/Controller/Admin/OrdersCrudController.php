@@ -25,6 +25,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 
+use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 use App\Repository\OrdersRepository;
 use App\Repository\ProductsByOrderRepository;
 
@@ -52,9 +53,10 @@ class OrdersCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->hideOnForm(),
+            AssociationField::new('user', 'Usuario')->hideOnForm(),
             DateTimeField::new('createdAt', 'Fecha de solicitud'),
             TextField::new('memo', 'Memo'),
-            TextField::new('healthcenter', 'Centro de salud'),
+            TextField::new('healthCenter', 'Centro de salud'),
             AssociationField::new('status','Estado')
         ];
     }
@@ -64,7 +66,8 @@ class OrdersCrudController extends AbstractCrudController
         return $filters
             ->add('memo')
             ->add('user')
-            ->add('status')
+            ->add(EntityFilter::new('status'))
+            ->add('healthCenter')
         ;
     }
 
@@ -96,6 +99,7 @@ class OrdersCrudController extends AbstractCrudController
       ]);
     }
 
+    
     public function main(AdminContext $context, Request $request, ManagerRegistry $doctrine): Response
     {
         if (isset($request->request->all()['producto'])) {
