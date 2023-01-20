@@ -20,7 +20,10 @@ class ProductsCrudController extends AbstractCrudController
 
     public function configureCrud(Crud $crud): Crud
     {
-      return $crud->showEntityActionsInlined();
+      return $crud->showEntityActionsInlined()
+      ->setPageTitle('index','Productos')
+      ->setPageTitle('edit','Editar producto')
+      ->setPageTitle('detail','Producto');
     }
 
     public function configureActions(Actions $actions): Actions

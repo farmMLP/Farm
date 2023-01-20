@@ -23,7 +23,10 @@ class BatchCrudController extends AbstractCrudController
 
     public function configureCrud(Crud $crud): Crud
     {
-      return $crud->showEntityActionsInlined();
+      return $crud->showEntityActionsInlined()
+      ->setPageTitle('index','Lotes')
+      ->setPageTitle('edit','Editar Lote')
+      ->setPageTitle('detail', 'Lote');
     }
 
     public function configureActions(Actions $actions): Actions

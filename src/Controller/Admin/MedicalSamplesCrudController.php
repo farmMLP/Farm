@@ -21,7 +21,10 @@ class MedicalSamplesCrudController extends AbstractCrudController
 
     public function configureCrud(Crud $crud): Crud
     {
-      return $crud->showEntityActionsInlined();
+      return $crud->showEntityActionsInlined()
+      ->setPageTitle('index','Muestras médicas')
+      ->setPageTitle('edit','Editar muestra médica')
+      ->setPageTitle('detail','Muestra médica');
     }
 
     public function configureActions(Actions $actions): Actions

@@ -87,6 +87,11 @@ class Orders
         return $this->status;
     }
 
+    public function getStatusId(): int
+    {
+        return $this->status->id;
+    }
+
     public function setStatus(?Status $status): self
     {
         $this->status = $status;

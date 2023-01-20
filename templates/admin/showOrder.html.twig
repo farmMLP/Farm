@@ -3,6 +3,7 @@
 <div class="w-100 h-100">
   <div class="p-4 w-100 h-100">
     <h1 class="font-bold">PEDIDO #{{order.id}}</h1>
+    <h1 class="font-bold">ESTADO DEL PEDIDO: {{order.status.description}}</h1>
     <p>creado el dia {{order.createdAt | date("d/m/y h:m") }}</p>
     <p>memo: {{order.memo}}</p>
     <p>usuario que solicito el pedido {{order.user.email}} ({{order.user.name}} {{order.user.lastname}})</p>
@@ -13,18 +14,34 @@
     <p>Dia de entrega: {{order.healthCenter.shipmentDay}}</p>
   </div>
   <h1>PRODUCTOS DEL PEDIDO</h1>
-  {% for product in products %}
-    <div class="d-flex gap-5 w-100">
-      <p>NOMBRE: {{product.product.name}}</p>
-      <p>DESCRIPCION: {{product.product.description}}</p>
-      <p>CANTIDAD SOLICITADA: {{product.quantityRequested}}</p>
-      <div class="d-flex">
-        <p>CANTIDAD A ENVIAR: </p><input type="number">
+{% if order.getStatus().getId() != '2' %}
+<!-- EVALUAR SI EL FORM ACTION DEBE SER VISIBLE O NO (POR POSIBLES SOLICITUDES MEDIANTE POSTMAN) -->
+  <form action="admin?crudAction=detail&crudControllerFqcn=App%5CController%5CAdmin%5COrdersCrudController&entityId={{order.id}}&referrer=https://127.0.0.1:8000/admin?crudAction%3Dindex%26crudControllerFqcn%3DApp%255CController%255CAdmin%255COrdersCrudController" method="POST">
+    {% for product in products %}
+      <div class="d-flex gap-5 w-100">
+        <p>NOMBRE: {{product.product.name}}</p>
+        <p>DESCRIPCION: {{product.product.description}}</p>
+        <p>CANTIDAD SOLICITADA: {{product.quantityRequested}}</p>
+        <div class="d-flex align-items-center">
+          <p>CANTIDAD A ENVIAR: </p><input type="number" name="quantity[]">
+        </div>
+        {# <p>CANTIDAD ENVIADA: {{product.quantitySent}}</p> #}
+        {# <p>CANTIDAD SOLICITADA: {{product.quantityRequested}}</p> #}
+        <p>STOCK Q TENGO DEL PRODUCTO: {{product.product.stock}}</p>
       </div>
-      {# <p>CANTIDAD ENVIADA: {{product.quantitySent}}</p> #}
-      {# <p>CANTIDAD SOLICITADA: {{product.quantityRequested}}</p> #}
-      <p>STOCK Q TENGO DEL PRODUCTO: {{product.product.stock}}</p>
-    </div>
-  {% endfor %}
+    {% endfor %}
+    <button class="btn btn-info">Autorizar</button>
+  </form>
+{% else %}
+    {% for product in products %}
+      <div class="d-flex gap-5 w-100">
+        <p>NOMBRE: {{product.product.name}}</p>
+        <p>DESCRIPCION: {{product.product.description}}</p>
+        <p>CANTIDAD SOLICITADA: {{product.quantityRequested}}</p>
+        <p>CANTIDAD ENVIADA: {{product.quantitySent}}</p>
+        <p>STOCK Q TENGO DEL PRODUCTO: {{product.product.stock}}</p>
+      </div>
+    {% endfor %}
+{% endif %}
 </div>
 {% endblock %}

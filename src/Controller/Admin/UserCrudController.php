@@ -22,7 +22,9 @@ class UserCrudController extends AbstractCrudController
 
     public function configureCrud(Crud $crud): Crud
     {
-      return $crud->showEntityActionsInlined();
+      return $crud->showEntityActionsInlined()
+      ->setPageTitle('index','Usuarios')
+      ->setPageTitle('edit','Editar Usuario');
     }
 
     public function configureActions(Actions $actions): Actions

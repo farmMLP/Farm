@@ -5,8 +5,10 @@ namespace App\Controller\Admin;
 use App\Entity\Products;
 use App\Entity\Orders;
 use App\Entity\Status;
+use App\Repository\StatusRepository;
 use App\Entity\HealthCenter;
 use App\Entity\ProductsByOrder;
+
 
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
@@ -38,15 +40,18 @@ class OrdersCrudController extends AbstractCrudController
 
     private $em;
 
-    public function __construct(EntityManagerInterface $em, OrdersRepository $orders, ProductsByOrderRepository $products){
+    public function __construct(EntityManagerInterface $em, OrdersRepository $orders, ProductsByOrderRepository $products, StatusRepository $status){
       $this->em= $em;
       $this->orders = $orders;
       $this->products = $products;
+      $this->status = $status;
+      // $this->request = $request;
     }
 
     public function configureCrud(Crud $crud): Crud
     {
-      return $crud->showEntityActionsInlined();
+      return $crud->showEntityActionsInlined()
+      ->setPageTitle('index','Pedidos');
     }
 
     public function configureFields(string $pageName): iterable
@@ -92,7 +97,43 @@ class OrdersCrudController extends AbstractCrudController
       $orderId = $context->getRequest()->query->get('entityId');
       $order = $this->orders->findOneById($orderId);
       $products = $this->products->findByPetition($orderId);
-      // dd($products);
+      // dd($products['0']);
+
+      if (isset($context->getRequest()->request->all()['quantity'])) {
+        // dd($context->getRequest()->request->all()['quantity']);
+
+        foreach ($context->getRequest()->request->all()['quantity'] as $key => $value) {
+          // if ($request->request->all()['cantidad'][$key]!='') {
+          
+          $products[$key]->setQuantitySent($value);
+          // dd($products[$key]);
+          $this->products->save($products[$key], true);
+          // $productsByOrder= new ProductsByOrder();
+          // $productsByOrder->setProduct($doctrine->getRepository(Products::class)->findOneById($value));
+          // $productsByOrder->setQuantityRequested($request->request->all()['cantidad'][$key]);
+          // $productsByOrder->setPetition($order);
+          // $this->em->persist($productsByOrder);
+          // }
+      }
+      // $this->em->flush();
+
+        return $this->redirect('admin?crudAction=index&crudControllerFqcn=App%5CController%5CAdmin%5COrdersCrudController');
+      }
+      // if ($context->getRequest()->isMethod('POST')){
+      //   // dd($this->status->findOneById('2'));
+      //   $order->setStatus($this->status->findOneById(2));
+      //   $this->orders->save($order, true);
+
+      //   // LOGICA STOCK
+      //   dd($context->getRequest());
+      //   foreach ($context->getRequest()->request->all()['quantity'] as $key => $value) {
+      //     dd($value);
+      //   }
+        //
+
+        
+      // }
+
       return $this->render('admin/showOrder.html.twig', [
         "order" => $order,
         "products" => $products

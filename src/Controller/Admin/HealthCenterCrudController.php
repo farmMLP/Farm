@@ -21,9 +21,9 @@ class HealthCenterCrudController extends AbstractCrudController
 
     public function configureCrud(Crud $crud): Crud
     {
-      return $crud->showEntityActionsInlined();
+      return $crud->showEntityActionsInlined()->setPageTitle('index','Centros de Salud')
+      ->setPageTitle('edit','Editar Centro de Salud');
     }
-
     public function configureActions(Actions $actions): Actions
     {
       return $actions
