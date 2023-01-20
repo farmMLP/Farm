@@ -97,49 +97,30 @@ class OrdersCrudController extends AbstractCrudController
       $orderId = $context->getRequest()->query->get('entityId');
       $order = $this->orders->findOneById($orderId);
       $products = $this->products->findByPetition($orderId);
-      // dd($products['0']);
-
-      if (isset($context->getRequest()->request->all()['quantity'])) {
-        // dd($context->getRequest()->request->all()['quantity']);
-
-        foreach ($context->getRequest()->request->all()['quantity'] as $key => $value) {
-          // if ($request->request->all()['cantidad'][$key]!='') {
-          
-          $products[$key]->setQuantitySent($value);
-          // dd($products[$key]);
-          $this->products->save($products[$key], true);
-          // $productsByOrder= new ProductsByOrder();
-          // $productsByOrder->setProduct($doctrine->getRepository(Products::class)->findOneById($value));
-          // $productsByOrder->setQuantityRequested($request->request->all()['cantidad'][$key]);
-          // $productsByOrder->setPetition($order);
-          // $this->em->persist($productsByOrder);
-          // }
+      // dd($products['0']->getProduct()->getStock());
+      if ($context->getRequest()->isMethod('POST')){
+        if (isset($context->getRequest()->request->all()['quantity'])) {
+          foreach ($context->getRequest()->request->all()['quantity'] as $key => $value) { 
+            if ($products[$key]->getProduct()->getStock() < $value){ 
+          }
+          else {
+            $products[$key]->setQuantitySent($value);
+            $this->products->save($products[$key], true);
+          }
+        }
+      
+      
+      }   
+        $order->setStatus($this->status->findOneById(2));
+        $this->orders->save($order, true);  
+        return $this->redirect('admin?crudAction=index&crudControllerFqcn=App%5CController%5CAdmin%5COrdersCrudController');        
       }
-      // $this->em->flush();
-
-        return $this->redirect('admin?crudAction=index&crudControllerFqcn=App%5CController%5CAdmin%5COrdersCrudController');
-      }
-      // if ($context->getRequest()->isMethod('POST')){
-      //   // dd($this->status->findOneById('2'));
-      //   $order->setStatus($this->status->findOneById(2));
-      //   $this->orders->save($order, true);
-
-      //   // LOGICA STOCK
-      //   dd($context->getRequest());
-      //   foreach ($context->getRequest()->request->all()['quantity'] as $key => $value) {
-      //     dd($value);
-      //   }
-        //
-
-        
-      // }
 
       return $this->render('admin/showOrder.html.twig', [
         "order" => $order,
         "products" => $products
       ]);
     }
-
     
     public function main(AdminContext $context, Request $request, ManagerRegistry $doctrine): Response
     {
