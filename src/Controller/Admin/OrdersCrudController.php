@@ -100,17 +100,18 @@ class OrdersCrudController extends AbstractCrudController
       // dd($products['0']->getProduct()->getStock());
       if ($context->getRequest()->isMethod('POST')){
         if (isset($context->getRequest()->request->all()['quantity'])) {
-          foreach ($context->getRequest()->request->all()['quantity'] as $key => $value) { 
+          foreach ($context->getRequest()->request->all()['quantity'] as $key => $value){ 
+            // SI UNA CANTIDAD SE ENVIA MAL, SIGUE EN EL FOR, DEBERIA ROMPER POR COMPLETO Y RETORNAR ERROR.
             if ($products[$key]->getProduct()->getStock() < $value){ 
-          }
-          else {
+              dd('MANEJO DE ERROR DE STOCK');
+            }
+            else {
             $products[$key]->setQuantitySent($value);
             $this->products->save($products[$key], true);
+            }
           }
         }
-      
-      
-      }   
+        // EVALUAR SI CAMBIA EL ESTADO AUNQUE SE ENVIEN MAL LAS CANTIDADES
         $order->setStatus($this->status->findOneById(2));
         $this->orders->save($order, true);  
         return $this->redirect('admin?crudAction=index&crudControllerFqcn=App%5CController%5CAdmin%5COrdersCrudController');        
