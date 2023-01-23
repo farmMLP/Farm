@@ -14,6 +14,13 @@
     <p>Dia de entrega: {{order.healthCenter.shipmentDay}}</p>
   </div>
   <h1>PRODUCTOS DEL PEDIDO</h1>
+  {% if not error %}
+    <div class="alert my-2" role="alert" style="background-color: #ef233c; border-radius: .25rem">
+      <p class="fs-5 mb-0">
+        Cantidad enviada no válida
+      </p>
+    </div>
+  {% endif %}
 {% if order.getStatus().getId() != '2' %}
 <!-- EVALUAR SI EL FORM ACTION DEBE SER VISIBLE O NO (POR POSIBLES SOLICITUDES MEDIANTE POSTMAN) -->
   <form action="admin?crudAction=detail&crudControllerFqcn=App%5CController%5CAdmin%5COrdersCrudController&entityId={{order.id}}&referrer=https://127.0.0.1:8000/admin?crudAction%3Dindex%26crudControllerFqcn%3DApp%255CController%255CAdmin%255COrdersCrudController" method="POST">

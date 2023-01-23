@@ -97,29 +97,56 @@ class OrdersCrudController extends AbstractCrudController
       $orderId = $context->getRequest()->query->get('entityId');
       $order = $this->orders->findOneById($orderId);
       $products = $this->products->findByPetition($orderId);
-      // dd($products['0']->getProduct()->getStock());
+      $auxiliar=true;
       if ($context->getRequest()->isMethod('POST')){
         if (isset($context->getRequest()->request->all()['quantity'])) {
-          foreach ($context->getRequest()->request->all()['quantity'] as $key => $value){ 
-            // SI UNA CANTIDAD SE ENVIA MAL, SIGUE EN EL FOR, DEBERIA ROMPER POR COMPLETO Y RETORNAR ERROR.
-            if ($products[$key]->getProduct()->getStock() < $value){ 
-              dd('MANEJO DE ERROR DE STOCK');
+          // while ($auxiliar = true) {
+            foreach ($context->getRequest()->request->all()['quantity'] as $key => $value){
+              if ($products[$key]->getProduct()->getStock() < $value){ 
+                // EVALUO SI LA CANTIDAD QUE ENVIO ES MENOR A LA DE STOCK Y MANTENGO UNA VARIABLE AUXILIAR
+                $auxiliar = false;
+                break;
+                // return;
+                // mensaje de error al template
+              } else {
+                $products[$key]->setQuantitySent($value);
+              }
+              // if (!$auxiliar) {
+              //   ret
+              // }
+              // SI UNA CANTIDAD SE ENVIA MAL, SIGUE EN EL FOR, DEBERIA ROMPER POR COMPLETO Y RETORNAR ERROR.
+              // if ($products[$key]->getProduct()->getStock() < $value){ 
+              //   dd('MANEJO DE ERROR DE STOCK');
+              // }
+              // else {
+              //   $products[$key]->setQuantitySent($value);
+              //   $this->products->save($products[$key], true);
+              // }
             }
-            else {
-            $products[$key]->setQuantitySent($value);
-            $this->products->save($products[$key], true);
+          // }
+          // dd($products[$key]);
+          if ($auxiliar) {
+            foreach ($context->getRequest()->request->all()['quantity'] as $key => $value){
+              $products[$key]->getProduct()->subStock($value);
+              $this->products->save($products[$key], true);
             }
+            $order->setStatus($this->status->findOneById(2));
+            $this->orders->save($order, true);
+            return $this->redirect('admin?crudAction=index&crudControllerFqcn=App%5CController%5CAdmin%5COrdersCrudController');
+          } else {
+            return $this->render('admin/showOrder.html.twig', [
+              "order" => $order,
+              "products" => $products,
+              "error" => $auxiliar
+            ]);
           }
         }
-        // EVALUAR SI CAMBIA EL ESTADO AUNQUE SE ENVIEN MAL LAS CANTIDADES
-        $order->setStatus($this->status->findOneById(2));
-        $this->orders->save($order, true);  
-        return $this->redirect('admin?crudAction=index&crudControllerFqcn=App%5CController%5CAdmin%5COrdersCrudController');        
       }
 
       return $this->render('admin/showOrder.html.twig', [
         "order" => $order,
-        "products" => $products
+        "products" => $products,
+        "error" => $auxiliar
       ]);
     }
     

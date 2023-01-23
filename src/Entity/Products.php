@@ -77,6 +77,20 @@ class Products
         return $this;
     }
 
+    public function addStock(int $stock): self
+    {
+        $this->stock = $this->stock+$stock;
+
+        return $this;
+    }
+
+    public function subStock(int $stock): self
+    {
+        $this->stock = $this->stock-$stock;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Batch>
      */
