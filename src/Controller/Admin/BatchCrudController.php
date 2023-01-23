@@ -13,9 +13,26 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use App\Repository\ProductsRepository;
+use App\Repository\BatchRepository;
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
+
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+
+use Symfony\Component\HttpFoundation\Response;
 
 class BatchCrudController extends AbstractCrudController
 {
+
+    public function __construct(EntityManagerInterface $em, UserRepository $users, ProductsRepository $products, BatchRepository $batchs){
+      $this->em= $em;
+      $this->users = $users;
+      $this->products = $products;
+      $this->batchs = $batchs;
+    }
+
     public static function getEntityFqcn(): string
     {
         return Batch::class;
@@ -73,5 +90,42 @@ class BatchCrudController extends AbstractCrudController
             DateTimeField::new('expirationDate', 'Fecha de vencimiento'),
             TextField::new('code', 'Código de lote'),
         ];
+    }
+  
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add('createdAt')
+            ->add('user')
+            ->add(EntityFilter::new('product'))
+            ->add('expirationDate')
+        ;
+    }
+
+    public function new(AdminContext $context): Response 
+    {
+      // $users = $this->users->getAll();
+      if ($context->getRequest()->isMethod('POST')){
+
+        $user = $this->users->findOneById($context->getRequest()->request->get('user'));
+        $product = $this->products->findOneById($context->getRequest()->request->get('product'));
+
+        $newBatch = new Batch();
+        $newBatch->setUser($user);
+        $newBatch->setProduct($product);
+        $newBatch->setQuantity($context->getRequest()->request->get('cantidad'));
+        $newBatch->setCreatedAt(new \DateTimeImmutable);
+        $newBatch->setCode($context->getRequest()->request->get('batchCode'));
+        $newBatch->setExpirationDate(new \DateTimeImmutable($context->getRequest()->request->get('fechaVencimiento')));
+
+        $product->addStock($context->getRequest()->request->get('cantidad'));
+
+        $this->products->save($product, true);
+        $this->batchs->save($newBatch, true);
+      }
+      return $this->render('admin/createBatch.html.twig',[
+      "users" => $this->users->findAll(),
+      "products" => $this->products->findAll()
+      ]);
     }
 }

@@ -186,8 +186,4 @@ class OrdersCrudController extends AbstractCrudController
             'healthCenters' => $healthCenters
         ]);
     }
-
-    public function AutorizarPedido(){
-      dd('test');
-    }
 }
