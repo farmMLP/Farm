@@ -30,6 +30,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 use App\Repository\OrdersRepository;
 use App\Repository\ProductsByOrderRepository;
+use App\Repository\MedicalSamplesRepository;
 
 class OrdersCrudController extends AbstractCrudController
 {
@@ -40,11 +41,12 @@ class OrdersCrudController extends AbstractCrudController
 
     private $em;
 
-    public function __construct(EntityManagerInterface $em, OrdersRepository $orders, ProductsByOrderRepository $products, StatusRepository $status){
+    public function __construct(EntityManagerInterface $em, OrdersRepository $orders, ProductsByOrderRepository $products, StatusRepository $status, MedicalSamplesRepository $medicalSamples){
       $this->em= $em;
       $this->orders = $orders;
       $this->products = $products;
       $this->status = $status;
+      $this->medicalSamples = $medicalSamples;
       // $this->request = $request;
     }
 
@@ -98,18 +100,26 @@ class OrdersCrudController extends AbstractCrudController
       $order = $this->orders->findOneById($orderId);
       $products = $this->products->findByPetition($orderId);
       $auxiliar=true;
+      $medicalSamples = $this->medicalSamples;
+      
       if ($context->getRequest()->isMethod('POST')){
+        // dd($context->getRequest()->request->all());
+        //if ((isset($context->getRequest()->request->all()['quantity'])) || (isset($context->getRequest()->request->all()['medicalQuantitys'])) ){
         if (isset($context->getRequest()->request->all()['quantity'])) {
           // while ($auxiliar = true) {
             foreach ($context->getRequest()->request->all()['quantity'] as $key => $value){
-              if ($products[$key]->getProduct()->getStock() < $value){ 
-                // EVALUO SI LA CANTIDAD QUE ENVIO ES MENOR A LA DE STOCK Y MANTENGO UNA VARIABLE AUXILIAR
-                $auxiliar = false;
-                break;
-                // return;
-                // mensaje de error al template
+              if (!$value) {
+                $auxiliar= false;
               } else {
-                $products[$key]->setQuantitySent($value);
+                if ($products[$key]->getProduct()->getStock() < $value){ 
+                  // EVALUO SI LA CANTIDAD QUE ENVIO ES MENOR A LA DE STOCK Y MANTENGO UNA VARIABLE AUXILIAR
+                  $auxiliar = false;
+                  break;
+                  // return;
+                  // mensaje de error al template
+                } else {
+                  $products[$key]->setQuantitySent($value);
+                }
               }
               // if (!$auxiliar) {
               //   ret
@@ -125,6 +135,7 @@ class OrdersCrudController extends AbstractCrudController
             }
           // }
           // dd($products[$key]);
+
           if ($auxiliar) {
             foreach ($context->getRequest()->request->all()['quantity'] as $key => $value){
               $products[$key]->getProduct()->subStock($value);
@@ -137,16 +148,23 @@ class OrdersCrudController extends AbstractCrudController
             return $this->render('admin/showOrder.html.twig', [
               "order" => $order,
               "products" => $products,
-              "error" => $auxiliar
+              "error" => $auxiliar,
+              "medicalSamples" => $medicalSamples
             ]);
           }
         }
       }
-
+      
+      // foreach ($products as $key => $product){
+      //   dd($product);
+      // }
+      // dd($medicalSamples->findOneByProduct($products["0"]->getProduct()));
+      // dd($medicalSamples);
       return $this->render('admin/showOrder.html.twig', [
         "order" => $order,
         "products" => $products,
-        "error" => $auxiliar
+        "error" => $auxiliar,
+        "medicalSamples" => $medicalSamples
       ]);
     }
     

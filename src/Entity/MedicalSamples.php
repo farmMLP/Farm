@@ -79,4 +79,8 @@ class MedicalSamples
 
         return $this;
     }
+    
+    public function __toString(){
+      return $this->getStock();
+    }
 }

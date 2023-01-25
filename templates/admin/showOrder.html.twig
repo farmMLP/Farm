@@ -1,3 +1,4 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
 {% extends '@!EasyAdmin/page/content.html.twig' %}
 {% block main %}
 <div class="w-100 h-100">
@@ -21,34 +22,113 @@
       </p>
     </div>
   {% endif %}
-{% if order.getStatus().getId() != '2' %}
+{% if order.getStatus().getId() != '2' %} <!--  -->
 <!-- EVALUAR SI EL FORM ACTION DEBE SER VISIBLE O NO (POR POSIBLES SOLICITUDES MEDIANTE POSTMAN) -->
   <form action="admin?crudAction=detail&crudControllerFqcn=App%5CController%5CAdmin%5COrdersCrudController&entityId={{order.id}}&referrer=https://127.0.0.1:8000/admin?crudAction%3Dindex%26crudControllerFqcn%3DApp%255CController%255CAdmin%255COrdersCrudController" method="POST">
-    {% for product in products %}
+    <table class="w-100 justify-content-evenly text-start datagrid">
+      <thead class="">
+        <tr style="line-height:3rem; font-size: 0.925rem;">
+          <th>#</th>
+          <th scope="col">Producto</th>
+          <th scope="col">Descripcion</th>
+          <th scope="col">Cantidad Solicitada</th>
+          <th scope="col">Stock</th>
+          <th scope="col">Stock de muestra médica</th>
+          <th scope="col">Seleccionar cantidad</th>
+          {# <th scope="col">Enviar por M. médica</th> #}
+          {# <th>Catalogo</th> #}
+        </tr>
+      </thead>
+      <tbody>
+
+
+           {# {% for product in products %}
       <div class="d-flex gap-5 w-100">
         <p>NOMBRE: {{product.product.name}}</p>
         <p>DESCRIPCION: {{product.product.description}}</p>
         <p>CANTIDAD SOLICITADA: {{product.quantityRequested}}</p>
-        <div class="d-flex align-items-center">
-          <p>CANTIDAD A ENVIAR: </p><input type="number" name="quantity[]">
-        </div>
+
+        <button type="button" onclick="add()">cambiar</button>
+        
         {# <p>CANTIDAD ENVIADA: {{product.quantitySent}}</p> #}
         {# <p>CANTIDAD SOLICITADA: {{product.quantityRequested}}</p> #}
-        <p>STOCK Q TENGO DEL PRODUCTO: {{product.product.stock}}</p>
+        {# <p>STOCK Q TENGO DEL PRODUCTO TOTAL: {{product.product.stock}}</p>
+        <p>STOCK QUE TENGO DE SU MUESTRA MEDICA: {{medicalSamples.findOneByProduct(product.getProduct().getId())}}</p>
+        <div id="eldiv" class="d-flex align-items-center">
+          <p>CANTIDAD A ENVIAR: </p><input type="number" name="quantity[]">
+        </div>
       </div>
-    {% endfor %}
+     endfor #}
+
+
+        {% for product in products %} 
+            <tr>
+              <th scope="row"> {{ loop.index }}</th>
+              <td class="px-0">{{product.product.name}}</td>
+              <td class="px-0">{{product.product.description}}</td>
+              <td class="px-0">{{product.quantityRequested}}</td>
+              <td class="px-0">{{product.product.stock}}</td>
+              <td class="px-0">{{medicalSamples.findOneByProduct(product.getProduct().getId()) ? medicalSamples.findOneByProduct(product.getProduct().getId()) : '0'}}</td>
+              {# <td class="px-0" id="typeCatalog{{loop.index}}"><input type="number" name="quantity[]" /><button type="button" class="btn btn-secondary" onclick="medicalSample({{loop.index}})">Enviando por programa</button></td> #}
+              {# <td class="px-0"><input type="number" name="quantity[]"/><input id="contexto{{loop.index}}" type="text" value="muestra medica" name="contexto[]"/> <button type="button" onClick="change({{loop.index}})">cambiar contexto</button></td> #}
+              {# <td class="px-0"><input type="number" name="quantity[]" /></td> #}
+              {# <td class="px-0"><input type="number" name="medicalQuantity[]" /></td> #}
+              {# <td class="px-0" id="carlos"></td> #}
+              <td class="px-0">
+              {# <select name="contexto[]" class="p-1 w-100 rounded-1" style="border: 1px solid gray">
+                <option value="" style="color:gray">Seleccionar catalogo</option>
+                <option value="Programa">programa</option>
+                <option value="muestramedica">muestra medica</option>
+              </select> #}
+                {# <select name="medicalSample[]" class="p-1 w-100 rounded-1" style="border: 1px solid gray">
+                  <option value="" style="color:gray">Seleccione una muestra médica</option>
+                  {% for medicalSample in medicalSamples.findAll() %}
+                  <option value="{{medicalSample.id}}">{{medicalSample.product.name}}
+                  </option>{% endfor %}
+                </select> #}
+              <input type="number" name="quantity[]">
+              </td>
+            </tr>
+          {% endfor %}
+      </tbody>
+    </table>
     <button class="btn btn-info">Autorizar</button>
+    <!-- como ver que boton se apretó (falta rechazar)-->
+    <button class="btn btn-danger">Rechazar</button>
   </form>
 {% else %}
-    {% for product in products %}
-      <div class="d-flex gap-5 w-100">
-        <p>NOMBRE: {{product.product.name}}</p>
-        <p>DESCRIPCION: {{product.product.description}}</p>
-        <p>CANTIDAD SOLICITADA: {{product.quantityRequested}}</p>
-        <p>CANTIDAD ENVIADA: {{product.quantitySent}}</p>
-        <p>STOCK Q TENGO DEL PRODUCTO: {{product.product.stock}}</p>
-      </div>
-    {% endfor %}
+    <table class="w-100 justify-content-evenly text-start datagrid">
+      <thead class="">
+        <tr style="line-height:3rem; font-size: 0.925rem;">
+          <th scope="col">Producto</th>
+          <th scope="col">Descripcion</th>
+          <th scope="col">Cantidad Solicitada</th>
+          <th scope="col">Stock</th>
+          <th scope="col">Stock de muestra médica</th>
+          <th scope="col">Cantidad enviada</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for product in products %} 
+            <tr >
+              {# <th scope="row">1</th> #}
+              <td class="px-0">{{product.product.name}}</td>
+              <td class="px-0">{{product.product.description}}</td>
+              <td class="px-0">{{product.quantityRequested}}</td>
+              <td class="px-0">{{product.product.stock}}</td>
+              <td class="px-0">{{medicalSamples.findOneByProduct(product.getProduct().getId()) ? medicalSamples.findOneByProduct(product.getProduct().getId()) : '0'}}</td>
+              <td class="px-0">{{product.quantitySent}}</td>
+            </tr>
+          {% endfor %}
+      </tbody>
+    </table>
 {% endif %}
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+  </script>
 {% endblock %}
+{# $('#carlos').replaceWith(
+    '<div class="d-flex gap-3 my-1"><select name="medicalSample[]" class="p-1 w-100 rounded-1" style="border: 1px solid gray"><option value="" style="color:gray">Seleccione una muestra médica</option>{% for medicalSample in medicalSamples.findAll() %}<option value="{{medicalSample.id}}">{{medicalSample.product.name}}</option>{% endfor %}</select><input type="number" name="cantidad[]"></div>');
+  } #}

@@ -104,7 +104,6 @@ class BatchCrudController extends AbstractCrudController
 
     public function new(AdminContext $context): Response 
     {
-      // $users = $this->users->getAll();
       if ($context->getRequest()->isMethod('POST')){
 
         $user = $this->users->findOneById($context->getRequest()->request->get('user'));
@@ -126,6 +125,56 @@ class BatchCrudController extends AbstractCrudController
       return $this->render('admin/createBatch.html.twig',[
       "users" => $this->users->findAll(),
       "products" => $this->products->findAll()
+      ]);
+    }
+
+    public function edit(AdminContext $context): Response 
+    {
+      // $users = $this->users->getAll();
+      // $aux = $context->getRequest()->query->get('crudAction');
+      // if ($aux == 'edit') {
+      //   dd('EDITANDO');
+      // } else {
+      //   dd('CREANDO');
+      // }
+      $batchId = $context->getRequest()->query->get('entityId');
+      $updatedBatch = $this->batchs->findOneById($batchId);
+      
+      if ($context->getRequest()->isMethod('POST')){
+
+        
+        $user = $this->users->findOneById($context->getRequest()->request->get('user'));
+        $product = $this->products->findOneById($context->getRequest()->request->get('product'));
+
+        
+        // $newBatch = new Batch();
+        $updatedBatch->setUser($user);
+        $updatedBatch->setProduct($product);
+
+        $oldQuantity = $updatedBatch->getQuantity();
+        $updatedBatch->setQuantity($context->getRequest()->request->get('cantidad'));
+        $updatedBatch->setCreatedAt(new \DateTimeImmutable);
+        $updatedBatch->setCode($context->getRequest()->request->get('batchCode'));
+        $updatedBatch->setExpirationDate(new \DateTimeImmutable($context->getRequest()->request->get('fechaVencimiento')));
+
+        if ($oldQuantity >= $context->getRequest()->request->get('cantidad'))
+        {
+          $newQuantity = $oldQuantity - $context->getRequest()->request->get('cantidad');
+          $product->subStock($newQuantity);
+          $this->products->save($product, true);
+        } else 
+        {
+          $newQuantity = $context->getRequest()->request->get('cantidad') - $oldQuantity;
+          $product->addStock($newQuantity);
+          $this->products->save($product, true);
+        }
+        // $this->products->save($product, true);
+        $this->batchs->save($updatedBatch, true);
+      }
+      return $this->render('admin/editBatch.html.twig',[
+      "users" => $this->users->findAll(),
+      "products" => $this->products->findAll(),
+      "batchValues" => $updatedBatch
       ]);
     }
 }

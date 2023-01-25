@@ -1,0 +1,36 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block main %}
+  <h1>Editar Lote</h1>
+  <form id="elform" action="" method="post">
+    <div class="mb-3">
+      <label for="user" class="form-label d-block">Usuario</label>
+      <select name="user" class="p-2 rounded-1" id="user">
+        <option value="{{batchValues.user.id}}" style="color:gray">{{batchValues.user.name}}</option>
+        {% for user in users %}
+          <option value="{{user.id}}">{{user.name}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="product" class="form-label d-block">Producto</label>
+      <select name="product" class="p-2 rounded-1" id="product">
+        <option value="{{batchValues.product.id}}" style="color:gray">{{batchValues.product.name}}</option>
+        {% for product in products %}
+          <option value="{{product.id}}">{{product.name}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="">
+      <label for="quantity" class="d-block">Ingresar cantidad</label>
+      <input type="number" name="cantidad" id="quantity" value="{{batchValues.quantity}}">
+    </div>
+    {# <label for="createdAt" class="d-block">Fecha de ingreso</label>
+    <input type="datetime-local" name="fechaIngreso" id="createdAt"> #}
+    <label for="expirationDate" class="d-block">Fecha de vencimiento</label>
+    <input type="datetime-local" name="fechaVencimiento" id="expirationDate" value="{{batchValues.expirationDate|date('d-m-Y')}}">
+    <label for="batchCode" class="d-block">Código de lote</label>
+    <input type="text" id="batchCode" name="batchCode" value="{{batchValues.code}}">
+    <button type="submit" class="btn btn-primary">Guardar</button>
+  </form>
+{% endblock %}
