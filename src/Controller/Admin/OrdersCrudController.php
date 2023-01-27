@@ -6,6 +6,7 @@ use App\Entity\Products;
 use App\Entity\Orders;
 use App\Entity\Status;
 use App\Repository\StatusRepository;
+use App\Repository\ProductsRepository;
 use App\Entity\HealthCenter;
 use App\Entity\ProductsByOrder;
 
@@ -41,12 +42,13 @@ class OrdersCrudController extends AbstractCrudController
 
     private $em;
 
-    public function __construct(EntityManagerInterface $em, OrdersRepository $orders, ProductsByOrderRepository $products, StatusRepository $status, MedicalSamplesRepository $medicalSamples){
+    public function __construct(EntityManagerInterface $em, OrdersRepository $orders, ProductsByOrderRepository $products, StatusRepository $status, MedicalSamplesRepository $medicalSamples, ProductsRepository $allProducts){
       $this->em= $em;
       $this->orders = $orders;
       $this->products = $products;
       $this->status = $status;
       $this->medicalSamples = $medicalSamples;
+      $this->allProducts = $allProducts;
       // $this->request = $request;
     }
 
@@ -104,23 +106,54 @@ class OrdersCrudController extends AbstractCrudController
       
       if ($context->getRequest()->isMethod('POST')){
         // dd($context->getRequest()->request->all());
+        //  dd($context->getRequest()->request->all());
         //if ((isset($context->getRequest()->request->all()['quantity'])) || (isset($context->getRequest()->request->all()['medicalQuantitys'])) ){
         if (isset($context->getRequest()->request->all()['quantity'])) {
+          $catalog = $context->getRequest()->request->all()['contexto'];
+          $productosGENERAL = $context->getRequest()->request->all()['productos'];
+          // dd($productosGENERAL);
+          // dd($catalog);
           // while ($auxiliar = true) {
             foreach ($context->getRequest()->request->all()['quantity'] as $key => $value){
               if (!$value) {
                 $auxiliar= false;
+                
+                break;
+              
               } else {
-                if ($products[$key]->getProduct()->getStock() < $value){ 
-                  // EVALUO SI LA CANTIDAD QUE ENVIO ES MENOR A LA DE STOCK Y MANTENGO UNA VARIABLE AUXILIAR
-                  $auxiliar = false;
-                  break;
-                  // return;
-                  // mensaje de error al template
-                } else {
-                  $products[$key]->setQuantitySent($value);
+                if($catalog[$key] === 'Programa')
+                {
+                  if ($products[$key]->getProduct()->getStock() < $value){ 
+                    // EVALUO SI LA CANTIDAD QUE ENVIO ES MENOR A LA DE STOCK Y MANTENGO UNA VARIABLE AUXILIAR
+                    // dd('ENTRE AL IF DEL PROGRAMA, PERO PUSE VALOR MÁS GRANDE QUE EL STOCK QUE POSEO DEL PROGRAMA');
+                    $auxiliar = false;
+                    break;
+                    // return;
+                    // mensaje de error al template
+                  } else {
+                    // dd('ENTRE AL IF DEL PROGRAMA, Y EL VALOR ES CORRECTO, SETEO LA CANTIDAD ENVIADA');
+                    $products[$key]->setQuantitySent($value);
+                  }
+                } else 
+                {
+                  // dd($products[$key]);
+                  // tira id 38, cantidad solicitada, es el PRODUCTO POR ORDEN
+                  // dd($medicalSamples->findOneById(4));
+                  if ($medicalSamples->findOneById($productosGENERAL[$key])->getStock() < $value){ 
+                    
+                    // dd('ENTRE AL IF DE MUESTRA MÉDICA, PERO PUSE VALOR MÁS GRANDE QUE EL STOCK QUE POSEO DE MUESTRA MÉDICA');
+                    // EVALUO SI LA CANTIDAD QUE ENVIO ES MENOR A LA DE STOCK Y MANTENGO UNA VARIABLE AUXILIAR
+                    $auxiliar = false;
+                    break;
+                    // return;
+                    // mensaje de error al template
+                  } else {
+                    // dd('ENTRE AL IF DE MUESTRA MEDICA, Y EL VALOR ES CORRECTO, SETEO LA CANTIDAD ENVIADA');
+                    $products[$key]->setQuantitySent($value);
+                  }
                 }
               }
+                
               // if (!$auxiliar) {
               //   ret
               // }
@@ -138,8 +171,14 @@ class OrdersCrudController extends AbstractCrudController
 
           if ($auxiliar) {
             foreach ($context->getRequest()->request->all()['quantity'] as $key => $value){
-              $products[$key]->getProduct()->subStock($value);
-              $this->products->save($products[$key], true);
+              if($catalog[$key]=='Programa'){
+                $products[$key]->getProduct()->subStock($value);
+                $this->products->save($products[$key], true);
+              } else {
+                $medicalSample=$medicalSamples->findOneById($productosGENERAL[$key]);
+                $medicalSample->subStock($value);
+                $medicalSamples->save($medicalSample,true);
+              }
             }
             $order->setStatus($this->status->findOneById(2));
             $this->orders->save($order, true);
@@ -149,7 +188,8 @@ class OrdersCrudController extends AbstractCrudController
               "order" => $order,
               "products" => $products,
               "error" => $auxiliar,
-              "medicalSamples" => $medicalSamples
+              "medicalSamples" => $medicalSamples,
+              "allProducts" => $this->allProducts
             ]);
           }
         }
@@ -164,7 +204,8 @@ class OrdersCrudController extends AbstractCrudController
         "order" => $order,
         "products" => $products,
         "error" => $auxiliar,
-        "medicalSamples" => $medicalSamples
+        "medicalSamples" => $medicalSamples,
+        "allProducts" => $this->allProducts
       ]);
     }
     

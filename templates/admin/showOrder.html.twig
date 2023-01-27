@@ -1,4 +1,3 @@
-{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
 {% extends '@!EasyAdmin/page/content.html.twig' %}
 {% block main %}
 <div class="w-100 h-100">
@@ -75,26 +74,25 @@
               {# <td class="px-0"><input type="number" name="medicalQuantity[]" /></td> #}
               {# <td class="px-0" id="carlos"></td> #}
               <td class="px-0">
-              {# <select name="contexto[]" class="p-1 w-100 rounded-1" style="border: 1px solid gray">
+              <select id="contexto{{loop.index}}" onChange="cambiarValor({{loop.index}})" key="{{loop.index}}" name="contexto[]" class="p-1 w-100 rounded-1" style="border: 1px solid gray">
                 <option value="" style="color:gray">Seleccionar catalogo</option>
                 <option value="Programa">programa</option>
                 <option value="muestramedica">muestra medica</option>
-              </select> #}
-                {# <select name="medicalSample[]" class="p-1 w-100 rounded-1" style="border: 1px solid gray">
-                  <option value="" style="color:gray">Seleccione una muestra médica</option>
-                  {% for medicalSample in medicalSamples.findAll() %}
-                  <option value="{{medicalSample.id}}">{{medicalSample.product.name}}
-                  </option>{% endfor %}
-                </select> #}
+              </select>
+              <select id="dependantFormField{{loop.index}}" key="{{loop.index}}" name="productos[]" class="p-1 w-100 rounded-1" style="border: 1px solid gray">
+                {# {% for medicalSample in medicalSamples.findAll() %}
+                <option value="{{medicalSample.id}}">{{medicalSample.product.name}}
+                </option>{% endfor %} #}
+              </select>
               <input type="number" name="quantity[]">
               </td>
             </tr>
           {% endfor %}
       </tbody>
     </table>
-    <button class="btn btn-info">Autorizar</button>
+    <button class="btn btn-info" value="">Autorizar</button>
     <!-- como ver que boton se apretó (falta rechazar)-->
-    <button class="btn btn-danger">Rechazar</button>
+    <button class="btn btn-danger" value="">Rechazar</button>
   </form>
 {% else %}
     <table class="w-100 justify-content-evenly text-start datagrid">
@@ -127,8 +125,26 @@
 
 <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
   <script type="text/javascript">
+  {# $('#contexto').on('change', function(){
+    if($(this).val() === 'muestramedica'){
+      $('#dependantFormField').html(
+        '{% for medicalSample in medicalSamples.findAll() %}<option value="{{medicalSample.id}}">{{medicalSample.product.name}}</option>{% endfor %}'
+      )
+    } else {
+      $('#dependantFormField').html(
+        '{% for product in allProducts.findAll() %}<option value="{{product.id}}">{{product.name}}</option>{% endfor %}'
+      )
+    }
+  }) #}
+  function cambiarValor(idx){
+    if ($(`#contexto${idx}`).val() == 'muestramedica'){
+
+      $(`#dependantFormField${idx}`).html('<option value="" style="color:gray">Seleccione una muestra médica</option>{% for medicalSample in medicalSamples.findAll() %}<option value="{{medicalSample.id}}">{{medicalSample.product.name}}</option>{% endfor %}')
+    } else {
+
+      $(`#dependantFormField${idx}`).html('<option value="" style="color:gray">Seleccione un producto del Programa</option>{% for product in allProducts.findAll() %}<option value="{{product.id}}">{{product.name}}</option>{% endfor %}')
+    } 
+  }
   </script>
+  
 {% endblock %}
-{# $('#carlos').replaceWith(
-    '<div class="d-flex gap-3 my-1"><select name="medicalSample[]" class="p-1 w-100 rounded-1" style="border: 1px solid gray"><option value="" style="color:gray">Seleccione una muestra médica</option>{% for medicalSample in medicalSamples.findAll() %}<option value="{{medicalSample.id}}">{{medicalSample.product.name}}</option>{% endfor %}</select><input type="number" name="cantidad[]"></div>');
-  } #}

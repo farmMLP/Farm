@@ -44,6 +44,20 @@ class MedicalSamples
         return $this;
     }
 
+    public function addStock(int $stock): self
+    {
+        $this->stock = $this->stock+$stock;
+
+        return $this;
+    }
+
+    public function subStock(int $stock): self
+    {
+        $this->stock = $this->stock-$stock;
+
+        return $this;
+    }
+
     public function getExpirationDate(): ?\DateTimeImmutable
     {
         return $this->expirationDate;
