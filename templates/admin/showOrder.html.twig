@@ -21,81 +21,13 @@
       </p>
     </div>
   {% endif %}
-{% if order.getStatus().getId() != '2' %} <!--  -->
-<!-- EVALUAR SI EL FORM ACTION DEBE SER VISIBLE O NO (POR POSIBLES SOLICITUDES MEDIANTE POSTMAN) -->
-  <form action="admin?crudAction=detail&crudControllerFqcn=App%5CController%5CAdmin%5COrdersCrudController&entityId={{order.id}}&referrer=https://127.0.0.1:8000/admin?crudAction%3Dindex%26crudControllerFqcn%3DApp%255CController%255CAdmin%255COrdersCrudController" method="POST">
-    <table class="w-100 justify-content-evenly text-start datagrid">
-      <thead class="">
-        <tr style="line-height:3rem; font-size: 0.925rem;">
-          <th>#</th>
-          <th scope="col">Producto</th>
-          <th scope="col">Descripcion</th>
-          <th scope="col">Cantidad Solicitada</th>
-          <th scope="col">Stock</th>
-          <th scope="col">Stock de muestra médica</th>
-          <th scope="col">Seleccionar cantidad</th>
-          {# <th scope="col">Enviar por M. médica</th> #}
-          {# <th>Catalogo</th> #}
-        </tr>
-      </thead>
-      <tbody>
-
-
-           {# {% for product in products %}
-      <div class="d-flex gap-5 w-100">
-        <p>NOMBRE: {{product.product.name}}</p>
-        <p>DESCRIPCION: {{product.product.description}}</p>
-        <p>CANTIDAD SOLICITADA: {{product.quantityRequested}}</p>
-
-        <button type="button" onclick="add()">cambiar</button>
-        
-        {# <p>CANTIDAD ENVIADA: {{product.quantitySent}}</p> #}
-        {# <p>CANTIDAD SOLICITADA: {{product.quantityRequested}}</p> #}
-        {# <p>STOCK Q TENGO DEL PRODUCTO TOTAL: {{product.product.stock}}</p>
-        <p>STOCK QUE TENGO DE SU MUESTRA MEDICA: {{medicalSamples.findOneByProduct(product.getProduct().getId())}}</p>
-        <div id="eldiv" class="d-flex align-items-center">
-          <p>CANTIDAD A ENVIAR: </p><input type="number" name="quantity[]">
-        </div>
-      </div>
-     endfor #}
-
-
-        {% for product in products %} 
-            <tr>
-              <th scope="row"> {{ loop.index }}</th>
-              <td class="px-0">{{product.product.name}}</td>
-              <td class="px-0">{{product.product.description}}</td>
-              <td class="px-0">{{product.quantityRequested}}</td>
-              <td class="px-0">{{product.product.stock}}</td>
-              <td class="px-0">{{medicalSamples.findOneByProduct(product.getProduct().getId()) ? medicalSamples.findOneByProduct(product.getProduct().getId()) : '0'}}</td>
-              {# <td class="px-0" id="typeCatalog{{loop.index}}"><input type="number" name="quantity[]" /><button type="button" class="btn btn-secondary" onclick="medicalSample({{loop.index}})">Enviando por programa</button></td> #}
-              {# <td class="px-0"><input type="number" name="quantity[]"/><input id="contexto{{loop.index}}" type="text" value="muestra medica" name="contexto[]"/> <button type="button" onClick="change({{loop.index}})">cambiar contexto</button></td> #}
-              {# <td class="px-0"><input type="number" name="quantity[]" /></td> #}
-              {# <td class="px-0"><input type="number" name="medicalQuantity[]" /></td> #}
-              {# <td class="px-0" id="carlos"></td> #}
-              <td class="px-0">
-              <select id="contexto{{loop.index}}" onChange="cambiarValor({{loop.index}})" key="{{loop.index}}" name="contexto[]" class="p-1 w-100 rounded-1" style="border: 1px solid gray">
-                <option value="" style="color:gray">Seleccionar catalogo</option>
-                <option value="Programa">programa</option>
-                <option value="muestramedica">muestra medica</option>
-              </select>
-              <select id="dependantFormField{{loop.index}}" key="{{loop.index}}" name="productos[]" class="p-1 w-100 rounded-1" style="border: 1px solid gray">
-                {# {% for medicalSample in medicalSamples.findAll() %}
-                <option value="{{medicalSample.id}}">{{medicalSample.product.name}}
-                </option>{% endfor %} #}
-              </select>
-              <input type="number" name="quantity[]">
-              </td>
-            </tr>
-          {% endfor %}
-      </tbody>
-    </table>
-    <button class="btn btn-info" value="">Autorizar</button>
-    <!-- como ver que boton se apretó (falta rechazar)-->
-    <button class="btn btn-danger" value="">Rechazar</button>
-  </form>
-{% else %}
-    <table class="w-100 justify-content-evenly text-start datagrid">
+{% if order.getStatus().getId() == '2' %} <!-- Pedido Autorizado -->
+<div class="alert my-2" role="alert" style="background-color: green; border-radius: .25rem">
+      <p class="fs-5 mb-0">
+        Pedido Aprobado
+      </p>
+    </div>
+  <table class="w-100 justify-content-evenly text-start datagrid">
       <thead class="">
         <tr style="line-height:3rem; font-size: 0.925rem;">
           <th scope="col">Producto</th>
@@ -109,7 +41,6 @@
       <tbody>
         {% for product in products %} 
             <tr >
-              {# <th scope="row">1</th> #}
               <td class="px-0">{{product.product.name}}</td>
               <td class="px-0">{{product.product.description}}</td>
               <td class="px-0">{{product.quantityRequested}}</td>
@@ -120,30 +51,105 @@
           {% endfor %}
       </tbody>
     </table>
+  
+{% elseif order.getStatus().getId() == '3' %} <!-- Pedido Rechazado -->
+    <div class="alert my-2" role="alert" style="background-color: #ef233c; border-radius: .25rem">
+      <p class="fs-5 mb-0">
+        Pedido Rechazado
+      </p>
+    </div>
+    <table class="w-100 justify-content-evenly text-start datagrid">
+      <thead class="">
+        <tr style="line-height:3rem; font-size: 0.925rem;">
+          <th scope="col">Producto</th>
+          <th scope="col">Descripcion</th>
+          <th scope="col">Cantidad Solicitada</th>
+          <th scope="col">Stock</th>
+          <th scope="col">Stock de muestra médica</th>
+          {# <th scope="col">Cantidad enviada</th> #}
+        </tr>
+      </thead>
+      <tbody>
+        {% for product in products %} 
+            <tr >
+              <td class="px-0">{{product.product.name}}</td>
+              <td class="px-0">{{product.product.description}}</td>
+              <td class="px-0">{{product.quantityRequested}}</td>
+              <td class="px-0">{{product.product.stock}}</td>
+              <td class="px-0">{{medicalSamples.findOneByProduct(product.getProduct().getId()) ? medicalSamples.findOneByProduct(product.getProduct().getId()) : '0'}}</td>
+            </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+{% else %} <!-- Pedido Recibido -->
+<form action="admin?crudAction=detail&crudControllerFqcn=App%5CController%5CAdmin%5COrdersCrudController&entityId={{order.id}}&referrer=https://127.0.0.1:8000/admin?crudAction%3Dindex%26crudControllerFqcn%3DApp%255CController%255CAdmin%255COrdersCrudController" method="POST">
+    <table class="w-100 justify-content-evenly text-start datagrid">
+      <thead class="">
+        <tr style="line-height:3rem; font-size: 0.925rem;">
+          <th>#</th>
+          <th scope="col">Producto</th>
+          <th scope="col">Descripcion</th>
+          <th scope="col">Cantidad Solicitada</th>
+          <th scope="col">Stock</th>
+          <th scope="col">Stock de muestra médica</th>
+          <th scope="col">Seleccionar cantidad</th>
+          {# <th class="d-none" scope="col">Stock</th> #}
+          {# <th>Catalogo</th> #}
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for product in products %} 
+            <tr id="row-{{loop.index}}">
+              <th scope="row"> {{ loop.index }}</th>
+              <td class="px-0">{{product.product.name}}</td>
+              <td class="px-0">{{product.product.description}}</td>
+              <td class="px-0">{{product.quantityRequested}}</td>
+              <td class="px-0">{{product.product.stock}}</td>
+              <td class="px-0">{{medicalSamples.findOneByProduct(product.getProduct().getId()) ? medicalSamples.findOneByProduct(product.getProduct().getId()) : '0'}}</td>
+              <td class="px-0">
+                <select id="contexto-{{loop.index}}" onChange="cambiarValor({{loop.index}})" key="{{loop.index}}" name="contexto[]" class="p-1 rounded-1 d-none" style="border: 1px solid gray">
+                  <option value="" style="color:gray">Seleccionar catálogo</option>
+                  <option value="Programa">Programa</option>
+                  <option value="muestramedica">Muestra medica</option>
+                </select>
+                <select id="dependantFormField{{loop.index}}" key="{{loop.index}}" name="productos[]" class="p-1 rounded-1 d-none" style="border: 1px solid gray; width:min-content">
+                  <option value="">Selecciona un catálogo para ver los productos</option>
+                </select>
+                {# <input type="number" name="quantity[]"> #}
+                <input type="number" name="quantity[]" class="p-1" style="width:60px;">
+                <button class="d-inline p-1" style="outline:none; border: none; border-radius:3px;"
+                type="button" id="action-{{loop.index}}" onClick="agregarSelector({{loop.index}})">Cambiar</button>
+                
+              </td>
+            </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+    <textarea type="text" placeholder="Agregar memo (notificar cambios de productos, aclaraciones)" class="d-block w-100 my-3 p-2 rounded-2"></textarea>
+    <button class="btn btn-info" value="Autorizar" name="action">Autorizar</button>
+    <button class="btn btn-danger" value="Rechazar" name="action">Rechazar</button>
+  </form>
 {% endif %}
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
   <script type="text/javascript">
-  {# $('#contexto').on('change', function(){
-    if($(this).val() === 'muestramedica'){
-      $('#dependantFormField').html(
-        '{% for medicalSample in medicalSamples.findAll() %}<option value="{{medicalSample.id}}">{{medicalSample.product.name}}</option>{% endfor %}'
-      )
-    } else {
-      $('#dependantFormField').html(
-        '{% for product in allProducts.findAll() %}<option value="{{product.id}}">{{product.name}}</option>{% endfor %}'
-      )
-    }
-  }) #}
   function cambiarValor(idx){
-    if ($(`#contexto${idx}`).val() == 'muestramedica'){
+    if ($(`#contexto-${idx}`).val() == 'muestramedica'){
 
-      $(`#dependantFormField${idx}`).html('<option value="" style="color:gray">Seleccione una muestra médica</option>{% for medicalSample in medicalSamples.findAll() %}<option value="{{medicalSample.id}}">{{medicalSample.product.name}}</option>{% endfor %}')
+      $(`#dependantFormField${idx}`).html('<option value="" style="color:gray">Seleccione una muestra médica</option>{% for medicalSample in medicalSamples.findAll() %}<option id="dependant-option-{{loop.index}}" value="{{medicalSample.id}}">{{medicalSample.product.name}} | Stock: {{medicalSample.stock}}</option>{% endfor %}')
     } else {
 
-      $(`#dependantFormField${idx}`).html('<option value="" style="color:gray">Seleccione un producto del Programa</option>{% for product in allProducts.findAll() %}<option value="{{product.id}}">{{product.name}}</option>{% endfor %}')
+      $(`#dependantFormField${idx}`).html('<option value="" style="color:gray">Seleccione un producto del Programa</option>{% for product in allProducts.findAll() %}<option id="dependant-option-{{loop.index}}" value="{{product.id}}">{{product.name}} | Stock: {{product.stock}}</option>{% endfor %}')
     } 
+  }
+  function agregarSelector(idx){
+    $(`#row-${idx}`).addClass('text-secondary');
+    $(`#contexto-${idx}`).removeClass('d-none');
+    $(`#dependantFormField${idx}`).removeClass('d-none');
+    $(`#action-${idx}`).removeClass('d-inline');
+    $(`#action-${idx}`).addClass('d-none');
   }
   </script>
   
