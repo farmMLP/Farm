@@ -105,100 +105,89 @@ class OrdersCrudController extends AbstractCrudController
       $medicalSamples = $this->medicalSamples;
       
       if ($context->getRequest()->isMethod('POST')){
-        // dd($context->getRequest()->request->all()['action']);
+        // veo qué botón se clickeó, si se autorizó o rechazó
         if ($context->getRequest()->request->all()['action'] === "Autorizar") {
+          // evalúo que todas las cantidades estén seteadas
           if (isset($context->getRequest()->request->all()['quantity'])) {
+            // veo todos los contextos (catálogos) se eligieron en el formulario
             $catalog = $context->getRequest()->request->all()['contexto'];
-            
+            // veo todos los productos que se setearon (al haber cambio de producto, aquellos inputs que se dejaron default van a estar 'vacios')
             $productosGENERAL = $context->getRequest()->request->all()['productos'];
-            // dd($productosGENERAL);
-             // PRODUCTS ES PRODUCTOS POR PEDIDO SOLICITADO
-            //PRODUCTOS GENERAL ES LOS PRODUCTOS QUE ESTOY MANDANDO, SI NO ESPECIFIQUE PRODUCTO VIENE VACIO, HAY QUE ESTABLECER COMPARACION CON PRODUCTOS POR PEDIDO Y MANEJAR
-            // STOCKS CON RESPECTO AL PRODUCTO QUE YO ENVÍO, NO EL QUE ME SOLICITAN
+              // por cada input de cantidad (es el que tengo asegurado de tener lleno y con valores seteados)
               foreach ($context->getRequest()->request->all()['quantity'] as $key => $value)
               {
-                if (!$value) {
+                // si el valor es nulo, corto y envío mensaje de error ($auxiliar)
+                if ($value == null) {
                   $auxiliar= false;
                   break;              
                 } else 
                 {
-                  // si se seleccionó el catálogo del programa o no se seleccionó ninguno (es decir, usó el input number default, se evalua el stock del programa)
+                  // si se seleccionó el catálogo del programa o no se seleccionó ninguno (es decir, usó el input default, se evalua el stock del programa)
                   if($catalog[$key] === 'Programa' || !$catalog[$key])
                   {
+                    // si no se eligió un producto, es decir que se usó el input default
                     if (!$productosGENERAL[$key]) {
-                      // ACÁ SE EVALUA EL STOCK DEL PRODUCTO SOLICITADO CON EL VALOR QUE YO LE ENVÍO, Y SU 
-                      // PRODUCTOS GENERAL ES NULO, SIGNIFICA QUE EL VALOR Y EL STOCK QUE COMPARO ES CORRECTO
-                      // PERO SI NO ES NULO, ES DECIR QUE SELECCIONÉ UN CATALOGO PROGRAMA Y CAMBIÉ EL PRODUCTO, TENGO QUE COMPARAR EL VALOR QUE ENVÍO
-                      // CON EL STOCK DEL PRODUCOT INDICADO, NO EL PRODUCTO SOLICITADO.
+                      // si el stock que se posee del producto solicitado en el pedido es menor al valor que se seteó, corto y envío mensaje de error ($auxiliar)
                       if ($products[$key]->getProduct()->getStock() < $value){ 
-                        // dd('ENTRE AL IF DEL PROGRAMA, PERO PUSE VALOR MÁS GRANDE QUE EL STOCK QUE POSEO DEL PROGRAMA');
                         $auxiliar = false;
                         break;
-                        // return;
-                        // mensaje de error al template
                       } else {
-                        // dd('ENTRE AL IF DEL PROGRAMA, Y EL VALOR ES CORRECTO, SETEO LA CANTIDAD ENVIADA');
+                        // seteo cantidad enviada en caso de que el valor esté bien
                         $products[$key]->setQuantitySent($value);
                       }
                     } else {
-                      // $changedProduct = $this->allProducts->findOneById($productosGENERAL[$key]);
-                      // $changedProduct->subStock($value);
+                      // si se seleccionó un producto por parte del programa, evalúo stock
                       if ($this->allProducts->findOneById($productosGENERAL[$key])->getStock() < $value){ 
-                        // dd('ENTRE AL IF DEL PROGRAMA, PERO PUSE VALOR MÁS GRANDE QUE EL STOCK QUE POSEO DEL PROGRAMA');
+                        // si el stock que se posee del producto que yo cambié es menor al valor que se seteó, corto y envío mensaje de error ($auxiliar)
                         $auxiliar = false;
                         break;
-                        // return;
-                        // mensaje de error al template
                       } else {
-                        // dd('ENTRE AL IF DEL PROGRAMA, Y EL VALOR ES CORRECTO, SETEO LA CANTIDAD ENVIADA');
+                        // seteo cantidad enviada en caso de que el valor esté bien
                         $products[$key]->setQuantitySent($value);
                       }
-                      // dd('envié un producto que sí tiene input de catalogo y producto seleccionado, el cual es programa' CAMBIAR STOCK DEL NUEVO PRODUCTO, AHI TENGO EL ID);
-                      // dd($productosGENERAL[$key]);
-                      // $products[$key]->setQuantitySent($value);
                     }
                   } else 
+                  // si el catálogo elegido no es programa ni nulo, entonces es muestra médica
                   {
-                    // if (!$productosGENERAL[$key]) {
-                    //   dd('ENCONTRE VALOR NULO EN INPUT ENVIADO DEL PRODUCTO POR MUESTRA MEDICA, TENGO QUE MANEJAR ID DE PRODUCTO POR PEDIDO');
-                    // }
-                    // dd($medicalSamples->findOneById($productosGENERAL[$key])->getStock());
+                    // si se seleccionó un producto de una muestra médica, evalúo stock
                     if ($medicalSamples->findOneById($productosGENERAL[$key])->getStock() < $value){ 
-                      
-                      //  dd('ENTRE AL IF DE MUESTRA MÉDICA, PERO PUSE VALOR MÁS GRANDE QUE EL STOCK QUE POSEO DE MUESTRA MÉDICA');
+                      // si el stock que se posee del producto elegido de la muestra médica es menor al valor que se seteó, corto y envío mensaje de error ($auxiliar)
                       $auxiliar = false;
                       break;
-                      // return;
-                      // mensaje de error al template
                     } else {
-                      // dd('ENTRE AL IF DE MUESTRA MEDICA, Y EL VALOR ES CORRECTO, SETEO LA CANTIDAD ENVIADA');
+                      // seteo cantidad enviada en caso de que el valor esté bien
                       $products[$key]->setQuantitySent($value);
                     }
                   }
                 }
               }
-  
+            // si las cantidades estaban correctas
             if ($auxiliar) {
               foreach ($context->getRequest()->request->all()['quantity'] as $key => $value){
+                // según sea catalogo: Programa o muestra médica o nulo, cambio los stocks
                 if($catalog[$key]=='Programa' || !$catalog[$key]){
+                  // si no se eligió producto, se usó el input default, seteo el stock según el producto solicitado
                   if (!$productosGENERAL[$key]) {
-                    // PRODUCTOS GENERAL NO POSEE VALOR, ES DECIR, SE SETEO UNA CANTIDAD ENVIADA DIRECTAMENTE SIN CAMBIAR PRODUCTO NI PROGRAMA, RESTO STOCK
-                    $products[$key]->setQuantitySent($value);
                     $products[$key]->getProduct()->subStock($value);
                   } else {
-                    // PRODUCTOS GENERAL EN KEY SÍ TIENE VALOR, ES DECIR, HUBO UNA SELECCIÓN DE INPUT Y ME ENCUENTRO EN PROGRAMA
+                    // seteo stocks en el producto que yo cambié
                     $changedProduct = $this->allProducts->findOneById($productosGENERAL[$key]);
                     $changedProduct->subStock($value);
                     $this->allProducts->save($changedProduct,true);
                   }
                   $this->products->save($products[$key], true);
                 } else {
+                  // seteo stocks en la muestra médica que yo indiqué
                   $medicalSample=$medicalSamples->findOneById($productosGENERAL[$key]);
                   $medicalSample->subStock($value);
                   $medicalSamples->save($medicalSample,true);
                 }
               }
               // seteo estado de aprobado (2)
+              // concateno strings para el memo
+              $oldMemo = $order->getMemo();
+              $updatedMemo = $context->getRequest()->request->get('memo');
+              $order->setMemo($oldMemo."\r\n ".$updatedMemo);
               $order->setStatus($this->status->findOneById(2));
               $this->orders->save($order, true);
               return $this->redirect('admin?crudAction=index&crudControllerFqcn=App%5CController%5CAdmin%5COrdersCrudController');
@@ -214,6 +203,10 @@ class OrdersCrudController extends AbstractCrudController
           }        
         } else {
           // seteo valor rechazado (3)
+          // concateno strings para el memo
+          $oldMemo = $order->getMemo();
+          $updatedMemo = $context->getRequest()->request->get('memo');
+          $order->setMemo($oldMemo."\r\n ".$updatedMemo);
           $order->setStatus($this->status->findOneById(3));
           $this->orders->save($order, true);
           return $this->redirect('admin?crudAction=index&crudControllerFqcn=App%5CController%5CAdmin%5COrdersCrudController');
