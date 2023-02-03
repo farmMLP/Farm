@@ -1,25 +1,28 @@
 {% extends '@!EasyAdmin/page/content.html.twig' %}
 {% block main %}
 <div class="w-100 h-100">
-  <div class="p-4 w-100 h-100">
-    <h1 class="font-bold">PEDIDO #{{order.id}}</h1>
-    <h1 class="font-bold">ESTADO DEL PEDIDO: {{order.status.description}}</h1>
-    <p>creado el dia {{order.createdAt | date("d/m/y h:m") }}</p>
-    <label for="textarea">memo: </label>
-    <textarea disabled id="textarea" class="form-control" style="background-color:transparent">{{order.memo}}</textarea>
-    <p>usuario que solicito el pedido {{order.user.email}} ({{order.user.name}} {{order.user.lastname}})</p>
-    <P>CENTRO DE ENTREGA ASOCIADO AL PEDIDO</P>
-    <p>Nombre: {{order.healthCenter.name}}</p>
-    <p>Direccion: {{order.healthCenter.address}}</p>
-    <p>Numero: {{order.healthCenter.phonenumber}}</p>
-    <p>Dia de entrega: {{order.healthCenter.shipmentDay}}</p>
-  </div>
-  <h1>PRODUCTOS DEL PEDIDO</h1>
+  <div class="p-0 w-100 h-100 rounded-1">
+    <div class="d-flex w-100 justify-content-between align-items-center">
+      <h2 class="font-bold mb-0">PEDIDO #{{order.id}}</h2>
+      <h5 class="mb-0"><span class="fw-light">Fecha de Creación:</span> {{order.createdAt | date("d/m/y h:m") }}</h5>
+    </div>    
+    {# <h5 class="mb-0">DATOS DEL CENTRO DE ENTREGA:</h5> #}
+    <div class="d-flex flex-column justify-content-between gap-2 mt-3 mb-2">
+        <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25)" class="mb-0 pb-2"><span class="fw-normal text-secondary" >Estado: </span>{{order.status.description}}</p>
+        <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25)" class="mb-0 pb-2"><span class="fw-normal text-secondary">Solicitado por: </span>{{order.user.name}} {{order.user.lastname}} | {{order.user.email}}</p>
+    {# <p style="font-size: 0.925rem;" class="mb-0"><span class="fw-normal text-secondary" >Estado: </span>{{order.status.description}}</p> #}
+        <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25)" class="mb-0 pb-2"><span class="fw-normal text-secondary">Centro de Salud: </span> {{order.healthCenter.name}}</p>
+        <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25)" class="mb-0 pb-2"><span class="fw-normal text-secondary">Dirección: </span> {{order.healthCenter.address}}</p>
+        <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25)" class="mb-0 pb-2"><span class="fw-normal text-secondary">Teléfono: </span> {{order.healthCenter.phonenumber}}</p>
+        <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25)" class="mb-0 pb-2"><span class="fw-normal text-secondary">Dia de entrega: </span> {{order.healthCenter.shipmentDay}}</p>
+        <label for="textarea" class="text-secondary">Memo: </label>
+    <textarea disabled id="textarea" class="form-control" style="background-color:transparent; border: 1px solid rgba(124, 124, 124, 0.25)">{{order.memo}}</textarea>
+    </div>
+  <h2 class="mt-4">PRODUCTOS DEL PEDIDO</h2>
   {% if not error %}
-    <div class="my-2" style="background-color: #ef233c; border-radius: .25rem; padding:.5rem; color:white">
-      <p class="mb-0">
-        Cantidad enviada no válida
-      </p>
+    <div class="alert alert-dismissible fade show" role="alert" style="background-color: #ef233c; padding: .5rem; color:white; border-radius: .25rem;">
+      <p class="mb-0">Cantidad enviada no válida, verificá que los stocks y los valores sean correctos.</p>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="height:auto;"></button>
     </div>
   {% endif %}
 {% if order.getStatus().getId() == '2' %} <!-- Pedido Autorizado -->
@@ -110,18 +113,19 @@
               <td class="px-0">{{medicalSamples.findOneByProduct(product.getProduct().getId()) ? medicalSamples.findOneByProduct(product.getProduct().getId()) : '0'}}</td>
               <td class="px-0">
                 <select id="contexto-{{loop.index}}" onChange="cambiarValor({{loop.index}})" key="{{loop.index}}" name="contexto[]" class="p-1 rounded-1 d-none" style="border: 1px solid gray">
-                  <option value="" style="color:gray">Seleccionar catálogo</option>
+                  <option value="" style="color:gray">Catálogo</option>
                   <option value="Programa">Programa</option>
                   <option value="muestramedica">Muestra medica</option>
                 </select>
                 <select id="dependantFormField{{loop.index}}" key="{{loop.index}}" name="productos[]" class="p-1 rounded-1 d-none" style="border: 1px solid gray; width:min-content">
-                  <option value="">Selecciona un catálogo para ver los productos</option>
+                  <option value="">Listado de productos</option>
                 </select>
                 {# <input type="number" name="quantity[]"> #}
-                <input type="number" name="quantity[]" class="p-1" style="width:60px;">
+                <input type="number" name="quantity[]" class="p-1" style="width:60px;" min="0">
                 <button class="d-inline p-1" style="outline:none; border: none; border-radius:3px;"
                 type="button" id="action-{{loop.index}}" onClick="agregarSelector({{loop.index}})">Cambiar</button>
-                
+                <button class="d-none p-1" style="outline:none; border: none; border-radius:3px;" type="button" id="revert-{{loop.index}}"
+                onClick="cancelarCambio({{loop.index}})">Cancelar</button>
               </td>
             </tr>
           {% endfor %}
@@ -133,24 +137,36 @@
   </form>
 {% endif %}
 </div>
-
+</div>
 <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
   <script type="text/javascript">
   function cambiarValor(idx){
     if ($(`#contexto-${idx}`).val() == 'muestramedica'){
 
-      $(`#dependantFormField${idx}`).html('<option value="" style="color:gray">Seleccione una muestra médica</option>{% for medicalSample in medicalSamples.findAll() %}<option id="dependant-option-{{loop.index}}" value="{{medicalSample.id}}">{{medicalSample.product.name}} | Stock: {{medicalSample.stock}}</option>{% endfor %}')
+      $(`#dependantFormField${idx}`).html('<option value="" style="color:gray">Seleccionar producto</option>{% for medicalSample in medicalSamples.findAll() %}<option id="dependant-option-{{loop.index}}" value="{{medicalSample.id}}">{{medicalSample.product.name}} | Stock: {{medicalSample.stock}}</option>{% endfor %}')
     } else {
 
-      $(`#dependantFormField${idx}`).html('<option value="" style="color:gray">Seleccione un producto del Programa</option>{% for product in allProducts.findAll() %}<option id="dependant-option-{{loop.index}}" value="{{product.id}}">{{product.name}} | Stock: {{product.stock}}</option>{% endfor %}')
+      $(`#dependantFormField${idx}`).html('<option value="" style="color:gray">Seleccionar producto</option>{% for product in allProducts.findAll() %}<option id="dependant-option-{{loop.index}}" value="{{product.id}}">{{product.name}} | Stock: {{product.stock}}</option>{% endfor %}')
     } 
   }
   function agregarSelector(idx){
-    $(`#row-${idx}`).addClass('text-secondary');
+    $(`#row-${idx}`).addClass('text-body');
     $(`#contexto-${idx}`).removeClass('d-none');
     $(`#dependantFormField${idx}`).removeClass('d-none');
     $(`#action-${idx}`).removeClass('d-inline');
     $(`#action-${idx}`).addClass('d-none');
+    $(`#revert-${idx}`).removeClass('d-none');
+    $(`#revert-${idx}`).addClass('d-inline');
+  }
+  function cancelarCambio(idx){
+    $(`#row-${idx}`).removeClass('text-body');
+    $(`#revert-${idx}`).addClass('d-none');
+    $(`#contexto-${idx}`).addClass('d-none');
+    $(`#dependantFormField${idx}`).addClass('d-none');
+    $(`#action-${idx}`).addClass('d-inline');
+    $(`#action-${idx}`).removeClass('d-none');
+    $(`#contexto-${idx}`).val('');
+    $(`#dependantFormField${idx}`).val('');
   }
   </script>
   

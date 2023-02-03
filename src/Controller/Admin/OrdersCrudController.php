@@ -105,6 +105,7 @@ class OrdersCrudController extends AbstractCrudController
       $medicalSamples = $this->medicalSamples;
       
       if ($context->getRequest()->isMethod('POST')){
+        // dd($context->getRequest()->request->all());
         // veo qué botón se clickeó, si se autorizó o rechazó
         if ($context->getRequest()->request->all()['action'] === "Autorizar") {
           // evalúo que todas las cantidades estén seteadas
@@ -117,7 +118,7 @@ class OrdersCrudController extends AbstractCrudController
               foreach ($context->getRequest()->request->all()['quantity'] as $key => $value)
               {
                 // si el valor es nulo, corto y envío mensaje de error ($auxiliar)
-                if ($value == null) {
+                if ($value == null || $value < 0) {
                   $auxiliar= false;
                   break;              
                 } else 
