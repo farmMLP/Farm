@@ -38,6 +38,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $dni = null;
 
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?HealthCenter $healthCenter = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -146,5 +150,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __toString(){
         return strval($this->getName());
+    }
+
+    public function getHealthCenter(): ?HealthCenter
+    {
+        return $this->healthCenter;
+    }
+
+    public function setHealthCenter(?HealthCenter $healthCenter): self
+    {
+        $this->healthCenter = $healthCenter;
+
+        return $this;
     }
 }

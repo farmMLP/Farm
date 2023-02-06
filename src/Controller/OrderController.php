@@ -14,6 +14,7 @@ use App\Entity\Status;
 use App\Entity\HealthCenter;
 use App\Entity\ProductsByOrder;
 use App\Entity\Products;
+use Symfony\Component\Security\Core\Security;
 
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -28,10 +29,11 @@ class OrderController extends AbstractController
     }
 
     #[Route('/order', name: 'app_order')]
-    public function index(OrdersRepository $OrdersRepository): Response
+    public function index(OrdersRepository $OrdersRepository , Security $security): Response
     {
+        $orders = $OrdersRepository->findByHealthCenter($security->getUser()->getHealthCenter());
         return $this->render('order/index.html.twig', [
-            'orders' => $OrdersRepository->findAll(),
+            'orders' => $orders
         ]);
     }
 
