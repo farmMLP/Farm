@@ -23,7 +23,8 @@ class ProductsCrudController extends AbstractCrudController
       return $crud->showEntityActionsInlined()
       ->setPageTitle('index','Productos')
       ->setPageTitle('edit','Editar producto')
-      ->setPageTitle('detail','Producto');
+      ->setPageTitle('detail','Producto')
+      ->setPageTitle('new','Crear nuevo Producto');
     }
 
     public function configureActions(Actions $actions): Actions
@@ -56,6 +57,12 @@ class ProductsCrudController extends AbstractCrudController
       })
       ->update(Crud::PAGE_EDIT,Action::SAVE_AND_CONTINUE,function(Action $action){
         return $action->setIcon('fa fa-edit')->setLabel('Guardar y seguir editando')->addCssClass('btn btn-secondary');
+      })
+      ->update(Crud::PAGE_NEW,Action::SAVE_AND_ADD_ANOTHER,function(Action $action){
+        return $action->setIcon('fa fa-edit')->setLabel('Guardar y seguir editando')->addCssClass('btn btn-secondary');
+      })
+      ->update(Crud::PAGE_NEW,Action::SAVE_AND_RETURN,function(Action $action){
+        return $action->setIcon('fa fa-edit')->setLabel('Crear nuevo Producto')->addCssClass('btn btn-primary');
       });
     }
 

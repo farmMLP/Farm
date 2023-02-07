@@ -1,0 +1,36 @@
+{% extends '@!EasyAdmin/page/content.html.twig' %}
+{% block main %}
+<div>
+  {% if passworderror == true %}
+    <div class="alert alert-dismissible fade show mb-3" role="alert" style="background-color: #ef233c; padding: .5rem; color:white; border-radius: .25rem;">
+      <p class="mb-0">Contraseñas incorrectas, asegurate que sean iguales.</p>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="height:auto;"></button>
+    </div>
+  {% endif %}
+  <form action="" method="POST">
+    <div class="d-flex justify-content-between align-items-center w-100">
+      <h1>Crear Usuario</h1>
+      <button type="submit" class="btn btn-primary">Crear nuevo usuario</button>
+    </div>
+    <label class="d-block fw-semibold mb-2" for="email">Email<span class="text-danger">*</span></label>
+    <input type="email" class="mb-4 w-25" id="email" required name="email">
+    <label class="d-block fw-semibold mb-2" for="nombre">Nombre<span class="text-danger">*</span></label>
+    <input type="text" class="mb-4 w-25" id="nombre" required name="name">
+    <label class="d-block fw-semibold mb-2" for="apellido">Apellido<span class="text-danger">*</span></label>
+    <input type="text" class="mb-4 w-25" id="apellido" required name="lastname">
+    <label class="d-block fw-semibold mb-2" for="dni">DNI<span class="text-danger">*</span></label>
+    <input type="number" class="mb-4 w-25" id="dni" required name="dni">
+    <label class="d-block fw-semibold mb-2" for="password">Contraseña<span class="text-danger">*</span></label>
+    <input type="password" class="mb-4 w-25" id="password" required name="password">
+    <label class="d-block fw-semibold mb-2" for="passwordrepeat">Repetir contraseña<span class="text-danger">*</span></label>
+    <input type="password" class="mb-4 w-25" id="passwordrepeat" required name="passwordrepeat">
+    <label class="d-block fw-semibold mb-2" for="healthcenter">Centro de salud<span class="text-danger">*</span></label>
+    <select type="text" class="mb-0 w-25 p-1" id="healthcenter" required name="healthcenter" style="font-size:.9rem;">
+      <option value="" style="font-size:.9rem;">Seleccione un centro médico</option>
+      {% for healthCenter in healthCenters %}
+        <option value="{{healthCenter.id}}" style="font-size:.9rem;">{{healthCenter.name}}</option>
+      {% endfor %}
+    </select>
+  </form>
+</div>
+{% endblock %}

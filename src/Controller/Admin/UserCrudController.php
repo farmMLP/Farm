@@ -12,12 +12,25 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+use Symfony\Component\HttpFoundation\Response;
+use App\Repository\HealthCenterRepository;
+use App\Repository\UserRepository;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserCrudController extends AbstractCrudController
 {
+  
     public static function getEntityFqcn(): string
     {
         return User::class;
+    }
+
+    public function __construct(HealthCenterRepository $healthCenterRepo, User $user, UserPasswordHasherInterface $userPasswordHasher, UserRepository $users){
+      $this->healthCenterRepo = $healthCenterRepo;
+      $this->user = $user;
+      $this->userPasswordHasher = $userPasswordHasher;
+      $this->users = $users;
     }
 
     public function configureCrud(Crud $crud): Crud
@@ -71,5 +84,53 @@ class UserCrudController extends AbstractCrudController
             TextField::new('password', 'Contraseña')->hideOnIndex(),
             AssociationField::new('healthCenter','Centro de salud')
         ];
+    }
+
+    public function new(AdminContext $context): Response
+    { 
+      $user = new User();
+      // $this->user = new User();
+      $healthCenters = $this->healthCenterRepo->findAll();
+      $passworderror = false;
+      if ($context->getRequest()->isMethod('POST')){
+        $name = $context->getRequest()->request->get('name');
+        $email = $context->getRequest()->request->get('email');
+        $lastname = $context->getRequest()->request->get('lastname');
+        $dni = $context->getRequest()->request->get('dni');
+        $password = $context->getRequest()->request->get('password');
+        $passwordrepeat = $context->getRequest()->request->get('passwordrepeat');
+        $healthCenter = $context->getRequest()->request->get('healthcenter');
+
+        if ($password === $passwordrepeat) {
+          $user->setPassword(
+            $this->userPasswordHasher->hashPassword(
+              $user,
+              $password
+              )
+            );
+          $user->setName($name);
+          $user->setLastname($lastname);
+          // dd($context->getRequest()->request->all());
+          // hay que setearle una entidad, no un id, por lo que hay que buscar el health center primero.
+          // dd($this->healthCenterRepo->findOneById($healthCenter));
+          $user->setHealthCenter($this->healthCenterRepo->findOneById($healthCenter));
+          $user->setDni($dni);
+          $user->setEmail($email);
+          $user->setRoles(['ROLE_USER']);
+          $this->users->save($user, true);
+          return $this->redirect('/admin?crudAction=index&crudControllerFqcn=App%5CController%5CAdmin%5CUserCrudController');
+        } else {
+          $passworderror = true;
+          return $this->render('admin/createUser.html.twig', [
+            "healthCenters" => $healthCenters,
+            "passworderror" => $passworderror
+          ]);
+        }
+        
+      }
+      return $this->render('admin/createUser.html.twig', [
+        "healthCenters" => $healthCenters,
+        "passworderror" => $passworderror
+      ]);
     }
 }

@@ -1,11 +1,14 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
 
 {% block main %}
-  <h1>Crear Lote</h1>
   <form id="elform" action="" method="post">
+    <div class="d-flex justify-content-between align-items-center w-100 mb-4">
+      <h1>Crear Lote</h1>
+      <button type="submit" class="btn btn-primary">Guardar Lote</button>
+    </div>
     <div class="mb-3">
-      <label for="user" class="form-label d-block">Usuario</label>
-      <select name="user" class="p-2 rounded-1" id="user">
+      <label for="user" class="form-label d-block">Usuario<span class="text-danger">*</span></label>
+      <select name="user" class="p-1 rounded-1" id="user">
         <option value="" style="color:gray">Usuario</option>
         {% for user in users %}
           <option value="{{user.id}}">{{user.name}}</option>
@@ -13,8 +16,8 @@
       </select>
     </div>
     <div class="mb-3">
-      <label for="product" class="form-label d-block">Producto</label>
-      <select name="product" class="p-2 rounded-1" id="product">
+      <label for="product" class="form-label d-block">Producto<span class="text-danger">*</span></label>
+      <select name="product" class="p-1 rounded-1" id="product">
         <option value="" style="color:gray">Producto</option>
         {% for product in products %}
           <option value="{{product.id}}">{{product.name}}</option>
@@ -22,15 +25,15 @@
       </select>
     </div>
     <div class="">
-      <label for="quantity" class="d-block">Ingresar cantidad</label>
+      <label for="quantity" class="form-label d-block">Ingresar cantidad<span class="text-danger">*</span></label>
       <input type="number" name="cantidad" id="quantity">
     </div>
     {# <label for="createdAt" class="d-block">Fecha de ingreso</label>
     <input type="datetime-local" name="fechaIngreso" id="createdAt"> #}
-    <label for="expirationDate" class="d-block">Fecha de vencimiento</label>
+    <label for="expirationDate" class="form-label mt-3 d-block">Fecha de vencimiento<span class="text-danger">*</span></label>
     <input type="datetime-local" name="fechaVencimiento" id="expirationDate">
-    <label for="batchCode" class="d-block">Código de lote</label>
+    <label for="batchCode" class="d-block form-label mt-3">Código de lote<span class="text-danger">*</span></label>
     <input type="text" id="batchCode" name="batchCode">
-    <button type="submit">submit</button>
+    
   </form>
 {% endblock %}

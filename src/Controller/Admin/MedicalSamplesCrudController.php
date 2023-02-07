@@ -24,7 +24,8 @@ class MedicalSamplesCrudController extends AbstractCrudController
       return $crud->showEntityActionsInlined()
       ->setPageTitle('index','Muestras médicas')
       ->setPageTitle('edit','Editar muestra médica')
-      ->setPageTitle('detail','Muestra médica');
+      ->setPageTitle('detail','Muestra médica')
+      ->setPageTitle('new', 'Crear nueva Muestra médica');
     }
 
     public function configureActions(Actions $actions): Actions
@@ -57,6 +58,12 @@ class MedicalSamplesCrudController extends AbstractCrudController
       })
       ->update(Crud::PAGE_EDIT,Action::SAVE_AND_CONTINUE,function(Action $action){
         return $action->setIcon('fa fa-edit')->setLabel('Guardar y seguir editando')->addCssClass('btn btn-secondary');
+      })
+      ->update(Crud::PAGE_NEW,Action::SAVE_AND_ADD_ANOTHER,function(Action $action){
+        return $action->setIcon('fa fa-edit')->setLabel('Guardar y seguir editando')->addCssClass('btn btn-secondary');
+      })
+      ->update(Crud::PAGE_NEW,Action::SAVE_AND_RETURN,function(Action $action){
+        return $action->setIcon('fa fa-edit')->setLabel('Crear nueva Muestra médica')->addCssClass('btn btn-primary');
       });
     }
 

@@ -22,7 +22,8 @@ class HealthCenterCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
       return $crud->showEntityActionsInlined()->setPageTitle('index','Centros de Salud')
-      ->setPageTitle('edit','Editar Centro de Salud');
+      ->setPageTitle('edit','Editar Centro de Salud')
+      ->setPageTitle('new', 'Crear nuevo Centro de Salud');
     }
     public function configureActions(Actions $actions): Actions
     {
@@ -54,6 +55,12 @@ class HealthCenterCrudController extends AbstractCrudController
       })
       ->update(Crud::PAGE_EDIT,Action::SAVE_AND_CONTINUE,function(Action $action){
         return $action->setIcon('fa fa-edit')->setLabel('Guardar y seguir editando')->addCssClass('btn btn-secondary');
+      })
+      ->update(Crud::PAGE_NEW,Action::SAVE_AND_ADD_ANOTHER,function(Action $action){
+        return $action->setIcon('fa fa-edit')->setLabel('Guardar y seguir editando')->addCssClass('btn btn-secondary');
+      })
+      ->update(Crud::PAGE_NEW,Action::SAVE_AND_RETURN,function(Action $action){
+        return $action->setIcon('fa fa-edit')->setLabel('Crear nuevo Centro de Salud')->addCssClass('btn btn-primary');
       });
     }
     
