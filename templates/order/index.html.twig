@@ -12,6 +12,7 @@
         <th scope="col">Usuario</th>
         <th scope="col">Estado</th>
         <th scope="col">Centro de salud</th>
+        <th scope="col">Ver orden</th>
         </tr>
         </thead>
     <tbody>
@@ -23,6 +24,9 @@
       <td>{{ order.user }}</td>
       <td>{{ order.status }}</td>
       <td>{{ order.healthCenter }}</td>
+      <td>
+      <a href="{{ path('app_order_show', {'id': order.id}) }}">show</a>
+      </td>
     </tr>
 {% endfor %}
     </tbody>

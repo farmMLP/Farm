@@ -15,6 +15,7 @@ use App\Entity\HealthCenter;
 use App\Entity\ProductsByOrder;
 use App\Entity\Products;
 use Symfony\Component\Security\Core\Security;
+use App\Repository\ProductsByOrderRepository;
 
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -72,6 +73,19 @@ class OrderController extends AbstractController
         return $this->render('order/createOrder.html.twig', [
             'productos' => $productos,
             'healthCenters' => $healthCenters
+        ]);
+    }
+
+    #[Route('/order/{id}', name: 'app_order_show', methods: ['GET'])]
+    public function show(Request $request, OrdersRepository $ordersRepository, ProductsByOrderRepository $productsByOrderRepository, $id): Response
+    {
+       $data=$productsByOrderRepository->findByPetition($id);
+       $order=$ordersRepository->findById($id);
+        
+        return $this->render('order/showOrderUser.html.twig', [
+            'products'=>$data,
+            'order'=>$order
+        
         ]);
     }
 }
