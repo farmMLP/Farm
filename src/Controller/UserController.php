@@ -26,10 +26,10 @@ class UserController extends AbstractController
        
     ) {
      
-        $this->em         = $em;
+        $this->em= $em;
      
     }
-    #[Route('/', name: 'app_user')]
+    #[Route('/profile', name: 'app_user_asda')]
     public function index(): Response
     {
         if ($this->isGranted('ROLE_ADMIN')) {

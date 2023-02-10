@@ -18,12 +18,12 @@
     <tbody>
 {% for order in orders %} 
     <tr>
-      <td>{{ order.id }}</td>
-      <td>{{ order.createdAt | date("d/m/y h:m") }}</td>
-      <td>{{ order.memo }}</td>
-      <td>{{ order.user }}</td>
-      <td>{{ order.status }}</td>
-      <td>{{ order.healthCenter }}</td>
+      <td class="fw-light">{{ order.id }}</td>
+      <td class="fw-light">{{ order.createdAt | date("d/m/y h:m") }}</td>
+      <td class="fw-light">{{ order.memo }}</td>
+      <td class="fw-light">{{ order.user }}</td>
+      <td class="fw-light">{{ order.status }}</td>
+      <td class="fw-light">{{ order.healthCenter }}</td>
       <td>
       <a href="{{ path('app_order_show', {'id': order.id}) }}">show</a>
       </td>

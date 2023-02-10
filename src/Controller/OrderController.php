@@ -29,7 +29,7 @@ class OrderController extends AbstractController
         $this->em = $em;
     }
 
-    #[Route('/order', name: 'app_order')]
+    #[Route('/pedidos', name: 'app_order')]
     public function index(OrdersRepository $OrdersRepository , Security $security): Response
     {
         $orders = $OrdersRepository->findByHealthCenter($security->getUser()->getHealthCenter());
@@ -38,7 +38,7 @@ class OrderController extends AbstractController
         ]);
     }
 
-    #[Route('/order/new', name: 'appOrder_new', methods: ['GET' , 'POST'])]
+    #[Route('/pedidos/nuevo', name: 'appOrder_new', methods: ['GET' , 'POST'])]
     public function main(Request $request, ManagerRegistry $doctrine): Response
     {
         if (isset($request->request->all()['producto'])) {
@@ -76,7 +76,7 @@ class OrderController extends AbstractController
         ]);
     }
 
-    #[Route('/order/{id}', name: 'app_order_show', methods: ['GET'])]
+    #[Route('/pedidos/{id}', name: 'app_order_show', methods: ['GET'])]
     public function show(Request $request, OrdersRepository $ordersRepository, ProductsByOrderRepository $productsByOrderRepository, $id): Response
     {
        $data=$productsByOrderRepository->findByPetition($id);
