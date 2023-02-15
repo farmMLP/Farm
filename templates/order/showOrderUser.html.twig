@@ -2,6 +2,228 @@
 
 
 {% block body %}
-<h1>hola</h1>
+<div class="position-static">
+  <h1 class="">Descripción del pedido</h1>
+  <h3 class="">Pedido realizado el {{order.createdAt | date("d/m/y h:m")}} </h3>
+</div>
+
+
+<div class="w-75 p-3">
+  <table class="table table-sm" style="background-color:#04B4AE" >
+    <thead class="">
+      <tr style="line-height:3rem; font-size: 0.925rem;">
+        <th scope="col">Producto</th>
+        <th scope="col">Descripcion</th>
+        <th scope="col">Cantidad Solicitada</th>
+        {# <th scope="col">Stock</th> #}
+        {# <th scope="col">Stock de muestra médica</th> #}
+        <th scope="col">Cantidad recibida</th>
+      </tr>
+    </thead>
+      <tbody>
+        {% for product in products %} 
+          <tr >
+            <td class="px-0">{{product.product.name}}</td>
+            <td class="px-0">{{product.product.description}}</td>
+            <td class="px-0">{{product.quantityRequested}}</td>
+            {# <td class="px-0">{{product.product.stock}}</td> #}
+            {# <td class="px-0">{{medicalSamples.findOneByProduct(product.getProduct().getId()) ? medicalSamples.findOneByProduct(product.getProduct().getId()) : '0'}}</td> #}
+            <td class="px-0">{{product.quantitySent}}</td>             
+          </tr>
+        {% endfor %}
+      </tbody> 
+  </table>
+</div>
+
+
+  <div class="card position-absolute top-50 end-0 translate-middle-y" style="width: 18rem;">
+  <img class="card-img-top" src="" alt="Card image cap">
+  <div class="card-body">
+    <h4 class="card-title">Pedido realizado por</h4>
+    <p class="card-text">{{order.user}}</p>
+  </div>
+  <ul class="list-group list-group-flush">
+    <h5>Desde el centro de salud  </h5>
+    <li class="list-group-item">{{order.healthCenter}}</li>
+    <h5>El cliente informa que</h5>
+    <li class="list-group-item">{{order.memo}}</li>
+    <h5>El cliente informa que</h5>
+    <li class="list-group-item">{{order.status}}</li>
+  </ul>
+  <div class="card-body">
+    <a href="#" class="card-link">Volver a pedidos</a>
+    <a href="#" class="card-link">Volver al home</a>
+  </div>
+  </div>
+  
+  
+  
+  
+  
+  
+<!-- Footer -->
+<footer class="text-center text-lg-start bg-light text-muted">
+  <!-- Section: Social media -->
+  <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+    <!-- Left -->
+    <div class="me-5 d-none d-lg-block">
+      <span>Get connected with us on social networks:</span>
+    </div>
+    <!-- Left -->
+
+    <!-- Right -->
+    <div>
+      <a href="" class="me-4 text-reset">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+      <a href="" class="me-4 text-reset">
+        <i class="fab fa-twitter"></i>
+      </a>
+      <a href="" class="me-4 text-reset">
+        <i class="fab fa-google"></i>
+      </a>
+      <a href="" class="me-4 text-reset">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="" class="me-4 text-reset">
+        <i class="fab fa-linkedin"></i>
+      </a>
+      <a href="" class="me-4 text-reset">
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <!-- Right -->
+  </section>
+  <!-- Section: Social media -->
+
+  <!-- Section: Links  -->
+  <section class="">
+    <div class="container text-center text-md-start mt-5">
+      <!-- Grid row -->
+      <div class="row mt-3">
+        <!-- Grid column -->
+        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+          <!-- Content -->
+          <h6 class="text-uppercase fw-bold mb-4">
+            <i class="fas fa-gem me-3"></i>Company name
+          </h6>
+          <p>
+            Here you can use rows and columns to organize your footer content. Lorem ipsum
+            dolor sit amet, consectetur adipisicing elit.
+          </p>
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+          <!-- Links -->
+          <h6 class="text-uppercase fw-bold mb-4">
+            Products
+          </h6>
+          <p>
+            <a href="#!" class="text-reset">Angular</a>
+          </p>
+          <p>
+            <a href="#!" class="text-reset">React</a>
+          </p>
+          <p>
+            <a href="#!" class="text-reset">Vue</a>
+          </p>
+          <p>
+            <a href="#!" class="text-reset">Laravel</a>
+          </p>
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+          <!-- Links -->
+          <h6 class="text-uppercase fw-bold mb-4">
+            Useful links
+          </h6>
+          <p>
+            <a href="#!" class="text-reset">Pricing</a>
+          </p>
+          <p>
+            <a href="#!" class="text-reset">Settings</a>
+          </p>
+          <p>
+            <a href="#!" class="text-reset">Orders</a>
+          </p>
+          <p>
+            <a href="#!" class="text-reset">Help</a>
+          </p>
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+          <!-- Links -->
+          <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+          <p><i class="fas fa-home me-3"></i> New York, NY 10012, US</p>
+          <p>
+            <i class="fas fa-envelope me-3"></i>
+            info@example.com
+          </p>
+          <p><i class="fas fa-phone me-3"></i> + 01 234 567 88</p>
+          <p><i class="fas fa-print me-3"></i> + 01 234 567 89</p>
+        </div>
+        <!-- Grid column -->
+      </div>
+      <!-- Grid row -->
+    </div>
+  </section>
+  <!-- Section: Links  -->
+
+  <!-- Copyright -->
+  <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+    © 2021 Copyright:
+    <a class="text-reset fw-bold" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+  </div>
+  <!-- Copyright -->
+</footer>
+<!-- Footer -->
+  
+  
+  
+  
+  {# <div class="card border-primary mb-3 position-fixed top-0 end-0" style="max-width: 30rem;">
+    <div class="card-header">{{order.user}}</div>
+    <div class="card-body text-primary">
+      <h5 class="card-title">{{order.healthCenter}}</h5>
+      <p class="card-text">{{order.memo}}</p>
+    </div>
+    <div class="card-footer bg-transparent border-primary">{{order.status}}</div>
+  </div> #}
+
+
+{# <div class="position-absolute top-0 end-0">
+  <a href="#" class="d-block link-dark text-decoration-none">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Add_user_icon_%28blue%29.svg/671px-Add_user_icon_%28blue%29.svg.png" alt="mdo" width="32" height="32" class="rounded-circle">
+    <p> {{order.user}} </p>
+     <p> {{order.healthCenter}} </p> 
+     <p> {{order.status}} </p> 
+  </a>   
+</div> #}
+
+
+{# <div class="row row-cols-1 row-cols-md-5 mb-5 text-center">
+    <div class="col position-absolute top-50 end-0 translate-middle-y">
+        <div class="card mb-4 rounded-3 shadow-sm border-primary">
+          <div class="card-header py-3 text-bg-primary border-primary">
+            <h4 class="my-0 fw-normal">Memo</h4>
+          </div>
+          <div class="card-body">
+              <ol>{{order.memo}}</ol>
+            </ul>
+          </div>
+        </div>
+      </div> 
+</div> #}
+
+
+
+<!-- COLOCAR EL NOMBRE DEL USUARIO EN EL NABVAR -->
+{# <td> {{order.user}} </td>  #}
   
 {% endblock %}

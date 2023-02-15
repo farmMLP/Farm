@@ -41,7 +41,11 @@
     <button type="button" onclick="add()" class="mt-1 p-1 rounded-1 border-secondary">Añadir producto</button>
     <div class="my-3">
       <label for="memo" class="form-label">Añadir memo</label>
-      <textarea class="form-control" name="memo" id="memo" rows="2" maxlength="255" style="background-color:transparent; border-color:gray;"></textarea>
+      <textarea class="form-control" name="memo" id="textarea" rows="2" maxlength="125" style="background-color:transparent; border-color:gray;"></textarea>
+        <div id="count">
+          <span id="current_count">0</span>
+          <span id="maximum_count">/ 125</span>
+        </div>
     </div>
   </form>
 </div>
@@ -52,5 +56,14 @@
     $('#eldiv').append(
     '<div class="d-flex gap-3 my-1"><select name="producto[]" class="p-1 w-100 rounded-1" style="border: 1px solid gray"><option value="" style="color:gray">Seleccione un producto</option>{% for producto in productos %}<option value="{{producto.id}}">{{producto.name}}</option>{% endfor %}</select><input type="number" name="cantidad[]"></div>');
   }
+
+    $('textarea').keyup(function() {    
+    var characterCount = $(this).val().length,
+        current_count = $('#current_count'),
+        maximum_count = $('#maximum_count'),
+        count = $('#count');    
+        current_count.text(characterCount);        
+});
+
   </script>
 {% endblock %}
