@@ -16,8 +16,8 @@ use App\Entity\ProductsByOrder;
 use App\Entity\Products;
 use Symfony\Component\Security\Core\Security;
 use App\Repository\ProductsByOrderRepository;
-
-
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Knp\Component\Pager\PaginatorInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 class OrderController extends AbstractController
@@ -29,27 +29,56 @@ class OrderController extends AbstractController
         $this->OrdersRepository = $OrdersRepository;
         $this->em = $em;
     }
+    
+  #[Route('/pedidos/filtrar/{id}', name: 'app_ordered_list')]
+  public function getFilteredOrders($id, Security $sec){
+    // $ordersMicentro= $this->OrdersRepository->findByHealthCenter($sec->getUser()->getHealthCenter());
+    // dd($this->OrdersRepository);
+    $orders= $this->OrdersRepository->findByStatusAndHealthCenter($id,$sec->getUser()->getHealthCenter());
+    $response = array();
+
+    foreach($orders as $order){
+      $response[] = array(
+        'id' => $order->getId(),
+        'created_at' => $order->getCreatedAt(),
+        'memo' => $order->getMemo(),
+        'user' => $order->getUser()->getLastname(),
+        'status' => $order->getStatus()->getDescription()
+      );
+    }
+    
+    return new JsonResponse($response);
+  }
 
     #[Route('/pedidos', name: 'app_order')]
-    public function index(OrdersRepository $OrdersRepository , Security $security): Response
+    public function index(OrdersRepository $OrdersRepository , Security $security, PaginatorInterface $paginator, Request $request): Response
     {
-        $orders = $OrdersRepository->findByHealthCenter($security->getUser()->getHealthCenter());
-        return $this->render('order/index.html.twig', [
-            'orders' => $orders
-        ]);
+      $pagination = $paginator->paginate(
+        $OrdersRepository->paginationQuery($security->getUser()->getHealthCenter()),
+        $request->query->get('page', 1),
+        1
+      );
+      return $this->render('order/index.html.twig', [
+        'pagination' => $pagination
+    ]);
+        // $orders = $OrdersRepository->findByHealthCenter($security->getUser()->getHealthCenter());
+        // return $this->render('order/index.html.twig', [
+        //     'orders' => $orders
+        // ]);
     }
 
     #[Route('/pedidos/nuevo', name: 'appOrder_new', methods: ['GET' , 'POST'])]
-    public function main(Request $request, ManagerRegistry $doctrine): Response
+    public function main(Request $request, ManagerRegistry $doctrine, Security $sec): Response
     {
         if (isset($request->request->all()['producto'])) {
             // dd($request);
             $order = new Orders();
             $order->setCreatedAt(new \DateTimeImmutable);
             $order->setUser($this->getUser());
-            $order->setMemo($request->request->get('memo'));
+            $sanitizedMemo = strip_tags($request->request->get('memo'));
+            $order->setMemo($sanitizedMemo);
             $order->setStatus($doctrine->getRepository(Status::class)->findOneById(1));
-            $order->setHealthCenter($doctrine->getRepository(HealthCenter::class)->findOneById($request->request->get('healthCenter')));
+            $order->setHealthCenter($sec->getUser()->getHealthCenter());
             $this->em->persist($order);
             $this->em->flush();
 
@@ -100,5 +129,7 @@ class OrderController extends AbstractController
     else{
         return $this->render('order/error.html.twig'); 
     }
-}
+  }
+
+  
 }

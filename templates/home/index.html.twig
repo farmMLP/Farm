@@ -5,7 +5,7 @@
 
 
 {% block body %}
-<div id="background-div">
+<div class="background-div">
   <div class="d-flex flex-column gap-2 justify-content-center align-items-start h-100" style="margin-left:5%">
     <div class="d-flex flex-column justify-content-start pt-5" style="width:48%; height:50%">
       <div style="width:90%;">
@@ -13,7 +13,7 @@
         <p class="mb-0" style="color: white; text-shadow: 1px 1px grey;">Sistema de gestión UMAD 2023, desarrollado en la Municipalidad de La Plata. Utilizá la botonera de accesos rápidos o navegá a través de las distintas secciones.</p>
       </div>
     </div>
-    <div class="d-flex align-items-center gap-4" style="width:60%; height:25%;">
+    <div class="d-flex align-items-center gap-4" style="width:57%; height:25%;">
       <div class="rounded-2 d-flex flex-column justify-content-end home-buttons shadow-sm" style="width:100%; height:100%; background-color: #00b4d8; position:relative;">
         <img src="/images/pedido1.jpg" alt="foto pedido" style="position: absolute; top:0; left: 0; z-index: 0; object-position: 50% 80%; width:100%; height:100%; object-fit:cover">
         <div class="d-flex flex-column p-2" style="background-color: rgba(0,0,0,.3); z-index:10;">
@@ -48,7 +48,7 @@
               <p class="mb-0" style="font-size:.85rem; line-height:1.05rem; text-shadow: 1px 1px black">Editá los datos de tu perfil o verificá datos de tu centro de salud.</p>
               <div class="d-flex gap-2 w-100 justify-content-end">
                 <a href="/perfil" class="text-white fw-bold link-buttons" style="padding-right:.25rem; padding-left:.25rem">Ver perfil</a>
-                <a href="/micentro" class="text-white fw-bold link-buttons" style="padding-right:.25rem; padding-left:.25rem">Ver Centro de Salud</a>
+                <a href="{{path('app_health_index', { 'healthcenter' : app.user.getHealthCenter() })}}" class="text-white fw-bold link-buttons" style="padding-right:.25rem; padding-left:.25rem">Ver Centro de Salud</a>
               </div>
           </div>
         </div>

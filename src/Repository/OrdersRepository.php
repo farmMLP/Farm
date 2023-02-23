@@ -52,6 +52,28 @@ class OrdersRepository extends ServiceEntityRepository
       // $qb->orderBy('p.id','ASC');
       return $qb->getQuery()->getResult();
     }
+
+    public function findByStatusAndHealthCenter($status, $healthcenter)
+   {
+       return $this->createQueryBuilder('a')
+           ->orderBy('a.id', 'ASC')
+           ->where('a.healthCenter = :healthcenter AND a.status = :status')
+           ->setParameter('healthcenter', $healthcenter)
+           ->setParameter('status', $status)
+           ->getQuery()->getResult()
+       ;
+   }
+
+   public function paginationQuery($id)
+   {
+       return $this->createQueryBuilder('a')
+           ->orderBy('a.id', 'ASC')
+           ->where('a.healthCenter = :id')
+           ->setParameter('id', $id)
+           ->getQuery()
+
+       ;
+   }
 //    /**
 //     * @return Orders[] Returns an array of Orders objects
 //     */
