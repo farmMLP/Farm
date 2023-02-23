@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+{# <style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style> #}
+<div class="example-wrapper">
+  <h1>Crear Pedido</h1>
+
+  <form id="elform" action="" method="post">
+
+    {# <div class="mb-3">
+      <label for="healthCenter" class="form-label d-block">Seleccionar Centro que solicita el pedido</label>
+      <select name="healthCenter" class="p-2 rounded-1" id="healthCenter">
+        <option value="" style="color:gray">Seleccionar centro</option>
+        {% for healthCenter in healthCenters %}
+          <option value="{{healthCenter.id}}">{{healthCenter.name}}</option>
+        {% endfor %}
+      </select>
+    </div> #}
+
+    <div>
+      <label for="producto" class="form-label d-block">Muestra medica</label>
+      <div class="d-flex gap-3 my-1">   
+        <select name="product" class="p-1 w-100 rounded-1" style="border: 1px solid gray" id="product">
+          <option value="" style="color:gray">Seleccione un producto</option>
+          {% for producto in productos %}
+            <option value="{{producto.id}}">{{producto.name}}</option>
+          {% endfor %}
+        </select>
+        <input type="number" name="stock">
+      </div>
+    </div>
+    
+    <div id="eldiv"></div>
+
+    {# <button type="button" onclick="add()" class="mt-1 p-1 rounded-1 border-secondary">Añadir producto</button> #}
+    <input type="submit" value="Submit"  class="mt-1 d-flex " />
+    {# <div class="my-3">
+      <label for="memo" class="form-label">Añadir memo</label>
+      <textarea class="form-control" name="memo" id="texto" rows="2" maxlength="125" style="background-color:transparent; border-color:gray;"></textarea>
+        <div id="count">
+          <span id="current_count">0</span>
+          <span id="maximum_count">/ 125</span>
+        </div>
+    </div>
+    <input type="submit" value="Submit"  class="mt-1"/>
+  </form>
+</div> #}
+
+  <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+  function add(){
+    $('#eldiv').append(
+    '<div class="d-flex gap-3 my-1"><select name="producto[]" class="p-1 w-100 rounded-1" style="border: 1px solid gray"><option value="" style="color:gray">Seleccione un producto</option>{% for producto in productos %}<option value="{{producto.id}}">{{producto.name}}</option>{% endfor %}</select><input type="number" name="cantidad[]"></div>');
+  }
+
+    $('textarea').keyup(function() {    
+    var characterCount = $(this).val().length,
+        current_count = $('#current_count'),
+        maximum_count = $('#maximum_count'),
+        count = $('#count');    
+        current_count.text(characterCount);        
+});
+  </script>
+{% endblock %}

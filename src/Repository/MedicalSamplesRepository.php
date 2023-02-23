@@ -39,6 +39,15 @@ class MedicalSamplesRepository extends ServiceEntityRepository
         }
     }
 
+    public function paginationQuery()
+    {
+        return $this->createQueryBuilder('a')
+            ->orderBy('a.id', 'ASC')
+            ->getQuery()
+ 
+        ;
+    }
+
 //    /**
 //     * @return MedicalSamples[] Returns an array of MedicalSamples objects
 //     */
