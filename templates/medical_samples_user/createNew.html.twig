@@ -5,55 +5,84 @@
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style> #}
-<div class="example-wrapper">
-  <h1>Crear Pedido</h1>
-
-  <form id="elform" action="" method="post">
-
-    {# <div class="mb-3">
-      <label for="healthCenter" class="form-label d-block">Seleccionar Centro que solicita el pedido</label>
-      <select name="healthCenter" class="p-2 rounded-1" id="healthCenter">
-        <option value="" style="color:gray">Seleccionar centro</option>
-        {% for healthCenter in healthCenters %}
-          <option value="{{healthCenter.id}}">{{healthCenter.name}}</option>
-        {% endfor %}
-      </select>
-    </div> #}
-
-    <div>
-      <label for="producto" class="form-label d-block">Muestra medica</label>
-      <div class="d-flex gap-3 my-1">   
-        <select name="product" class="p-1 w-100 rounded-1" style="border: 1px solid gray" id="product">
-          <option value="" style="color:gray">Seleccione un producto</option>
-          {% for producto in productos %}
-            <option value="{{producto.id}}">{{producto.name}}</option>
-          {% endfor %}
-        </select>
-        <input type="number" name="stock">
-      </div>
-    </div>
-    
-    <div id="eldiv"></div>
-
-    {# <button type="button" onclick="add()" class="mt-1 p-1 rounded-1 border-secondary">Añadir producto</button> #}
-    <input type="submit" value="Submit"  class="mt-1 d-flex " />
-    {# <div class="my-3">
-      <label for="memo" class="form-label">Añadir memo</label>
-      <textarea class="form-control" name="memo" id="texto" rows="2" maxlength="125" style="background-color:transparent; border-color:gray;"></textarea>
-        <div id="count">
-          <span id="current_count">0</span>
-          <span id="maximum_count">/ 125</span>
+<div class="gradient-bg">
+  <div class="container w-100 h-100">
+    <div class="d-flex flex-column pt-3 w-100 mh-100 h-100">
+    <div class="d-flex justify-content-between align-items-center" style="margin-top:3.5rem; margin-bottom:1.5rem;">
+        <div class="d-flex flex-column gap-1">
+          <h3 class="mb-0">Agregar Muestras médicas</h3>
+          <p class="text-secondary mb-0" style="font-size: .9rem">Detallá el listado de ingreso de muestras médicas, especificando productos y cantidades de stock.</p>
         </div>
+        <div class="d-flex justify-content-end gap-2" >
+          <a href="/muestras" class="btn btn-outline-secondary p-1 rounded-1 fw-light">Ir a Muestras</a>
+          <a href="/home" class="btn btn-outline-secondary p-1 rounded-1 fw-light">Ir a Inicio</a>
+        </div>
+      </div>
+      
+      <div style="height:65%; max-height:65%">
+        <form id="elform" action="" method="post" class="d-flex gap-3 mh-100 h-100 ">
+          <div class="w-100 h-100 d-flex flex-column justify-content-between bg-white p-4 rounded-3 border">
+              {# <input list="searchable-products">
+              <datalist id="searchable-products">
+                {% for producto in productos %}
+                    <option value="{{producto.id}}">{{producto.name}}</option>
+                  {% endfor %}
+              </datalist> #}
+            <div class="d-flex flex-column w-100 h-100 overflow-auto px-3">
+              <div class="d-flex justify-content-between gap-3">
+                <div class="d-flex flex-column w-75" id="product-input-div">
+                  <p for="producto" class="d-block fw-light mb-1" style="">Añadir Muestras</p>
+                  <select name="producto[]" class="my-1 p-1 w-100 fw-light" style="border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none; font-size: .9rem" id="product">
+                    <option value="" style="color:gray;">Seleccione un producto</option>
+                    {% for producto in productos %}
+                      <option value="{{producto.id}}" style="">{{producto.name}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="d-flex flex-column w-25" id="quantity-input-div">
+                  <p for="producto" class="d-block mb-1 fw-light" style="">Seleccionar Cantidad</p>
+                  <input type="number" name="cantidad[]" class="my-1 p-1" min="0" style="border-top:none; border-left:none; border-right:none; outline:none;border-bottom: 1px solid grey; font-size:.9rem; height:29px;">
+                </div>
+              </div>
+              <p type="button" onclick="add()" class="stylized-btn mt-2">Agregar otra muestra</p>
+            </div>
+
+            <input type="submit" value="Submit"  class="btn btn-outline-primary"/>
+          </div>
+          {# <div class="d-flex flex-column w-25 gap-2 bg-white p-4 rounded-3 border">
+              <div class="d-flex gap-2">
+                <p for="memo" class="d-block mb-1 fw-light">Añadir memo</p>
+                <div id="count">
+                  <span id="current_count">0</span>
+                  <span id="maximum_count">/ 125</span>
+                </div>
+              </div>
+              <textarea class="form-control rounded-1" name="memo" id="texto" rows="2" maxlength="125" style="background-color:transparent; border-color:gray;"></textarea>
+              <input type="submit" value="Submit"  class="btn btn-outline-primary"/>
+          </div> #}
+          
+        </form>
+      </div>
+      <div class="d-flex flex-column text-secondary pt-3 pb-0" style="font-size: .85rem;">
+    <div class="d-flex align-items-center gap-2">
+      <i class="dot"></i>
+      <p class="mb-0">Ayuda:</p>
     </div>
-    <input type="submit" value="Submit"  class="mt-1"/>
-  </form>
-</div> #}
+    <p class="mb-0 ms-3">- Si pretende solicitar un producto pero se permite recibir otro, especificar en memo. (Ej: solicité un insumo de X laboratorio pero me permito recibir de algún otro)</p>
+    <p class="mb-0 ms-3">- No duplicar productos en el pedido.</p>
+  </div>
+    </div>
+  </div>
+</div>
 
   <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
   <script type="text/javascript">
   function add(){
-    $('#eldiv').append(
-    '<div class="d-flex gap-3 my-1"><select name="producto[]" class="p-1 w-100 rounded-1" style="border: 1px solid gray"><option value="" style="color:gray">Seleccione un producto</option>{% for producto in productos %}<option value="{{producto.id}}">{{producto.name}}</option>{% endfor %}</select><input type="number" name="cantidad[]"></div>');
+    $('#product-input-div').append(
+    '<select name="producto[]" class="p-1 w-100 fw-light my-1" style="border: 1px solid gray; font-size:.9rem; border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none;"><option value="" style="color:gray">Seleccione un producto</option>{% for producto in productos %}<option value="{{producto.id}}">{{producto.name}}</option>{% endfor %}</select>');
+    $('#quantity-input-div').append(
+      '<input type="number" name="cantidad[]" class="my-1" style="border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none; font-size:.9rem; height:29px;">'
+    )
   }
 
     $('textarea').keyup(function() {    

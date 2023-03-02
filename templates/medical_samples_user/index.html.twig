@@ -18,8 +18,8 @@
       <div class="w-100 h-100 d-flex flex-column mt-3">
         <div class="d-flex justify-content-between align-items-center" style="margin-top:3.5rem; margin-bottom:1.5rem;">
           <div class="d-flex flex-column gap-1">
-            <h3 class="mb-0">Historial de pedidos</h3>
-            <p class="text-secondary mb-0" style="font-size: .9rem">Detalle de pedidos hasta el día de la fecha, perteneciente al centro de salud: <a href=""></a>.</p>
+            <h3 class="mb-0">Muestras médicas</h3>
+            <p class="text-secondary mb-0" style="font-size: .9rem">Listado de muestras médicas pertenecientes al centro de salud <a href="/centro/{{app.user.healthCenter}}">{{app.user.healthCenter}}</a>.</p>
           </div>
           <a href="/muestras/nuevo" class="btn btn-primary p-1">Crear muestra medica</a>
         </div>
@@ -58,8 +58,8 @@
             <i class="dot"></i>
             <p class="mb-0">Ayuda:</p>
           </div>
-          <p class="mb-0 ms-3">- En caso de querer cancelar un pedido, contactar con la administradora y solicitar un pedido nuevo.</p>
-          <p class="mb-0 ms-3">- Por cuestiones de integridad de la información, no es posible editar los pedidos.</p>
+          <p class="mb-0 ms-3">- La administración de las muestras médicas (stock y productos) es responsabilidad del encargado del centro.</p>
+          {# <p class="mb-0 ms-3">- Para eliminar una muestra médica, contactá con el encargado del centro.</p> #}
         </div>
       </div>
     </div>

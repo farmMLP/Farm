@@ -6,34 +6,37 @@
       <h1>Crear Lote</h1>
       <button type="submit" class="btn btn-primary">Guardar Lote</button>
     </div>
-    <div class="mb-3">
-      <label for="user" class="form-label d-block">Usuario<span class="text-danger">*</span></label>
-      <select name="user" class="p-1 rounded-1" id="user">
-        <option value="" style="color:gray">Usuario</option>
-        {% for user in users %}
-          <option value="{{user.id}}">{{user.name}}</option>
-        {% endfor %}
-      </select>
+    <div class="d-flex flex-column w-25">
+      <div class="mb-3">
+        <label for="user" class="form-label d-block">Usuario<span class="text-danger">*</span></label>
+        <select name="user" class="p-1 rounded-1 w-100" id="user">
+          <option value="" style="color:gray">Usuario</option>
+          {% for user in users %}
+            <option value="{{user.id}}">{{user.name}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="product" class="form-label d-block">Producto<span class="text-danger">*</span></label>
+        <select name="product" class="p-1 rounded-1 w-100" id="product">
+          <option value="" style="color:gray">Producto</option>
+          {% for product in products %}
+            <option value="{{product.id}}">{{product.name}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="">
+        <label for="quantity" class="form-label d-block">Ingresar cantidad<span class="text-danger">*</span></label>
+        <input type="number" name="cantidad" id="quantity" class="w-100">
+      </div>
+      {# <label for="createdAt" class="d-block">Fecha de ingreso</label>
+      <input type="datetime-local" name="fechaIngreso" id="createdAt"> #}
+      <label for="expirationDate" class="form-label mt-3 d-block">Fecha de vencimiento<span class="text-danger">*</span></label>
+      <input type="datetime-local" name="fechaVencimiento" id="expirationDate">
+      <label for="batchCode" class="d-block form-label mt-3">Código de lote<span class="text-danger">*</span></label>
+      <input type="text" id="batchCode" name="batchCode">
+      
     </div>
-    <div class="mb-3">
-      <label for="product" class="form-label d-block">Producto<span class="text-danger">*</span></label>
-      <select name="product" class="p-1 rounded-1" id="product">
-        <option value="" style="color:gray">Producto</option>
-        {% for product in products %}
-          <option value="{{product.id}}">{{product.name}}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <div class="">
-      <label for="quantity" class="form-label d-block">Ingresar cantidad<span class="text-danger">*</span></label>
-      <input type="number" name="cantidad" id="quantity">
-    </div>
-    {# <label for="createdAt" class="d-block">Fecha de ingreso</label>
-    <input type="datetime-local" name="fechaIngreso" id="createdAt"> #}
-    <label for="expirationDate" class="form-label mt-3 d-block">Fecha de vencimiento<span class="text-danger">*</span></label>
-    <input type="datetime-local" name="fechaVencimiento" id="expirationDate">
-    <label for="batchCode" class="d-block form-label mt-3">Código de lote<span class="text-danger">*</span></label>
-    <input type="text" id="batchCode" name="batchCode">
     
   </form>
 {% endblock %}

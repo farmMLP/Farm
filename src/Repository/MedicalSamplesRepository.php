@@ -39,29 +39,30 @@ class MedicalSamplesRepository extends ServiceEntityRepository
         }
     }
 
-    public function paginationQuery()
+    public function paginationQuery($id)
     {
         return $this->createQueryBuilder('a')
             ->orderBy('a.id', 'ASC')
+            ->where('a.healthCenter = :id')
+            ->setParameter('id', $id)
             ->getQuery()
- 
         ;
     }
 
 //    /**
 //     * @return MedicalSamples[] Returns an array of MedicalSamples objects
 //     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('m.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findIfExistsByHealthCenter($healthcenter, $product): ?MedicalSamples
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.healthCenter = :healthcenter AND a.product = :product')
+            ->setParameter('healthcenter', $healthcenter)
+            ->setParameter('product', $product)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    ;
+    }
 
 //    public function findOneBySomeField($value): ?MedicalSamples
 //    {

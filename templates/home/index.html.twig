@@ -34,8 +34,8 @@
           <div style="font-size:0.85rem;" class="text-white fw-light d-flex flex-column">
             <p class="mb-0" style="font-size:.85rem; line-height:1.05rem; text-shadow: 1px 1px black">Ingresá una muestra médica o mirá el stock que se posee.</p>
             <div class="d-flex gap-2 w-100 justify-content-end">
-              <a href="/muestra-medica/nuevo" class="text-white fw-bold link-buttons" style="padding-right:.25rem; padding-left:.25rem">Crear muestra</a>
-              <a href="/muestras-medicas" class="text-white fw-bold link-buttons" style="padding-right:.25rem; padding-left:.25rem">Ver muestras</a>
+              <a href="/muestras/nuevo" class="text-white fw-bold link-buttons" style="padding-right:.25rem; padding-left:.25rem">Crear muestra</a>
+              <a href="/muestras" class="text-white fw-bold link-buttons" style="padding-right:.25rem; padding-left:.25rem">Ver muestras</a>
             </div>
           </div>
         </div>
@@ -43,11 +43,11 @@
       <div class="rounded-2 d-flex flex-column justify-content-end home-buttons shadow-sm" style="width:100%; height:100%; background-color: #415a77; position:relative;">
         <img src="/images/perfil.jpg" alt="foto pedido" style="position: absolute; top:0; left: 0; z-index: 0; object-position: 50% 100%; width:100%; height:100%; object-fit:cover";>
         <div class="d-flex flex-column p-2" style="background-color: rgba(0,0,0,.3); z-index:10;">
-          <p class="text-white mb-0" style="font-weight:600; ">Mis Datos</p>
+          <p class="text-white mb-0" style="font-weight:600; ">Mi Centro</p>
           <div style="font-size:0.85rem;" class="text-white fw-light d-flex flex-column">
-              <p class="mb-0" style="font-size:.85rem; line-height:1.05rem; text-shadow: 1px 1px black">Editá los datos de tu perfil o verificá datos de tu centro de salud.</p>
+              <p class="mb-0" style="font-size:.85rem; line-height:1.05rem; text-shadow: 1px 1px black">Verificá los datos de tu centro de salud como dirección o día de entregas asociados.</p>
               <div class="d-flex gap-2 w-100 justify-content-end">
-                <a href="/perfil" class="text-white fw-bold link-buttons" style="padding-right:.25rem; padding-left:.25rem">Ver perfil</a>
+                {# <a href="/perfil" class="text-white fw-bold link-buttons" style="padding-right:.25rem; padding-left:.25rem">Ver perfil</a> #}
                 <a href="{{path('app_health_index', { 'healthcenter' : app.user.getHealthCenter() })}}" class="text-white fw-bold link-buttons" style="padding-right:.25rem; padding-left:.25rem">Ver Centro de Salud</a>
               </div>
           </div>

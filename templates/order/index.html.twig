@@ -18,7 +18,7 @@
         <div class="d-flex justify-content-between align-items-center" style="margin-top:3.5rem; margin-bottom:1.5rem;">
           <div class="d-flex flex-column gap-1">
             <h3 class="mb-0">Historial de pedidos</h3>
-            <p class="text-secondary mb-0" style="font-size: .9rem">Detalle de pedidos hasta el día de la fecha, perteneciente al centro de salud: <a href="">{{app.user.getHealthCenter()}}</a>.</p>
+            <p class="text-secondary mb-0" style="font-size: .9rem">Detalle de pedidos hasta el día de la fecha, perteneciente al centro de salud: <a href="/centro/{{app.user.getHealthCenter()}}">{{app.user.getHealthCenter()}}</a>.</p>
           </div>
           <div>
           
@@ -36,22 +36,16 @@
                     <h5 class="modal-title" id="exampleModalLabel">Filtrar</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
-                  <div class="modal-body">
-                    <p>Por Estado:</p>
-                    <button class="btn btn-outline-dark p-1 rounded-0" onClick="getFilteredOrders(3);">Ver Rechazados</button>
-                    <button class="btn btn-outline-dark p-1 rounded-0" onClick="getFilteredOrders(2);">Ver Autorizados</button>
-                    <button class="btn btn-outline-dark p-1 rounded-0" onClick="getFilteredOrders(1);">Ver Enviados</button>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                  <div class="modal-body" style="font-size: 0.9rem">
+                    <p class="fw-light mb-1">Por Estado:</p>
+                    <button class="btn btn-outline-primary p-1 rounded-1" onClick="getFilteredOrders(3);" style="font-size: 0.9rem">Ver Rechazados</button>
+                    <button class="btn btn-outline-primary p-1 rounded-1" onClick="getFilteredOrders(2);" style="font-size: 0.9rem">Ver Autorizados</button>
+                    <button class="btn btn-outline-primary p-1 rounded-1" onClick="getFilteredOrders(1);" style="font-size: 0.9rem">Ver Enviados</button>
                   </div>
                 </div>
               </div>
             </div>
-
           </div>
-          
         </div>
         <div class="table-responsive bg-white rounded-2 border p-3" style="height:65%; max-height:65%">
           <table class="table table-hover mw-100">

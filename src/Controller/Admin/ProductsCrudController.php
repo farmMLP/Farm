@@ -10,9 +10,16 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+use Symfony\Component\HttpFoundation\Response;
+use App\Repository\ProductsRepository;
 
 class ProductsCrudController extends AbstractCrudController
 {
+    public function __construct(ProductsRepository $products){
+      $this->productsRepository = $products;
+    }
+
     public static function getEntityFqcn(): string
     {
         return Products::class;
@@ -74,5 +81,26 @@ class ProductsCrudController extends AbstractCrudController
             TextField::new('description', 'Descripción'),
             NumberField::new('stock', 'Stock')
         ];
+    }
+
+    public function new(AdminContext $context): Response
+    { 
+      if ($context->getRequest()->isMethod('POST')){
+        $productName = $context->getRequest()->request->get('product');
+        if ($this->productsRepository->findOneByName($productName)){
+          $message = false;
+          return $this->render('admin/createProduct.html.twig', ['message' => $message]);
+        } else {
+          $description = $context->getRequest()->request->get('description');
+          $newProduct = new Products();
+          $newProduct->setName($productName);
+          $newProduct->setDescription($description);
+          $newProduct->setStock(0);
+          $this->productsRepository->save($newProduct, true);
+          $message = true;
+          return $this->render('admin/createProduct.html.twig', ['message' => $message]);
+        }
+      }     
+      return $this->render('admin/createProduct.html.twig');
     }
 }

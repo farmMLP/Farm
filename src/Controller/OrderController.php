@@ -53,8 +53,21 @@ class OrderController extends AbstractController
     #[Route('/pedidos', name: 'app_order')]
     public function index(OrdersRepository $OrdersRepository , Security $security, PaginatorInterface $paginator, Request $request): Response
     {
+      
+      // if ($request->query->get('filter') !== null){
+      //   $pagination = $paginator->paginate(
+      //     $OrdersRepository->filterByApproved($security->getUser()->getHealthCenter()),
+      //     $request->query->get('page', 1),
+      //     1
+      //   );
+      //   return $this->render('order/index.html.twig', [
+      //     'pagination' => $pagination
+      //   ]);
+      // }
+      // dd($request->query->get('filter'));
+      // $criterios = $request->query->get('filter');
       $pagination = $paginator->paginate(
-        $OrdersRepository->paginationQuery($security->getUser()->getHealthCenter()),
+        $OrdersRepository->defaultQuery($security->getUser()->getHealthCenter()),
         $request->query->get('page', 1),
         1
       );

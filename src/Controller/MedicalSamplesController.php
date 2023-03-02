@@ -33,7 +33,7 @@ class MedicalSamplesController extends AbstractController
     public function index(MedicalSamplesRepository $MedicalSamplesRepository, Security $security, Request $request, PaginatorInterface $paginator): Response
     {
         $pagination = $paginator->paginate(
-            $MedicalSamplesRepository->paginationQuery(),
+            $MedicalSamplesRepository->paginationQuery($security->getUser()->getHealthCenter()),
             $request->query->get('page', 1),
             10
         );
@@ -46,19 +46,32 @@ class MedicalSamplesController extends AbstractController
     public function create(Security $security, Request $request, ProductsRepository $productsRepository): Response
     {
         if ($request->isMethod('POST')){
-        $samples= new MedicalSamples();
-        $samples->setStock($request->request->get('stock'));
-        $samples->setExpirationDate(new \DateTimeImmutable);
-        $samples->setHealthCenter($security->getUser()->getHealthCenter());
-        $samples->setProduct($request->request->get('product'));
-       
-
-        $this->MedicalSamplesRepository->save($samples , true);  
-        
+          // id de productos
+          // dd($request->request->all()['producto']);
+          // cantidades
+          //  dd($request->request->all()['cantidad']);
+          $quantitys = $request->request->all()['cantidad'];
+          $products = $request->request->all()['producto'];
+          if ((isset($request->request->all()['cantidad']) && (isset($request->request->all()['producto'])))) {
+            
+            foreach($products as $key => $value){
+              $medicalSample = $this->MedicalSamplesRepository->findIfExistsByHealthCenter($security->getUser()->getHealthCenter(), $value);
+              if($medicalSample){
+                $medicalSample->addStock($quantitys[$key]);
+                $this->MedicalSamplesRepository->save($medicalSample,true);
+              } else {
+                $samples= new MedicalSamples();
+                $samples->setStock($quantitys[$key]);
+                $samples->setExpirationDate(new \DateTimeImmutable);
+                $samples->setHealthCenter($security->getUser()->getHealthCenter());
+                $product = $productsRepository->findOneById($products[$key]);
+                $samples->setProduct($product);
+                $this->MedicalSamplesRepository->save($samples , true);  
+              }
+            }
+          }   
         }
-        
         $products = $productsRepository->findAll();
-
         return $this->render('medical_samples_user/createNew.html.twig', [
             'productos'=>$products
         ]);
