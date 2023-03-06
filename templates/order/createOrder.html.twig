@@ -32,7 +32,7 @@
               <div class="d-flex justify-content-between gap-3">
                 <div class="d-flex flex-column w-75" id="product-input-div">
                   <p for="producto" class="d-block fw-light mb-1">Añadir Productos</p>
-                  <select name="producto[]" class="my-1 p-1 w-100 fw-light products" style="border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none; font-size: .9rem" id="product" data-mdb-filter="true">
+                  <select required name="producto[]" class="my-1 p-1 w-100 fw-light products" style="border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none; font-size: .9rem" id="product" data-mdb-filter="true">
                     <option value="" style="color:gray;">Seleccione un producto</option>
                     {% for producto in productos %}
                       <option value="{{producto.id}}">{{producto.name}}</option>
@@ -41,9 +41,10 @@
                 </div>
                 <div class="d-flex flex-column w-25" id="quantity-input-div">
                   <p for="producto" class="d-block mb-1 fw-light">Seleccionar Cantidad</p>
-                  <input type="number" name="cantidad[]" class="my-1 p-1 quantitys" min="0" style="border-top:none; border-left:none; border-right:none; outline:none;border-bottom: 1px solid grey; font-size:.9rem; height:29px;">
+                  <input required type="number" name="cantidad[]" class="my-1 p-1 quantitys" min="0" style="border-top:none; border-left:none; border-right:none; outline:none;border-bottom: 1px solid grey; font-size:.9rem; height:29px;">
                 </div>
               </div>
+              <p id="messageText" style="font-size: .85rem;" class="text-secondary mb-0"></p>
               <p type="button" id="buttonAdd" class="stylized-btn mt-2">Agregar otro producto</p>
             </div>
           </div>
@@ -67,7 +68,7 @@
     </div>
     <p class="mb-0 ms-3">- Si pretende solicitar un producto pero se permite recibir otro, especificar en memo. (Ej: solicité un insumo de X laboratorio pero me permito recibir de algún otro)</p>
     <p class="mb-0 ms-3">- No duplicar productos en el pedido.</p>
-    <p class="mb-0 ms-3">- Para solicitar un producto es necesario completar los campos anteriores primero.</p>
+    <p class="mb-0 ms-3">- Para agregar un producto es necesario completar los campos anteriores primero.</p>
   </div>
     </div>
   </div>
@@ -103,20 +104,21 @@
   }
 
   const buttonAdd = document.getElementById('buttonAdd');
+  const messageText = document.getElementById('messageText');
   buttonAdd.addEventListener('click', () => {
     if (valuesAreSetted()) {
-      console.log('estan seteados los inputs')
+      messageText.innerHTML = '';
       add();
     } else {
-      console.log('no se setearon todos los inputs, no se agrega el nuevo row')
+      messageText.innerHTML = 'Completá la fila anterior para agregar otro producto al pedido.'
     }
   });
 
   function add(){
     $('#product-input-div').append(
-    '<select name="producto[]" class="p-1 w-100 fw-light my-1 products" style="border: 1px solid gray; font-size:.9rem; border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none;"><option value="" style="color:gray">Seleccione un producto</option>{% for producto in productos %}<option value="{{producto.id}}">{{producto.name}}</option>{% endfor %}</select>');
+    '<select required name="producto[]" class="p-1 w-100 fw-light my-1 products" style="border: 1px solid gray; font-size:.9rem; border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none;"><option value="" style="color:gray">Seleccione un producto</option>{% for producto in productos %}<option value="{{producto.id}}">{{producto.name}}</option>{% endfor %}</select>');
     $('#quantity-input-div').append(
-      '<input type="number" name="cantidad[]" class="my-1 quantitys" style="border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none; font-size:.9rem; height:29px;">'
+      '<input required type="number" name="cantidad[]" class="my-1 quantitys" style="border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none; font-size:.9rem; height:29px;">'
     )
   }
 

@@ -32,7 +32,7 @@
               <div class="d-flex justify-content-between gap-3">
                 <div class="d-flex flex-column w-75" id="product-input-div">
                   <p for="producto" class="d-block fw-light mb-1" style="">Añadir Muestras</p>
-                  <select name="producto[]" class="my-1 p-1 w-100 fw-light" style="border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none; font-size: .9rem" id="product">
+                  <select required name="producto[]" class="my-1 p-1 w-100 fw-light products" style="border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none; font-size: .9rem" id="product">
                     <option value="" style="color:gray;">Seleccione un producto</option>
                     {% for producto in productos %}
                       <option value="{{producto.id}}" style="">{{producto.name}}</option>
@@ -41,26 +41,14 @@
                 </div>
                 <div class="d-flex flex-column w-25" id="quantity-input-div">
                   <p for="producto" class="d-block mb-1 fw-light" style="">Seleccionar Cantidad</p>
-                  <input type="number" name="cantidad[]" class="my-1 p-1" min="0" style="border-top:none; border-left:none; border-right:none; outline:none;border-bottom: 1px solid grey; font-size:.9rem; height:29px;">
+                  <input required type="number" name="cantidad[]" class="my-1 p-1 quantitys" min="0" style="border-top:none; border-left:none; border-right:none; outline:none;border-bottom: 1px solid grey; font-size:.9rem; height:29px;">
                 </div>
               </div>
-              <p type="button" onclick="add()" class="stylized-btn mt-2">Agregar otra muestra</p>
+              <p id="messageText" style="font-size: .85rem;" class="text-secondary mb-0"></p>
+              <p type="button" id="buttonAdd" class="stylized-btn mt-2">Agregar otra muestra</p>
             </div>
-
             <input type="submit" value="Submit"  class="btn btn-outline-primary"/>
           </div>
-          {# <div class="d-flex flex-column w-25 gap-2 bg-white p-4 rounded-3 border">
-              <div class="d-flex gap-2">
-                <p for="memo" class="d-block mb-1 fw-light">Añadir memo</p>
-                <div id="count">
-                  <span id="current_count">0</span>
-                  <span id="maximum_count">/ 125</span>
-                </div>
-              </div>
-              <textarea class="form-control rounded-1" name="memo" id="texto" rows="2" maxlength="125" style="background-color:transparent; border-color:gray;"></textarea>
-              <input type="submit" value="Submit"  class="btn btn-outline-primary"/>
-          </div> #}
-          
         </form>
       </div>
       <div class="d-flex flex-column text-secondary pt-3 pb-0" style="font-size: .85rem;">
@@ -77,11 +65,49 @@
 
   <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
   <script type="text/javascript">
+
+  function valuesAreSetted(){
+    const products = document.querySelectorAll('.products');
+    let productBool = false;
+    const quantitys = document.querySelectorAll('.quantitys');
+    let quantityBool = false;
+    for (const product of products) {
+      if (product.value.trim() === '') {
+        productBool = false;
+      } else {
+        productBool = true;
+      }
+    }
+    for (const quantity of quantitys) {
+      if (quantity.value.trim() === '') {
+        quantityBool = false;
+      } else {
+        quantityBool = true;
+      }
+    }
+    if (quantityBool && productBool){
+      return true
+    } else {
+      return false
+    }
+  }
+
+  const buttonAdd = document.getElementById('buttonAdd');
+  const messageText = document.getElementById('messageText');
+  buttonAdd.addEventListener('click', () => {
+    if (valuesAreSetted()) {
+      messageText.innerHTML = '';
+      add();
+    } else {
+      messageText.innerHTML = 'Completá la fila anterior para agregar otro producto al pedido.'
+    }
+  });
+
   function add(){
     $('#product-input-div').append(
-    '<select name="producto[]" class="p-1 w-100 fw-light my-1" style="border: 1px solid gray; font-size:.9rem; border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none;"><option value="" style="color:gray">Seleccione un producto</option>{% for producto in productos %}<option value="{{producto.id}}">{{producto.name}}</option>{% endfor %}</select>');
+    '<select required name="producto[]" class="p-1 w-100 fw-light my-1 products" style="border: 1px solid gray; font-size:.9rem; border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none;"><option value="" style="color:gray">Seleccione un producto</option>{% for producto in productos %}<option value="{{producto.id}}">{{producto.name}}</option>{% endfor %}</select>');
     $('#quantity-input-div').append(
-      '<input type="number" name="cantidad[]" class="my-1" style="border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none; font-size:.9rem; height:29px;">'
+      '<input required type="number" name="cantidad[]" class="my-1 p-1 quantitys" style="border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none; font-size:.9rem; height:29px;">'
     )
   }
 
