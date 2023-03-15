@@ -35,6 +35,7 @@ use App\Repository\MedicalSamplesRepository;
 
 class OrdersCrudController extends AbstractCrudController
 {
+
     public static function getEntityFqcn(): string
     {
         return Orders::class;
@@ -89,7 +90,13 @@ class OrdersCrudController extends AbstractCrudController
       ->add(Crud::PAGE_INDEX, Action::DETAIL)
       ->update(Crud::PAGE_INDEX,Action::DETAIL,function(Action $action){
         return $action->setIcon('fa fa-eye')->addCssClass('btn btn-info')->setLabel('Ver');
-        })
+      })
+
+      // ->add(Crud::PAGE_INDEX, Action::ACTION_PRINT)
+      // ->update(Crud::PAGE_INDEX,Action::ACTION_PRINT,function(Action $action){
+      //   return $action->setIcon('fa-solid fa-print')->addCssClass('btn btn-success')->setLabel('Imprimir'); 
+      // })  
+
       ->disable(Action::EDIT)
       ->update(Crud::PAGE_INDEX,Action::DELETE,function(Action $action){
         return $action->setIcon('fa fa-trash')->addCssClass('btn btn-danger text-white')->setLabel('Eliminar');
@@ -258,5 +265,20 @@ class OrdersCrudController extends AbstractCrudController
             'productos' => $productos,
             'healthCenters' => $healthCenters
         ]);
+    }
+
+    public function generatePdfById($id, OrdersRepository $ordersRepository, productsByOrderRepository $productsByOrderRepository, PdfService $pdf)
+    {
+        // Get the product from the database
+        $order = $ordersRepository->findOneById($id);
+        $productos = $productsByOrderRepository->findByPetition($id);
+        
+      $html = $this->renderView('order/pdf.html.twig', [
+        'products' => $productos,
+        'order' => $order,
+      ]); 
+       
+    return new Response($pdf->showPdfFile($html),200,array('Content-Type'=>'application/pdf'))  ;
+      
     }
 }

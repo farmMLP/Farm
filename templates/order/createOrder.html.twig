@@ -18,26 +18,21 @@
           <a href="/home" class="btn btn-outline-secondary p-1 rounded-1 fw-light">Ir a Inicio</a>
         </div>
       </div>
-      
       <div style="height:65%; max-height:65%">
         <form id="elform" action="" method="post" class="d-flex gap-3 mh-100 h-100 ">
           <div class="w-75 h-100 d-flex justify-content-between bg-white p-4 rounded-3 border">
-              {# <input list="searchable-products">
-              <datalist id="searchable-products">
-                {% for producto in productos %}
-                    <option value="{{producto.id}}">{{producto.name}}</option>
-                  {% endfor %}
-              </datalist> #}
             <div class="d-flex flex-column w-100 h-100 overflow-auto px-3">
               <div class="d-flex justify-content-between gap-3">
-                <div class="d-flex flex-column w-75" id="product-input-div">
+                <div class="d-flex flex-column w-75" >
                   <p for="producto" class="d-block fw-light mb-1">Añadir Productos</p>
-                  <select required name="producto[]" class="my-1 p-1 w-100 fw-light products" style="border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none; font-size: .9rem" id="product" data-mdb-filter="true">
-                    <option value="" style="color:gray;">Seleccione un producto</option>
-                    {% for producto in productos %}
-                      <option value="{{producto.id}}">{{producto.name}}</option>
-                    {% endfor %}
-                  </select>
+                  <div id="product-input-div" style="position: relative;">
+                    <select required onfocus="oldValue(this.value)" onchange="updateArray(this)" name="producto[]" class="my-1 p-1 w-100 fw-light products" style="border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none; font-size: .9rem; z-index:1; " id="firstSelect">
+                        <option value="" style="color:gray;">Seleccione un producto</option>
+                        {% for producto in productos %}
+                          <option value="{{producto.id}}" style="z-index:-1">{{producto.name}}</option>
+                        {% endfor %}
+                    </select>
+                  </div>   
                 </div>
                 <div class="d-flex flex-column w-25" id="quantity-input-div">
                   <p for="producto" class="d-block mb-1 fw-light">Seleccionar Cantidad</p>
@@ -73,34 +68,126 @@
     </div>
   </div>
 </div>
-
-  <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
   <script type="text/javascript">
+    var updatedProducts = [];
+    var selectedValues = [];
+    var previousValue;
 
-  function valuesAreSetted(){
-    const products = document.querySelectorAll('.products');
-    let productBool = false;
-    const quantitys = document.querySelectorAll('.quantitys');
-    let quantityBool = false;
-    for (const product of products) {
-      if (product.value.trim() === '') {
-        productBool = false;
+    function oldValue(value){
+      let filter = document.getElementById('searchInput1');
+      previousValue = value;
+      console.log('VALOR ANTERIOR: ', previousValue)
+    }
+
+    var products = [];
+    function allProducts(){
+      fetch(`/api/allProducts`)
+      .then(response => response.json())
+      .then(data => {
+        products = data;
+        updatedProducts = data;
+      })
+      .catch(error => {
+        console.error('Error fetching products list:', error);
+      });
+    }
+    window.onload = allProducts();
+
+    function valuesAreSetted(){
+      const products = document.querySelectorAll('.products');
+      let productBool = false;
+      const quantitys = document.querySelectorAll('.quantitys');
+      let quantityBool = false;
+      for (const product of products) {
+        if (product.value.trim() === '') {
+          productBool = false;
+        } else {
+          productBool = true;
+        }
+      }
+      for (const quantity of quantitys) {
+        if (quantity.value.trim() === '') {
+          quantityBool = false;
+        } else {
+          quantityBool = true;
+        }
+      }
+      if (quantityBool && productBool){
+        return true
       } else {
-        productBool = true;
+        return false
       }
     }
-    for (const quantity of quantitys) {
-      if (quantity.value.trim() === '') {
-        quantityBool = false;
+
+    var selectElements = document.querySelectorAll('.products');
+    let firstSelect = document.getElementById('firstSelect');
+    firstSelect.onchange = function(){
+      let selectedValue = firstSelect.value;
+      newProduct = products.find((product)=> product.id == selectedValue);
+      if (previousValue !== "") {
+        oldProduct = products.find((product) => product.id == previousValue);
+        console.log('Anterior producto del Select 1', oldProduct);
+        selectedValues.splice(0,1,newProduct);
+        updatedProducts.push(oldProduct);
       } else {
-        quantityBool = true;
+        selectedValues.splice(0,0,newProduct)
       }
+      updatedProducts = updatedProducts.filter(
+        function(e){
+          return e.id != selectedValue;
+        }
+      );
+      console.log(selectedValues);
+      console.log(updatedProducts, 'Array de Productos disponibles');
+      console.log(products);
+      selectElements.forEach(function(select,idx) {
+          console.log('ESTOY REMAPEANDO')
+          select.innerHTML = `<select onfocus="oldValue(this.value)" required onclick="updateArray(this)" name="producto[]" class="p-1 w-100 fw-light my-1 products" style="border: 1px solid gray; font-size:.9rem; border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none;"> ${updatedProducts.map((e,idx)=>`<option value="${e.id}">${e.name}</option>`)}<option value="${selectedValues[idx].id}" selected>${selectedValues[idx].name}</option></select>`
+        })
     }
-    if (quantityBool && productBool){
-      return true
-    } else {
-      return false
-    }
+
+function updateArray(selectElement){
+    selectElements = document.querySelectorAll('.products');
+      selectElement.onchange = function() {
+        // Get the selected value
+        let selectedValue = selectElement.value;
+        newProduct = products.find((product) => product.id == selectedValue);
+        
+        if (previousValue !== "") {
+          oldProduct = products.find((product) => product.id == previousValue);
+          console.log(oldProduct, 'PRODUCTO ANTERIOR')
+          let index = selectedValues.findIndex(el => el.id === oldProduct.id);
+          console.log('INDICE DE MI PRODUCTO ANTERIOR EN EL ARRAY DE PRODUCTOS SELECECIONADOS', index)
+          //selectedValues = selectedValues.filter(function(element){
+          //  return element.id != oldProduct.id;
+          // })
+          selectedValues.splice(index,1,newProduct)
+          selectedValues.map((el)=>console.log(el.id))
+          updatedProducts.push(oldProduct);
+        } else {
+          selectedValues.push(newProduct);
+        }
+        console.log(selectedValues, 'Productos Seleccionados')
+        // Call the useData function with the selected value
+        updatedProducts = updatedProducts.filter(
+          function(element){
+            // console.log(element, 'ELEMENTO')
+            return element.id != selectedValue;
+          }
+        );
+        console.log(updatedProducts, 'Array de Productos disponibles');
+        console.log(products, 'Array de productos completos');
+        selectElements.forEach(function(select,idx) {
+          select.innerHTML = `<select onfocus="oldValue(this.value)" required onclick="updateArray(this)" name="producto[]" class="p-1 w-100 fw-light my-1 products" style="border: 1px solid gray; font-size:.9rem; border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none;"> ${updatedProducts.map((e,idx)=>`<option value="${e.id}">${e.name}</option>`)}<option value="${selectedValues[idx].id}" selected>${selectedValues[idx].name}</option></select>`
+        })
+      }
+  }
+  function add(){
+    $('#product-input-div').append(
+    `<select required onclick="updateArray(this)" onfocus="oldValue(this.value)" name="producto[]" class="p-1 w-100 fw-light my-1 products" style="border: 1px solid gray; font-size:.9rem; border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none;"><option value="" style="color:gray">Seleccione un producto</option> ${updatedProducts.map((e)=>`<option value="${e.id}">${e.name}</option>`)}</select>`);
+    $('#quantity-input-div').append(
+      '<input required type="number" name="cantidad[]" class="my-1 quantitys" style="border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none; font-size:.9rem; height:29px;">'
+    )
   }
 
   const buttonAdd = document.getElementById('buttonAdd');
@@ -114,20 +201,13 @@
     }
   });
 
-  function add(){
-    $('#product-input-div').append(
-    '<select required name="producto[]" class="p-1 w-100 fw-light my-1 products" style="border: 1px solid gray; font-size:.9rem; border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none;"><option value="" style="color:gray">Seleccione un producto</option>{% for producto in productos %}<option value="{{producto.id}}">{{producto.name}}</option>{% endfor %}</select>');
-    $('#quantity-input-div').append(
-      '<input required type="number" name="cantidad[]" class="my-1 quantitys" style="border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none; font-size:.9rem; height:29px;">'
-    )
-  }
-
+    // CONTADOR DE CHARACTERS PARA EL MEMO
     $('textarea').keyup(function() {    
     var characterCount = $(this).val().length,
         current_count = $('#current_count'),
         maximum_count = $('#maximum_count'),
-        count = $('#count');    
-        current_count.text(characterCount);        
-});
+        count = $('#count');
+        current_count.text(characterCount);
+    });
   </script>
 {% endblock %}

@@ -3,3 +3,10 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+
+pedidos_pdf:
+  path: /pedidos/pdf/{id}
+  controller: App\Controller\OrderController::generatePdfById
+
+

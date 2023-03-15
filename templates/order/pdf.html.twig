@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block body %}
+<div style="width:100%">
+  <h1 style="position:absolute; top:0; left:0">Pedido #{{order.id}}</h1>
+  <h2 style="position:absolute; top:0; right:0;">Fecha: {{order.createdAt | date("d/m/y h:m")}}</h2>
+</div> 
+  <div style="font-family:Times New Roman, Times,serif; font-size:20px; margin-top:5rem">
+    <p style="margin-bottom: .25rem; margin-top: .25rem">Usuario: {{order.user.getName()}} {{order.user.getLastname()}} | {{order.user.getEmail()}}</p>
+    <p style="margin-bottom: .25rem; margin-top: .25rem">Memo: {{order.memo}} </p>
+    <p style="margin-bottom: .25rem; margin-top: .25rem">Estado: {{order.status}}</p>
+  </div>
+  <table  id="customers" style="width:700px; border:1px solid black; margin-top: 2rem">
+    <thead>
+      <tr>
+        <th style="border:1px solid #ddd; padding-top: .4rem; padding-bottom: .4rem">Insumo</th>
+        <th style="border:1px solid #ddd; padding-top: .4rem; padding-bottom: .4rem">Cantidad solicitada</th>
+        <th style="border:1px solid #ddd; padding-top: .4rem; padding-bottom: .4rem">Cantidad enviada</th>
+      </tr>
+    </thead>
+        <tbody id="table-body">
+      {% for product in products %}
+        <tr>
+           {# <td>{{product.name}}</td> #}
+          <td style="text-align: center;  border:1px solid #ddd; padding-top: .2rem; padding-bottom: .2rem">{{ product.product.name }}</td> 
+          <td style="text-align: center;  border: 1px solid #ddd; padding-top: .2rem; padding-bottom: .2rem">{{product.quantityRequested}}</td> 
+          <td style="text-align: center;  border: 1px solid #ddd; padding-top: .2rem; padding-bottom: .2rem"> {{ product.quantitySent ? product.quantitySent : '-' }}</td> 
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}
+
+

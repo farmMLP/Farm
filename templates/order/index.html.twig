@@ -73,6 +73,7 @@
                     {# <td class="fw-light">{{ order.healthCenter }}</td> #}
                     <td>
                     <a href="{{ path('app_order_show', {'id': order.id}) }}" class="d-flex">Ver</a>
+                    <a href="{{ path('pedidos_pdf', {'id': order.id}) }}">Download PDF</a>
                     </td>
                   </tr>
                 {% endfor %}

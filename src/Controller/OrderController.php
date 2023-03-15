@@ -20,6 +20,16 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Knp\Component\Pager\PaginatorInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
+use App\Repository\ProductsRepository;
+
+
+use Symfony\Component\Console\Helper\TableSeparator;
+
+use App\Service\PdfService;
+
+
+use TCPDF;
+
 class OrderController extends AbstractController
 {
     private $em;
@@ -29,26 +39,6 @@ class OrderController extends AbstractController
         $this->OrdersRepository = $OrdersRepository;
         $this->em = $em;
     }
-    
-  #[Route('/pedidos/filtrar/{id}', name: 'app_ordered_list')]
-  public function getFilteredOrders($id, Security $sec){
-    // $ordersMicentro= $this->OrdersRepository->findByHealthCenter($sec->getUser()->getHealthCenter());
-    // dd($this->OrdersRepository);
-    $orders= $this->OrdersRepository->findByStatusAndHealthCenter($id,$sec->getUser()->getHealthCenter());
-    $response = array();
-
-    foreach($orders as $order){
-      $response[] = array(
-        'id' => $order->getId(),
-        'created_at' => $order->getCreatedAt(),
-        'memo' => $order->getMemo(),
-        'user' => $order->getUser()->getLastname(),
-        'status' => $order->getStatus()->getDescription()
-      );
-    }
-    
-    return new JsonResponse($response);
-  }
 
     #[Route('/pedidos', name: 'app_order')]
     public function index(OrdersRepository $OrdersRepository , Security $security, PaginatorInterface $paginator, Request $request): Response
@@ -69,7 +59,7 @@ class OrderController extends AbstractController
       $pagination = $paginator->paginate(
         $OrdersRepository->defaultQuery($security->getUser()->getHealthCenter()),
         $request->query->get('page', 1),
-        1
+        9
       );
       return $this->render('order/index.html.twig', [
         'pagination' => $pagination
@@ -78,7 +68,7 @@ class OrderController extends AbstractController
         // return $this->render('order/index.html.twig', [
         //     'orders' => $orders
         // ]);
-    }
+    }  
 
     #[Route('/pedidos/nuevo', name: 'appOrder_new', methods: ['GET' , 'POST'])]
     public function main(Request $request, ManagerRegistry $doctrine, Security $sec): Response
@@ -119,6 +109,46 @@ class OrderController extends AbstractController
         ]);
     }
 
+
+    
+  #[Route('/pedidos/filtrar/{id}', name: 'app_ordered_list')]
+  public function getFilteredOrders($id, Security $sec){
+    // $ordersMicentro= $this->OrdersRepository->findByHealthCenter($sec->getUser()->getHealthCenter());
+    // dd($this->OrdersRepository);
+    $orders= $this->OrdersRepository->findByStatusAndHealthCenter($id,$sec->getUser()->getHealthCenter());
+    $response = array();
+
+    foreach($orders as $order){
+      $response[] = array(
+        'id' => $order->getId(),
+        'created_at' => $order->getCreatedAt(),
+        'memo' => $order->getMemo(),
+        'user' => $order->getUser()->getLastname(),
+        'status' => $order->getStatus()->getDescription()
+      );
+    }
+    
+    return new JsonResponse($response);
+  }
+
+
+  #[Route('/pedidos/pdf/{id}', name: 'pedidos_pdf')]
+  public function generatePdfById($id, OrdersRepository $ordersRepository, productsByOrderRepository $productsByOrderRepository, PdfService $pdf)
+    {
+        // Get the product from the database
+        $order = $ordersRepository->findOneById($id);
+        $productos = $productsByOrderRepository->findByPetition($id);
+        
+      $html = $this->renderView('order/pdf.html.twig', [
+        'products' => $productos,
+        'order' => $order,
+      ]); 
+       
+    return new Response($pdf->showPdfFile($html),200,array('Content-Type'=>'application/pdf'))  ;
+      
+    }
+
+
     #[Route('/pedidos/{id}', name: 'app_order_show', methods: ['GET'])]
     public function show(Request $request, OrdersRepository $ordersRepository, ProductsByOrderRepository $productsByOrderRepository, Security $sec, $id): Response
     {
@@ -144,5 +174,23 @@ class OrderController extends AbstractController
     }
   }
 
+
+  #[Route('/api/allProducts', name: 'app_ordered_list')]
+  public function allProducts(ProductsRepository $allProducts){
+    // $ordersMicentro= $this->OrdersRepository->findByHealthCenter($sec->getUser()->getHealthCenter());
+    // dd($this->OrdersRepository);
+    $products= $allProducts->findAll();
+    $response = array();
+
+    foreach($products as $product){
+      $response[] = array(
+        'id' => $product->getId(),
+        'name' => $product->getName(),
+        'description' => $product->getDescription(),
+      );
+    }
+    
+    return new JsonResponse($response);
+  }
   
 }
