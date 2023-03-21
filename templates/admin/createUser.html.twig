@@ -25,7 +25,7 @@
     <label class="d-block fw-semibold mb-2" for="passwordrepeat">Repetir contraseña<span class="text-danger">*</span></label>
     <input type="password" class="mb-4 w-25" id="passwordrepeat" required name="passwordrepeat">
     <label class="d-block fw-semibold mb-2" for="healthcenter">Centro de salud<span class="text-danger">*</span></label>
-    <select type="text" class="mb-0 w-25 p-1" id="healthcenter" required name="healthcenter" style="font-size:.9rem;">
+    <select type="text" class="mb-0 w-25 p-1" id="healthcenter"  name="healthcenter" style="font-size:.9rem;">
       <option value="" style="font-size:.9rem;">Seleccione un centro médico</option>
       {% for healthCenter in healthCenters %}
         <option value="{{healthCenter.id}}" style="font-size:.9rem;">{{healthCenter.name}}</option>

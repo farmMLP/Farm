@@ -195,7 +195,7 @@ class OrdersCrudController extends AbstractCrudController
               // concateno strings para el memo
               $oldMemo = $order->getMemo();
               $updatedMemo = $context->getRequest()->request->get('memo');
-              $order->setMemo($oldMemo."\r\n ".$updatedMemo);
+              $order->setMemo($oldMemo. "\r\n" . "Rta: " . $updatedMemo);
               $order->setStatus($this->status->findOneById(2));
               $this->orders->save($order, true);
               return $this->redirect('admin?crudAction=index&crudControllerFqcn=App%5CController%5CAdmin%5COrdersCrudController');
@@ -210,11 +210,13 @@ class OrdersCrudController extends AbstractCrudController
             }
           }        
         } else {
+
+          
           // seteo valor rechazado (3)
           // concateno strings para el memo
           $oldMemo = $order->getMemo();
           $updatedMemo = $context->getRequest()->request->get('memo');
-          $order->setMemo($oldMemo."\r\n ".$updatedMemo);
+          $order->setMemo($oldMemo." --- ". " \r\n ".$updatedMemo);
           $order->setStatus($this->status->findOneById(3));
           $this->orders->save($order, true);
           return $this->redirect('admin?crudAction=index&crudControllerFqcn=App%5CController%5CAdmin%5COrdersCrudController');

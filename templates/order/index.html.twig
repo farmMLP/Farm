@@ -18,13 +18,11 @@
         <div class="d-flex justify-content-between align-items-center" style="margin-top:3.5rem; margin-bottom:1.5rem;">
           <div class="d-flex flex-column gap-1">
             <h3 class="mb-0">Historial de pedidos</h3>
-            <p class="text-secondary mb-0" style="font-size: .9rem">Detalle de pedidos hasta el día de la fecha, perteneciente al centro de salud: <a href="/centro/{{app.user.getHealthCenter()}}">{{app.user.getHealthCenter()}}</a>.</p>
+            <p class="text-secondary mb-0" style="font-size: .9rem">Detalle de pedidos hasta el día de la fecha, perteneciente al centro de salud: <a href="{{ path('app_health_index', {'healthcenter' : app.user.getHealthCenter() }) }}">{{app.user.getHealthCenter()}}</a>.</p>
           </div>
           <div>
-          
-          <a href="/pedidos/nuevo" class="btn btn-primary p-1">Crear Pedido</a>
-
-            <button type="button" class="btn btn-outline-dark p-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          <a href="{{ path('app_order_new') }}" class="btn btn-primary p-1"><i class="fa-solid fa-plus"></i> Pedido</a>
+            {# <button type="button" class="btn btn-outline-dark p-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
               Filtrar
             </button>
 
@@ -44,18 +42,18 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> #}
           </div>
         </div>
-        <div class="table-responsive bg-white rounded-2 border p-3" style="height:65%; max-height:65%">
+        <div class="table-responsive bg-white rounded-2 border p-3 overflow-hidden" style="height:66%; max-height:66%">
           <table class="table table-hover mw-100">
             <thead>
               <tr style="font-size:.9rem">
                 <th scope="col">#</th>
-                <th scope="col">Creado</th>
+                <th>{{ knp_pagination_sortable(pagination, 'Creado', 'a.createdAt') }}</th>
                 <th scope="col">Memo</th>
                 <th scope="col">Usuario</th>
-                <th scope="col">Estado</th>
+                <th >{{ knp_pagination_sortable(pagination, 'Estado', 'e.description') }}</th>
                 {# <th scope="col">Centro de salud</th> #}
                 <th scope="col">Ver orden</th>
               </tr>
@@ -68,12 +66,15 @@
                     <td class="fw-light">{{ order.id }}</td>
                     <td class="fw-light">{{ order.createdAt | date("d/m/y h:i") }}</td>
                     <td class="fw-light">{{ order.memo ? (order.memo|length > 50 ? order.memo|slice(0,50) ~ '...' : order.memo) : ('No se especificó memo') }}</td>
-                    <td class="fw-light">{{ order.user.lastname }} {{ order.user.name }}</td>
+                    <td class="fw-light">{{ order.username }} {{order.userlastname}}</td>
                     <td class="fw-light">{{ order.status == 'Recibido' ? 'Enviado' : order.status}}</td>
                     {# <td class="fw-light">{{ order.healthCenter }}</td> #}
                     <td>
-                    <a href="{{ path('app_order_show', {'id': order.id}) }}" class="d-flex">Ver</a>
-                    <a href="{{ path('pedidos_pdf', {'id': order.id}) }}">Download PDF</a>
+                      <div class="d-flex gap-2 align-items-center">
+                        <a href="{{ path('app_order_show', {'id': order.id}) }}" class="d-flex text-dark">Ver</a>
+                        <a href="{{ path('pedidos_pdf', {'id': order.id}) }}" class="btn btn-outline-dark p-1 rounded-1" style="font-size:.8rem"><i class="fa-solid fa-arrow-down"></i> PDF</a>
+                      </div>
+                    
                     </td>
                   </tr>
                 {% endfor %}
@@ -82,9 +83,9 @@
                 <p>No se encontró ningún pedido. Puede ser que no se haya realizado ninguno o que no hay pedidos que cumplan con el filtro.</p>
               {% endif %}
           </table>
-          {{knp_pagination_render(pagination)}}
         </div>
-        <div class="d-flex flex-column text-secondary pt-3 pb-0" style="font-size: .85rem;">
+        <div class="d-flex justify-content-between mt-2">
+        <div class="d-flex flex-column text-secondary pb-0" style="font-size: .85rem;">
           <div class="d-flex align-items-center gap-2">
             <i class="dot"></i>
             <p class="mb-0">Ayuda:</p>
@@ -92,6 +93,10 @@
           <p class="mb-0 ms-3">- En caso de querer cancelar un pedido, contactar con la administradora y solicitar un pedido nuevo.</p>
           <p class="mb-0 ms-3">- Por cuestiones de integridad de la información, no es posible editar los pedidos.</p>
         </div>
+        {{knp_pagination_render(pagination)}}
+        </div>
+        
+        
       </div>
     </div>
   </div>

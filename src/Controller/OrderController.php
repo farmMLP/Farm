@@ -59,7 +59,7 @@ class OrderController extends AbstractController
       $pagination = $paginator->paginate(
         $OrdersRepository->defaultQuery($security->getUser()->getHealthCenter()),
         $request->query->get('page', 1),
-        9
+        10
       );
       return $this->render('order/index.html.twig', [
         'pagination' => $pagination
@@ -70,7 +70,7 @@ class OrderController extends AbstractController
         // ]);
     }  
 
-    #[Route('/pedidos/nuevo', name: 'appOrder_new', methods: ['GET' , 'POST'])]
+    #[Route('/pedidos/nuevo', name: 'app_order_new', methods: ['GET' , 'POST'])]
     public function main(Request $request, ManagerRegistry $doctrine, Security $sec): Response
     {
         if (isset($request->request->all()['producto'])) {

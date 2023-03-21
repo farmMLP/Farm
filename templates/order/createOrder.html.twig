@@ -14,8 +14,8 @@
           <p class="text-secondary mb-0" style="font-size: .9rem">Seleccione qué insumos se necesitan y su correspondiente cantidad.</p>
         </div>
         <div class="d-flex justify-content-end gap-2" >
-          <a href="/pedidos" class="btn btn-outline-secondary p-1 rounded-1 fw-light">Ir a Pedidos</a>
-          <a href="/home" class="btn btn-outline-secondary p-1 rounded-1 fw-light">Ir a Inicio</a>
+          <a href="{{ path('app_order') }}" style="font-size:.95rem;" class="btn btn-outline-dark p-1 rounded-1 fw-light"><i class="fa-regular fa-eye"></i> Pedidos</a>
+          <a href="{{ path('app_home') }}" style="font-size:.95rem;" class="btn btn-outline-dark p-1 rounded-1 fw-light"><i class="fa-solid fa-arrow-left"></i> Inicio</a>
         </div>
       </div>
       <div style="height:65%; max-height:65%">
@@ -51,8 +51,8 @@
                   <span id="maximum_count">/ 250</span>
                 </div>
               </div>
-              <textarea class="form-control rounded-1" name="memo" id="texto" rows="3" maxlength="250" placeholder="Agregar memo (notificar cambios de productos, aclaraciones)" style="background-color:transparent; border-color:gray;"></textarea>
-              <input type="submit" value="Submit"  class="btn btn-outline-primary"/>
+              <textarea class="form-control rounded-1 h-100" name="memo" id="texto" maxlength="250" placeholder="Agregar memo (notificar cambios de productos, aclaraciones)" style="background-color:transparent; border-color:gray;"></textarea>
+              <input  style="font-size:.95rem;" type="submit" value="Submit"  class="btn btn-outline-primary"/>
           </div>
         </form>
       </div>

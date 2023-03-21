@@ -100,7 +100,7 @@ class UserCrudController extends AbstractCrudController
         $password = $context->getRequest()->request->get('password');
         $passwordrepeat = $context->getRequest()->request->get('passwordrepeat');
         $healthCenter = $context->getRequest()->request->get('healthcenter');
-
+        $hcEntity = $this->healthCenterRepo->findOneById($healthCenter);
         if ($password === $passwordrepeat) {
           $user->setPassword(
             $this->userPasswordHasher->hashPassword(
@@ -118,6 +118,8 @@ class UserCrudController extends AbstractCrudController
           $user->setEmail($email);
           $user->setRoles(['ROLE_USER']);
           $this->users->save($user, true);
+          $hcEntity->setUser($user);
+          $this->healthCenterRepo->save($hcEntity, true);
           return $this->redirect('/admin?crudAction=index&crudControllerFqcn=App%5CController%5CAdmin%5CUserCrudController');
         } else {
           $passworderror = true;

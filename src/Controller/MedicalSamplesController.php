@@ -29,7 +29,7 @@ class MedicalSamplesController extends AbstractController
     }
 
 
-    #[Route('/muestras', name: 'app_medical_samples_user')]
+    #[Route('/muestras', name: 'app_medical_samples')]
     public function index(MedicalSamplesRepository $MedicalSamplesRepository, Security $security, Request $request, PaginatorInterface $paginator): Response
     {
         $pagination = $paginator->paginate(
@@ -42,7 +42,7 @@ class MedicalSamplesController extends AbstractController
         ]);
     }
 
-    #[Route('/muestras/nuevo', name: 'medicalSamples_new', methods: ['GET' , 'POST'])]
+    #[Route('/muestras/nuevo', name: 'app_medical_samples_new', methods: ['GET' , 'POST'])]
     public function create(Security $security, Request $request, ProductsRepository $productsRepository): Response
     {
         if ($request->isMethod('POST')){

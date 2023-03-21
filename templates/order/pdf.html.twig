@@ -8,9 +8,20 @@
   <h1 style="position:absolute; top:0; left:0">Pedido #{{order.id}}</h1>
   <h2 style="position:absolute; top:0; right:0;">Fecha: {{order.createdAt | date("d/m/y h:m")}}</h2>
 </div> 
-  <div style="font-family:Times New Roman, Times,serif; font-size:20px; margin-top:5rem">
+  <div style=" margin-top:5rem">
     <p style="margin-bottom: .25rem; margin-top: .25rem">Usuario: {{order.user.getName()}} {{order.user.getLastname()}} | {{order.user.getEmail()}}</p>
-    <p style="margin-bottom: .25rem; margin-top: .25rem">Memo: {{order.memo}} </p>
+    
+    {% if ('\r\n' in order.memo) %}
+      {% set memo = order.memo|split('\r\n') %}
+      <div style="width:100%">
+        <p style="text-wrap: wrap; white-space:pre-wrap; overflow-wrap: break-word;">{{memo['0']}}</p>
+        <p style="text-wrap: wrap; white-space:pre-wrap; overflow-wrap: break-word;">{{memo['1']}}</p>
+      </div>
+    {% else %}
+      <div style="width:100%">
+        <p style="text-wrap: wrap; white-space:pre-wrap; overflow-wrap: break-word;">{{order.memo}}</p>
+      </div>
+    {% endif %}
     <p style="margin-bottom: .25rem; margin-top: .25rem">Estado: {{order.status}}</p>
   </div>
   <table  id="customers" style="width:700px; border:1px solid black; margin-top: 2rem">

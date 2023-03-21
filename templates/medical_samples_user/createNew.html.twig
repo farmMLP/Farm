@@ -14,11 +14,10 @@
           <p class="text-secondary mb-0" style="font-size: .9rem">Detallá el listado de ingreso de muestras médicas, especificando productos y cantidades de stock.</p>
         </div>
         <div class="d-flex justify-content-end gap-2" >
-          <a href="/muestras" class="btn btn-outline-secondary p-1 rounded-1 fw-light">Ir a Muestras</a>
-          <a href="/home" class="btn btn-outline-secondary p-1 rounded-1 fw-light">Ir a Inicio</a>
+          <a href="{{ path('app_medical_samples') }}" style="font-size:.95rem;" class="btn btn-outline-dark p-1 rounded-1 fw-light"><i class="fa-regular fa-eye"></i> Muestras</a>
+          <a href="{{ path('app_home') }}" style="font-size:.95rem;" class="btn btn-outline-dark p-1 rounded-1 fw-light"><i class="fa-solid fa-arrow-left"></i> Inicio</a>
         </div>
-      </div>
-      
+      </div>      
       <div style="height:65%; max-height:65%">
         <form id="elform" action="" method="post" class="d-flex gap-3 mh-100 h-100 ">
           <div class="w-100 h-100 d-flex flex-column justify-content-between bg-white p-4 rounded-3 border">

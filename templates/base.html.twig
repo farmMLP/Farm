@@ -35,7 +35,7 @@
               opacity:0;
               height:0;
               margin-top:.2rem;
-              top: 50px;
+              top: 40px;
               transition: all .25s ease-in;
               list-style-type: none;
               padding: 10px;
@@ -44,16 +44,16 @@
               text-align: start;
               left: -30px;
               font-size: .9rem;
+              background-color:white;
             }
             .dropdown:hover>a {
               color:black;
             }
             .dropdown:hover .dropdown-menu-styled {
                 display: block;
-                top:26px;
+                top:38px;
                 opacity:1;
                 height:auto;
-                background-color:white;
                 /* remove the gap so it doesn't close */
             }
             .dropdown:hover .dropdown-menu-styled a{
@@ -63,8 +63,8 @@
               
             }
             .dropdown:hover .dropdown-menu-styled a:hover {
-              color: #40916c;
-              text-decoration: underline;
+              text-decoration:underline;
+              
             }
             .dropdown>div>img {
               transition: all .25s ease-in-out;
@@ -84,7 +84,7 @@
               transition: all .1s ease-in;
             }
             .text-title:hover {
-              color:#57cc99;
+              color:#e63946;
             }
             @media (max-width:900px) {
               body {
@@ -173,50 +173,59 @@
               text-decoration: underline;
               color: #40916c;
             }
+            .profile-div a #logout-icon{
+              position:absolute;
+              color: grey;
+              left:10px;
+              top:2.5px;
+              opacity:0%;
+              transition: left .3s, opacity .5s;
+            }
+            .profile-div:hover a #logout-icon{
+              left:20px;
+              opacity:100%;
+            }
           </style>
     <body style="font-family: 'Roboto', sans-serif; overflow-x: hidden">
       <div class="d-flex flex-column" style="min-height:100vh; min-width: 100vw; height:100vh; max-width:100vw; width:100vw">
         {% block navbar %}
-          <nav class="navbar border-bottom" style="background-color: transparent; padding-left:10%; padding-right:10%;">
-            <div class="d-flex justify-content-between w-100">
+          <nav class="navbar border-bottom" style="background-color: transparent; padding-left:10%; padding-right:10%; padding-bottom:4px; padding-top:4px;">
+            <div class="d-flex justify-content-between w-100 align-items-center h-100">
               <a class="d-flex gap-2 align-items-center text-decoration-none" href="/home" style="color:#3a506b;">
                 <img src="/images/munilogowhite.png" alt="Logo de la Municipalidad de La Plata" height="40" id="navbar-img">
                 <p class="mb-0 fw-bold text-title" style="font-size:1.05rem" data-text="UMAD 2023">UMAD 2023</p>
               </a>
-                <div class="d-flex align-items-center">
-                  <ul class="d-flex gap-3 me-auto mb-0" style="--bs-scroll-height: 200px; list-style-type:none;">
-                    <li class="dropdown mt-1">
-                    <div class="d-flex gap-1 align-items-center">
-                      <p class="text-decoration-none py-0 mb-0" role="button" data-bs-toggle="dropdown" aria-current="page">Pedidos</p>
-                      <img id="arrow-direction-image" src="https://img.icons8.com/external-those-icons-fill-those-icons/256/external-down-arrows-those-icons-fill-those-icons-1.png" height="12" alt="">
-                    </div>
-                      
-                      <div class="dropdown-menu-styled p-0" style="border-left: 1px solid #e5e5e5; border-bottom: 1px solid #e5e5e5; border-right: 1px solid #e5e5e5;">
-                        <a class="dropdown-item px-3 py-2 border-bottom" href="/pedidos">Ver pedidos</a>
-                        <a class="dropdown-item px-3 py-2" href="/pedidos/nuevo">Crear pedido</a>
+                <div class="d-flex h-100 align-items-center">
+                  <ul class="d-flex gap-3 me-auto mb-0 h-100 align-items-center" style="--bs-scroll-height: 200px; list-style-type:none;">
+                    <li class="dropdown mt-1 h-100 d-flex align-items-center">
+                      <div class="d-flex gap-1 align-items-center">
+                        <p class="text-decoration-none py-0 mb-0" role="button" data-bs-toggle="dropdown" aria-current="page">Pedidos</p>
+                        <img id="arrow-direction-image" src="https://img.icons8.com/external-those-icons-fill-those-icons/256/external-down-arrows-those-icons-fill-those-icons-1.png" height="12" alt="">
+                      </div>
+                      <div class="dropdown-menu-styled shadow-sm pe-1 ps-1 pb-1 pt-2" style="border-left: 1px solid #e5e5e5; border-right: 1px solid #e5e5e5;">
+                        <a class="dropdown-item px-3 pt-0 pb-2 ps-2 pe-2" href="{{ path('app_order') }}">Listado de pedidos</a>
+                        <a class="dropdown-item px-3 pb-1 ps-2 pe-2" href="{{ path('app_order_new') }}">Crear pedido</a>
                       </div>
                     </li>
-                    <li class="dropdown mt-1">
+                    <li class="dropdown mt-1 h-100 d-flex align-items-center">
                       <div class="d-flex gap-1 align-items-center">
-                      <p class="text-decoration-none py-0 mb-0" role="button" data-bs-toggle="dropdown" aria-current="page">Muestras Médicas</p>
-                      <img id="arrow-direction-image" src="https://img.icons8.com/external-those-icons-fill-those-icons/256/external-down-arrows-those-icons-fill-those-icons-1.png" height="12" alt="">
-                    </div>
-                      <div class="dropdown-menu-styled p-0" style="border-left: 1px solid #e5e5e5; border-bottom: 1px solid #e5e5e5; border-right: 1px solid #e5e5e5;">
-                        <a class="dropdown-item px-3 py-2 border-bottom" href="/muestras">Ver muestras médicas</a>
-                        <a class="dropdown-item px-3 py-2" href="/muestras/nuevo">Agregar Muestra médica</a>
+                        <p class="text-decoration-none py-0 mb-0" role="button" data-bs-toggle="dropdown" aria-current="page">Muestras médicas</p>
+                        <img id="arrow-direction-image" src="https://img.icons8.com/external-those-icons-fill-those-icons/256/external-down-arrows-those-icons-fill-those-icons-1.png" height="12" alt="">
+                      </div>
+                      <div class="dropdown-menu-styled shadow-sm pe-1 ps-1 pb-1 pt-2" style="border-left: 1px solid #e5e5e5; : 1px solid #e5e5e5; border-right: 1px solid #e5e5e5;">
+                        <a class="dropdown-item px-3 pt-1 pb-2 ps-2 pe-2" href="{{ path('app_medical_samples') }}">Listado de muestras médicas</a>
+                        <a class="dropdown-item px-3 pb-1 ps-2 pe-2" href="{{ path('app_medical_samples_new') }}">Agregar Muestra médica</a>
                       </div>
                     </li>
                     <li class="mt-1">
                       <a class="text-decoration-none nav-item-styled pe-1 mb-0" href="{{path('app_health_index', {'healthcenter' : app.user.getHealthCenter() }) }}">{{app.user.getHealthCenter()}} ({{app.user}})</a>
                       {# <a class="text-decoration-none nav-item-styled pe-1 mb-0" href="{{ path('app_healthcenter_show', {'name': app.user.getHealthCenter()}) }}">{{app.user.getHealthCenter()}}</a> #}
                     </li>
-                    <li class="dropdown profile-div">
-                      <div class="border border-dark rounded-circle opacity-75" style="cursor: pointer; padding:2px;">
-                        <i class="fa-solid fa-user" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="padding: 6px 7px;"></i>
-                      </div>
-                      <div class="dropdown-menu-styled p-0 user-profile-dropdown" style="border-left: 1px solid #e5e5e5; border-bottom: 1px solid #e5e5e5; border-right: 1px solid #e5e5e5; margin-top:.5rem; left: -45px; padding-top: .5rem;" aria-labelledby="dropdownMenuButton1">
-                        <a class="dropdown-item px-3 py-2" href="/logout">Cerrar sesión</a>
-                      </div>
+                    <li class="dropdown profile-div relative mt-1">
+                    <a href="/logout">
+                      <i class="fa-solid fa-person-walking" style="font-size:1.225rem"></i>
+                      <i class="fa-solid fa-arrow-right-from-bracket" id="logout-icon"></i>
+                    </a>
                     </li>
                   </ul>
                 </div>
