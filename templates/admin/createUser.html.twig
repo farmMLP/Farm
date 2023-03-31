@@ -1,4 +1,5 @@
 {% extends '@!EasyAdmin/page/content.html.twig' %}
+{% block page_title %}Crear Usuario{% endblock %} 
 {% block main %}
 <div>
   {% if passworderror == true %}
@@ -8,10 +9,6 @@
     </div>
   {% endif %}
   <form action="" method="POST">
-    <div class="d-flex justify-content-between align-items-center w-100">
-      <h1>Crear Usuario</h1>
-      <button type="submit" class="btn btn-primary">Crear nuevo usuario</button>
-    </div>
     <label class="d-block fw-semibold mb-2" for="email">Email<span class="text-danger">*</span></label>
     <input type="email" class="mb-4 w-25" id="email" required name="email">
     <label class="d-block fw-semibold mb-2" for="nombre">Nombre<span class="text-danger">*</span></label>
@@ -31,6 +28,9 @@
         <option value="{{healthCenter.id}}" style="font-size:.9rem;">{{healthCenter.name}}</option>
       {% endfor %}
     </select>
+    <div class="d-flex justify-content-between align-items-center w-100">
+      <button type="submit" class="btn btn-primary mt-4">Crear nuevo usuario</button>
+    </div>
   </form>
 </div>
 {% endblock %}

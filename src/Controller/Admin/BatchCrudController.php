@@ -86,8 +86,8 @@ class BatchCrudController extends AbstractCrudController
             AssociationField::new('user', 'Usuario'),
             AssociationField::new('product', 'Producto'),
             NumberField::new('quantity', 'Cantidad'),
-            DateTimeField::new('createdAt', 'Fecha de ingreso'),
-            DateTimeField::new('expirationDate', 'Fecha de vencimiento'),
+            DateTimeField::new('createdAt', 'Fecha de ingreso')->setTimezone('America/Argentina/Buenos_Aires'),
+            DateTimeField::new('expirationDate', 'Fecha de vencimiento')->setFormat('long'),
             TextField::new('code', 'Código de lote'),
         ];
     }

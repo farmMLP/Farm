@@ -1,0 +1,336 @@
+.pagination .page-item .page-link {
+  font-size: .8rem !important;
+}
+
+.dropdown {
+  position:relative;
+}
+.dropdown>a{
+  transition: all .2s ease-in;
+  color:#3a506b;
+}
+.dropdown .dropdown-menu-styled {
+  position:absolute;
+  font-size:1rem;
+  opacity:0;
+  height:0;
+  margin-top:.2rem;
+  top: 40px;
+  transition: all .25s ease-in;
+  list-style-type: none;
+  padding: 10px;
+  border-radius: 0 0 5px 5px;
+  overflow:hidden;
+  text-align: start;
+  left: -30px;
+  font-size: .9rem;
+  background-color:white;
+}
+.dropdown:hover>a {
+  color:black;
+}
+.dropdown:hover .dropdown-menu-styled {
+    display: block;
+    top:38px;
+    opacity:1;
+    height:auto;
+    /* remove the gap so it doesn't close */
+}
+.dropdown:hover .dropdown-menu-styled a{
+  background-color: transparent;
+  transition: all .2s ease-in;
+  padding: 0;
+  
+}
+.dropdown:hover .dropdown-menu-styled a:hover {
+  text-decoration:underline;
+  
+}
+.dropdown>div>img {
+  transition: all .25s ease-in-out;
+}
+.dropdown:hover>div>img {
+  transform: rotateZ(180deg);
+}
+.nav-item-styled {
+  color:#3a506b;
+  transition: all .2s ease-in;
+}
+.nav-item-styled:hover {
+  color:black;
+}
+.text-title {
+  color:#3a506b;
+  transition: all .1s ease-in;
+}
+.text-title:hover {
+  color:#e63946;
+}
+
+@media (max-width: 696px) {
+  #navbar {
+    height: 5.25% !important;
+    padding-left: 3% !important;
+    padding-right: 3% !important;
+  }
+  #navbar>div>:nth-child(1) {
+    display: none !important; 
+  }
+  #navbar>div{
+    display:flex !important;
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  #navbar>div>div>ul {
+    justify-content: space-between !important;
+    padding-left: 0px !important;
+  }
+}
+
+@media (max-width:950px) {
+  nav {
+    height:5%;
+  }
+  body {
+    font-size: .95rem
+  }
+  nav {
+    padding: 5px 7% !important;
+    font-size: .975rem;
+  }
+  .user-profile-dropdown {
+    left:-90px !important;
+  }
+  #navbar-img {
+    display: none;
+  }
+}
+
+@media (max-width: 991px) {
+  div>div>div>div>a {
+    font-size: .85rem !important;
+  }
+  h3 {
+    font-size:1.4rem !important;  
+  }
+
+  #order-show-container {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  #order-table-container {
+    width: 100% !important;
+  }
+  #order-detail-container {
+    overflow-y: scroll !important;
+    width: 100% !important;
+  }
+  #order-image-detail {
+    display: none !important;
+  }
+  #responsive-detail-container {
+    display: flex !important;
+    justify-content: space-between !important;
+  }
+  
+  .hidden-id-admin-table {
+    display: flex !important;
+  }
+
+  #orders-div {
+    width:100% !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+  }
+  .memo-cell {
+    display:none !important;
+  }
+
+  #footer-img {
+    display:none
+  }
+
+  .footer-text {
+    justify-content:center
+  }
+
+  #responsiveForm{
+    display: flex !important;
+    flex-direction: column !important ;
+  }
+
+  #responsiveForm>div:nth-child(1){
+    height: 50%;
+    width: 100% !important;
+    max-height: 50%;
+  }
+
+  #responsiveForm>div:nth-child(2){
+    width: 100% !important;
+    height: 50%;
+  }
+
+}
+
+.background-div {
+  background: url('https://images.unsplash.com/photo-1533090161767-e6ffed986c88?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2069&q=80');
+  background-size: cover;
+  background-position: right bottom;
+  height: 100%;
+}
+.home-buttons {
+  overflow: hidden;
+  transition: all .2s ease-in;
+}
+.home-buttons:hover {
+  transform: translateY(-5px)
+}
+.link-buttons {
+  text-decoration: none;
+  transition: all .2s ease-in;
+}
+.link-buttons:hover {
+  text-decoration: underline;
+}
+.gradient-bg {
+  height:80%;
+  background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
+  
+}
+.card-links {
+  font-size: .9rem;
+  color: black;
+  padding: .25rem;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: all .2s ease-in;
+}
+.card-links:hover {
+  text-decoration: underline;
+  color: #fb8500;
+}
+.stylized-btn {
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all .2s ease-in;
+  color: #3a506b;
+}
+.stylized-btn:hover {
+  text-decoration: underline;
+  color: #40916c;
+}
+.profile-div a #logout-icon{
+  position:absolute;
+  color: grey;
+  left:10px;
+  top:2.5px;
+  opacity:0%;
+  transition: left .3s, opacity .5s;
+}
+.profile-div:hover a #logout-icon{
+  left:20px;
+  opacity:100%;
+}
+
+@media (max-width: 700px) {
+  .home-div>div {
+    width: 100%;
+    padding-top: 0 !important;
+    justify-content: center !important;
+  }
+  .home-div>div:nth-child(1) {
+    height: 20% !important;
+    width: 70% !important;
+  }
+  .home-div>div:nth-child(2) {
+    height: 70% !important;
+    width: 85% !important;
+  }
+  .home-buttons>div>div>div {
+    display: flex !important;
+    justify-content: center !important;
+  }
+  .home-div {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-left: 0 !important;
+  }
+  .home-div h1 {
+    text-align: center;
+    font-size: 2rem !important;
+  }
+  .home-div div div p {
+    text-align: center;
+    font-size: 0.95rem;
+  }
+  .cards {
+    height: 70% !important;
+    width: 65% !important;
+    display:flex !important;
+    flex-direction: column !important;
+  }
+  .cards div {
+    width: 70% !important;
+  }
+  .cards div div {
+    width: 100% !important;
+  }
+  .cards div div p {
+    font-size: 1rem !important;
+  }
+  .cards div div div p {
+    font-size: .85rem !important;
+  }
+}
+
+@media (max-width: 1376px) and (min-width: 701px) {
+  .home-div div {
+    padding-top: 0 !important;
+    
+  }
+  .home-div {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+  }
+  .home-div h1 {
+    font-size: 3rem !important;
+  }
+  .home-div div div p {
+    font-size: 1rem;
+  }
+  .cards {
+    height: 70% !important;
+    width: 65% !important;
+    display:flex !important;
+    flex-direction: column !important;
+  }
+  .cards div {
+    width: 70% !important;
+  }
+  .cards div div {
+    width: 100% !important;
+  }
+  .cards div div p {
+    font-size: 1rem !important;
+  }
+  .cards div div div p {
+    font-size: .85rem !important;
+  }
+}
+.dot {
+  height: 6px;
+  width: 6px;
+  background-color: grey;
+  border-radius: 50%;
+  display: inline-block;
+}
+.sortable {
+  text-decoration: none !important;
+}
+.sortable span {
+  float: none !important;
+}

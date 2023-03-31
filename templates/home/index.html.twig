@@ -1,25 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}HOME{% endblock %}
-
-
-
+{% block title %}Inicio | UMAD {% endblock %}
 {% block body %}
 <div class="background-div">
-  <div class="d-flex flex-column gap-2 justify-content-center align-items-start h-100" style="margin-left:5%">
-    <div class="d-flex flex-column justify-content-start pt-5" style="width:48%; height:50%">
+  <div class="d-flex flex-column gap-2 justify-content-center align-items-start h-100 home-div" style="margin-left:5%">
+    <div class="d-flex flex-column justify-content-start pt-5 " style="width:48%; height:50%">
       <div style="width:90%;">
         <h1 class="text-white" style="font-size:5rem; font-weight: 900; text-shadow: 1px 1px 3px grey;">Bienvenido al Sistema <span class="text-white">UMAD.</span></h1>
         <p class="mb-0" style="color: white; text-shadow: 1px 1px grey;">Sistema de gestión UMAD 2023, desarrollado en la Municipalidad de La Plata. Utilizá la botonera de accesos rápidos o navegá a través de las distintas secciones.</p>
       </div>
     </div>
-    <div class="d-flex align-items-center gap-4" style="width:57%; height:25%;">
+    <div class="d-flex align-items-center gap-4 cards" style="width:57%; height:25%;">
       <div class="rounded-2 d-flex flex-column justify-content-end home-buttons shadow-sm" style="width:100%; height:100%; background-color: #00b4d8; position:relative;">
         <img src="/images/pedido1.jpg" alt="foto pedido" style="position: absolute; top:0; left: 0; z-index: 0; object-position: 50% 80%; width:100%; height:100%; object-fit:cover">
-        <div class="d-flex flex-column p-2" style="background-color: rgba(0,0,0,.3); z-index:10;">
-          <p class="text-white mb-0" style="font-weight:600; ">Pedidos</p>
-          <div style="font-size:0.85rem;" class="text-white fw-light d-flex flex-column">
-            <p class="mb-0" style="font-size:.85rem; line-height:1.05rem; text-shadow: 1px 1px black">Solicitá un pedido o chequeá el estado de los ya realizados.</p>
+        <div class="d-flex flex-column p-2" style="background-color: rgba(0,0,0,.25); z-index:10;">
+          <p class="text-white mb-0 card-title" style="font-weight:500;">Pedidos</p>
+          <div style="font-size:0.85rem;" class="text-white fw-light d-flex flex-column gap-1">
+            <p class="mb-0" style="font-size:.85rem; line-height:1.05rem; text-shadow: 1px 1px 2px grey">Solicitá un pedido o chequeá el estado de los ya realizados.</p>
             <div class="d-flex gap-2 w-100 justify-content-end">
               <a href="/pedidos/nuevo" class="text-white fw-bold link-buttons" style="padding-right:.25rem; padding-left:.25rem">Crear pedido</a>
               <a href="/pedidos" class="text-white fw-bold link-buttons" style="padding-right:.25rem; padding-left:.25rem">Ver pedidos</a>
@@ -29,10 +26,10 @@
       </div>
       <div class="rounded-2 d-flex flex-column justify-content-end home-buttons shadow-sm" style="width:100%; height:100%; background-color: #06d6a0; position:relative;">
         <img src="/images/muestra.jpg" alt="foto pedido" style="position: absolute; top:0; left: 0; z-index: 0; object-position: 40% 50%; width:100%; height:100%; object-fit:cover">
-        <div class="d-flex flex-column p-2" style="background-color: rgba(0,0,0,.3); z-index:10;">
-          <p class="text-white mb-0" style="font-weight:600; ">Muestras médicas</p>
-          <div style="font-size:0.85rem;" class="text-white fw-light d-flex flex-column">
-            <p class="mb-0" style="font-size:.85rem; line-height:1.05rem; text-shadow: 1px 1px black">Ingresá una muestra médica o mirá el stock que se posee.</p>
+        <div class="d-flex flex-column p-2" style="background-color: rgba(0,0,0,.25); z-index:10;">
+          <p class="text-white mb-0 card-title" style="font-weight:500;">Muestras médicas</p>
+          <div style="font-size:0.85rem;" class="text-white fw-light d-flex flex-column gap-1">
+            <p class="mb-0" style="font-size:.85rem; line-height:1.05rem; text-shadow: 1px 1px 2px grey">Ingresá una muestra médica o mirá el stock que se posee.</p>
             <div class="d-flex gap-2 w-100 justify-content-end">
               <a href="/muestras/nuevo" class="text-white fw-bold link-buttons" style="padding-right:.25rem; padding-left:.25rem">Crear muestra</a>
               <a href="/muestras" class="text-white fw-bold link-buttons" style="padding-right:.25rem; padding-left:.25rem">Ver muestras</a>
@@ -42,12 +39,11 @@
       </div>
       <div class="rounded-2 d-flex flex-column justify-content-end home-buttons shadow-sm" style="width:100%; height:100%; background-color: #415a77; position:relative;">
         <img src="/images/perfil.jpg" alt="foto pedido" style="position: absolute; top:0; left: 0; z-index: 0; object-position: 50% 100%; width:100%; height:100%; object-fit:cover";>
-        <div class="d-flex flex-column p-2" style="background-color: rgba(0,0,0,.3); z-index:10;">
-          <p class="text-white mb-0" style="font-weight:600; ">Mi Centro</p>
-          <div style="font-size:0.85rem;" class="text-white fw-light d-flex flex-column">
-              <p class="mb-0" style="font-size:.85rem; line-height:1.05rem; text-shadow: 1px 1px black">Verificá los datos de tu centro de salud como dirección o día de entregas asociados.</p>
+        <div class="d-flex flex-column p-2" style="background-color: rgba(0,0,0,.25); z-index:10;">
+          <p class="text-white mb-0 card-title" style="font-weight:500;">Mi Centro</p>
+          <div style="font-size:0.85rem;" class="text-white fw-light d-flex flex-column gap-1">
+              <p class="mb-0" style="font-size:.85rem; line-height:1.05rem; text-shadow: 1px 1px 2px grey">Verificá los datos de tu centro de salud.</p>
               <div class="d-flex gap-2 w-100 justify-content-end">
-                {# <a href="/perfil" class="text-white fw-bold link-buttons" style="padding-right:.25rem; padding-left:.25rem">Ver perfil</a> #}
                 <a href="{{path('app_health_index', { 'healthcenter' : app.user.getHealthCenter() })}}" class="text-white fw-bold link-buttons" style="padding-right:.25rem; padding-left:.25rem">Ver Centro de Salud</a>
               </div>
           </div>
@@ -55,6 +51,5 @@
       </div>
     </div>
   </div>
-  
 </div>
 {% endblock %}

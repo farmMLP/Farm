@@ -64,7 +64,7 @@ class OrdersCrudController extends AbstractCrudController
         return [
             IdField::new('id')->hideOnForm(),
             AssociationField::new('user', 'Usuario')->hideOnForm(),
-            DateTimeField::new('createdAt', 'Fecha de solicitud'),
+            DateTimeField::new('createdAt', 'Fecha de solicitud')->setTimezone('America/Argentina/Buenos_Aires'),
             TextField::new('memo', 'Memo'),
             TextField::new('healthCenter', 'Centro de salud'),
             AssociationField::new('status','Estado')

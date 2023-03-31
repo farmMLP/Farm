@@ -6,7 +6,7 @@
 {% block body %}
 <div style="width:100%">
   <h1 style="position:absolute; top:0; left:0">Pedido #{{order.id}}</h1>
-  <h2 style="position:absolute; top:0; right:0;">Fecha: {{order.createdAt | date("d/m/y h:m")}}</h2>
+  <h2 style="position:absolute; top:0; right:0;">Fecha: {{order.createdAt | date("d/m/y h:i")}}</h2>
 </div> 
   <div style=" margin-top:5rem">
     <p style="margin-bottom: .25rem; margin-top: .25rem">Usuario: {{order.user.getName()}} {{order.user.getLastname()}} | {{order.user.getEmail()}}</p>
@@ -14,11 +14,13 @@
     {% if ('\r\n' in order.memo) %}
       {% set memo = order.memo|split('\r\n') %}
       <div style="width:100%">
+        <p>Memo:</p>
         <p style="text-wrap: wrap; white-space:pre-wrap; overflow-wrap: break-word;">{{memo['0']}}</p>
         <p style="text-wrap: wrap; white-space:pre-wrap; overflow-wrap: break-word;">{{memo['1']}}</p>
       </div>
     {% else %}
       <div style="width:100%">
+        <p>Memo:</p>
         <p style="text-wrap: wrap; white-space:pre-wrap; overflow-wrap: break-word;">{{order.memo}}</p>
       </div>
     {% endif %}
@@ -35,7 +37,6 @@
         <tbody id="table-body">
       {% for product in products %}
         <tr>
-           {# <td>{{product.name}}</td> #}
           <td style="text-align: center;  border:1px solid #ddd; padding-top: .2rem; padding-bottom: .2rem">{{ product.product.name }}</td> 
           <td style="text-align: center;  border: 1px solid #ddd; padding-top: .2rem; padding-bottom: .2rem">{{product.quantityRequested}}</td> 
           <td style="text-align: center;  border: 1px solid #ddd; padding-top: .2rem; padding-bottom: .2rem"> {{ product.quantitySent ? product.quantitySent : '-' }}</td> 

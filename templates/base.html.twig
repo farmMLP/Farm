@@ -14,6 +14,7 @@
           <link rel="preconnect" href="https://fonts.googleapis.com">
           <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
           <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+          
         {% endblock %}
 
         {% block javascripts %}
@@ -21,177 +22,350 @@
           {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
-        <style>
-            .dropdown {
-              position:relative;
-            }
-            .dropdown>a{
-              transition: all .2s ease-in;
-              color:#3a506b;
-            }
-            .dropdown .dropdown-menu-styled {
-              position:absolute;
-              font-size:1rem;
-              opacity:0;
-              height:0;
-              margin-top:.2rem;
-              top: 40px;
-              transition: all .25s ease-in;
-              list-style-type: none;
-              padding: 10px;
-              border-radius: 0 0 5px 5px;
-              overflow:hidden;
-              text-align: start;
-              left: -30px;
-              font-size: .9rem;
-              background-color:white;
-            }
-            .dropdown:hover>a {
-              color:black;
-            }
-            .dropdown:hover .dropdown-menu-styled {
-                display: block;
-                top:38px;
-                opacity:1;
-                height:auto;
-                /* remove the gap so it doesn't close */
-            }
-            .dropdown:hover .dropdown-menu-styled a{
-              background-color: transparent;
-              transition: all .2s ease-in;
-              padding: 0;
-              
-            }
-            .dropdown:hover .dropdown-menu-styled a:hover {
-              text-decoration:underline;
-              
-            }
-            .dropdown>div>img {
-              transition: all .25s ease-in-out;
-            }
-            .dropdown:hover>div>img {
-              transform: rotateZ(180deg);
-            }
-            .nav-item-styled {
-              color:#3a506b;
-              transition: all .2s ease-in;
-            }
-            .nav-item-styled:hover {
-              color:black;
-            }
-            .text-title {
-              color:#3a506b;
-              transition: all .1s ease-in;
-            }
-            .text-title:hover {
-              color:#e63946;
-            }
-            @media (max-width:900px) {
-              body {
-                font-size: .9rem
-              }
-              nav {
-                padding: 5px 7% !important;
-              }
-              .user-profile-dropdown {
-                left:-90px !important;
-              }
-              #navbar-img {
-                display: none;
-              }
-            }
+    <style>
+    .pagination .page-item .page-link {
+      font-size: .8rem !important;
+    }
 
-            @media (max-width: 992px) {
-              .table * {
-                padding: .25rem !important;
-              }
+    .dropdown {
+      position:relative;
+    }
+    .dropdown>a{
+      transition: all .2s ease-in;
+      color:#3a506b;
+    }
+    .dropdown .dropdown-menu-styled {
+      position:absolute;
+      font-size:1rem;
+      opacity:0;
+      height:0;
+      margin-top:.2rem;
+      top: 40px;
+      transition: all .25s ease-in;
+      list-style-type: none;
+      padding: 10px;
+      border-radius: 0 0 5px 5px;
+      overflow:hidden;
+      text-align: start;
+      left: -30px;
+      font-size: .9rem;
+      background-color:white;
+    }
+    .dropdown:hover>a {
+      color:black;
+    }
+    .dropdown:hover .dropdown-menu-styled {
+        display: block;
+        top:38px;
+        opacity:1;
+        height:auto;
+        /* remove the gap so it doesn't close */
+    }
+    .dropdown:hover .dropdown-menu-styled a{
+      background-color: transparent;
+      transition: all .2s ease-in;
+      padding: 0;
+      
+    }
+    .dropdown:hover .dropdown-menu-styled a:hover {
+      text-decoration:underline;
+      
+    }
+    .dropdown>div>img {
+      transition: all .25s ease-in-out;
+    }
+    .dropdown:hover>div>img {
+      transform: rotateZ(180deg);
+    }
+    .nav-item-styled {
+      color:#3a506b;
+      transition: all .2s ease-in;
+    }
+    .nav-item-styled:hover {
+      color:black;
+    }
+    .text-title {
+      color:#3a506b;
+      transition: all .1s ease-in;
+    }
+    .text-title:hover {
+      color:#e63946;
+    }
 
-              #footer-img {
-                display:none
-              }
+    @media (max-width: 696px) {
+      #navbar {
+        height: 5.25% !important;
+        padding-left: 3% !important;
+        padding-right: 3% !important;
+      }
+      #navbar>div>:nth-child(1) {
+        display: none !important; 
+      }
+      #navbar>div{
+        display:flex !important;
+        width: 100% !important;
+        justify-content: center !important;
+      }
+      #navbar>div>div>ul {
+        justify-content: space-between !important;
+        padding-left: 0px !important;
+      }
+    }
 
-              .footer-text {
-                justify-content:center
-              }
-            }
+    @media (max-width:950px) {
+      nav {
+        height:5%;
+      }
+      body {
+        font-size: .95rem
+      }
+      nav {
+        padding: 5px 7% !important;
+        font-size: .975rem;
+      }
+      .user-profile-dropdown {
+        left:-90px !important;
+      }
+      #navbar-img {
+        display: none;
+      }
+    }
 
-            .background-div {
-              background: url('https://images.unsplash.com/photo-1533090161767-e6ffed986c88?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2069&q=80');
-              background-size: cover;
-              background-position: right bottom;
-              height: 100%;
-            }
-            .home-buttons {
-              overflow: hidden;
-              transition: all .2s ease-in;
-            }
-            .home-buttons:hover {
-              transform: translateY(-5px)
-            }
-            {# .glass {
-              background: rgba(151, 217, 253, 0.2);
-              border-radius: 5px;
-              box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
-              backdrop-filter: blur(5px);
-              -webkit-backdrop-filter: blur(5px);
-            } #}
-            .link-buttons {
-              text-decoration: none;
-              transition: all .2s ease-in;
-            }
-            .link-buttons:hover {
-              text-decoration: underline;
-            }
-            .gradient-bg {
-              height:80%;
-              background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
-              
-            }
-            .card-links {
-              font-size: .9rem;
-              color: black;
-              padding: .25rem;
-              text-decoration: none;
-              border-radius: 4px;
-              transition: all .2s ease-in;
-            }
-            .card-links:hover {
-              text-decoration: underline;
-              color: #fb8500;
-            }
-            {# select option{
-              line-height: 10px !important;
-            } #}
-            .stylized-btn {
-              font-size: 1rem;
-              font-weight: 600;
-              text-decoration: none;
-              transition: all .2s ease-in;
-              color: #3a506b;
-            }
-            .stylized-btn:hover {
-              text-decoration: underline;
-              color: #40916c;
-            }
-            .profile-div a #logout-icon{
-              position:absolute;
-              color: grey;
-              left:10px;
-              top:2.5px;
-              opacity:0%;
-              transition: left .3s, opacity .5s;
-            }
-            .profile-div:hover a #logout-icon{
-              left:20px;
-              opacity:100%;
-            }
-          </style>
+    @media (max-width: 991px) {
+      div>div>div>div>a {
+        font-size: .85rem !important;
+      }
+      h3 {
+        font-size:1.4rem !important;  
+      }
+
+      #order-show-container {
+        display: flex !important;
+        flex-direction: column !important;
+      }
+      #order-table-container {
+        width: 100% !important;
+      }
+      #order-detail-container {
+        overflow-y: scroll !important;
+        width: 100% !important;
+      }
+      #order-image-detail {
+        display: none !important;
+      }
+      #responsive-detail-container {
+        display: flex !important;
+        justify-content: space-between !important;
+      }
+      
+      .hidden-id-admin-table {
+        display: flex !important;
+      }
+
+      #orders-div {
+        width:100% !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+      }
+      .memo-cell {
+        display:none !important;
+      }
+
+      #footer-img {
+        display:none
+      }
+
+      .footer-text {
+        justify-content:center
+      }
+
+      #responsiveForm{
+        display: flex !important;
+        flex-direction: column !important ;
+      }
+
+      #responsiveForm>div:nth-child(1){
+        height: 50%;
+        width: 100% !important;
+        max-height: 50%;
+      }
+
+      #responsiveForm>div:nth-child(2){
+        width: 100% !important;
+        height: 50%;
+      }
+
+    }
+
+    .background-div {
+      background: url('https://images.unsplash.com/photo-1533090161767-e6ffed986c88?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2069&q=80');
+      background-size: cover;
+      background-position: right bottom;
+      height: 100%;
+    }
+    .home-buttons {
+      overflow: hidden;
+      transition: all .2s ease-in;
+    }
+    .home-buttons:hover {
+      transform: translateY(-5px)
+    }
+    .link-buttons {
+      text-decoration: none;
+      transition: all .2s ease-in;
+    }
+    .link-buttons:hover {
+      text-decoration: underline;
+    }
+    .gradient-bg {
+      height:80%;
+      background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
+      
+    }
+    .card-links {
+      font-size: .9rem;
+      color: black;
+      padding: .25rem;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: all .2s ease-in;
+    }
+    .card-links:hover {
+      text-decoration: underline;
+      color: #fb8500;
+    }
+    .stylized-btn {
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all .2s ease-in;
+      color: #3a506b;
+    }
+    .stylized-btn:hover {
+      text-decoration: underline;
+      color: #40916c;
+    }
+    .profile-div a #logout-icon{
+      position:absolute;
+      color: grey;
+      left:10px;
+      top:2.5px;
+      opacity:0%;
+      transition: left .3s, opacity .5s;
+    }
+    .profile-div:hover a #logout-icon{
+      left:20px;
+      opacity:100%;
+    }
+
+    @media (max-width: 700px) {
+      .home-div>div {
+        width: 100%;
+        padding-top: 0 !important;
+        justify-content: center !important;
+      }
+      .home-div>div:nth-child(1) {
+        height: 20% !important;
+        width: 70% !important;
+      }
+      .home-div>div:nth-child(2) {
+        height: 70% !important;
+        width: 85% !important;
+      }
+      .home-buttons>div>div>div {
+        display: flex !important;
+        justify-content: center !important;
+      }
+      .home-div {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        margin-left: 0 !important;
+      }
+      .home-div h1 {
+        text-align: center;
+        font-size: 2rem !important;
+      }
+      .home-div div div p {
+        text-align: center;
+        font-size: 0.95rem;
+      }
+      .cards {
+        height: 70% !important;
+        width: 65% !important;
+        display:flex !important;
+        flex-direction: column !important;
+      }
+      .cards div {
+        width: 70% !important;
+      }
+      .cards div div {
+        width: 100% !important;
+      }
+      .cards div div p {
+        font-size: 1rem !important;
+      }
+      .cards div div div p {
+        font-size: .85rem !important;
+      }
+    }
+
+    @media (max-width: 1376px) and (min-width: 701px) {
+      .home-div div {
+        padding-top: 0 !important;
+        
+      }
+      .home-div {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+      }
+      .home-div h1 {
+        font-size: 3rem !important;
+      }
+      .home-div div div p {
+        font-size: 1rem;
+      }
+      .cards {
+        height: 70% !important;
+        width: 65% !important;
+        display:flex !important;
+        flex-direction: column !important;
+      }
+      .cards div {
+        width: 70% !important;
+      }
+      .cards div div {
+        width: 100% !important;
+      }
+      .cards div div p {
+        font-size: 1rem !important;
+      }
+      .cards div div div p {
+        font-size: .85rem !important;
+      }
+    }
+    .dot {
+      height: 6px;
+      width: 6px;
+      background-color: grey;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .sortable {
+      text-decoration: none !important;
+    }
+    .sortable span {
+      float: none !important;
+    }
+    </style>
     <body style="font-family: 'Roboto', sans-serif; overflow-x: hidden">
-      <div class="d-flex flex-column" style="min-height:100vh; min-width: 100vw; height:100vh; max-width:100vw; width:100vw">
+      <div class="d-flex flex-column" style="min-height:100vh; min-width: 100vw; height:100vh; max-width:100vw; width:100vw; overflow: hidden;">
         {% block navbar %}
-          <nav class="navbar border-bottom" style="background-color: transparent; padding-left:10%; padding-right:10%; padding-bottom:4px; padding-top:4px;">
+          <nav id="navbar" class="navbar border-bottom" style="background-color: transparent; padding-left:10%; padding-right:10%; padding-bottom:4px; padding-top:4px;">
             <div class="d-flex justify-content-between w-100 align-items-center h-100">
-              <a class="d-flex gap-2 align-items-center text-decoration-none" href="/home" style="color:#3a506b;">
+              <a class="d-flex gap-2 align-items-center text-decoration-none mt-1" href="/home" style="color:#3a506b;">
                 <img src="/images/munilogowhite.png" alt="Logo de la Municipalidad de La Plata" height="40" id="navbar-img">
                 <p class="mb-0 fw-bold text-title" style="font-size:1.05rem" data-text="UMAD 2023">UMAD 2023</p>
               </a>
@@ -217,10 +391,36 @@
                         <a class="dropdown-item px-3 pb-1 ps-2 pe-2" href="{{ path('app_medical_samples_new') }}">Agregar Muestra médica</a>
                       </div>
                     </li>
-                    <li class="mt-1">
+                    {# <li class="mt-1">
                       <a class="text-decoration-none nav-item-styled pe-1 mb-0" href="{{path('app_health_index', {'healthcenter' : app.user.getHealthCenter() }) }}">{{app.user.getHealthCenter()}} ({{app.user}})</a>
-                      {# <a class="text-decoration-none nav-item-styled pe-1 mb-0" href="{{ path('app_healthcenter_show', {'name': app.user.getHealthCenter()}) }}">{{app.user.getHealthCenter()}}</a> #}
+                    </li> #}
+                    <li class="h-100 d-flex align-items-center">
+                      <p type="button" class="mb-0" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        {{app.user.getHealthCenter()}} ({{app.user}})
+                      </p>
                     </li>
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">{{app.user.getHealthCenter()}}</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <div class="d-flex flex-column w-100 h-100 overflow-auto">
+                              <div class="d-flex justify-content-between gap-3">
+                                <div class="w-100 h-100 d-flex flex-column gap-2 bg-white p-4 rounded-3">
+                                    <p class="fw-normal mb-0 border-bottom">Usuario encargado: <span class="fw-light">{{app.user.lastname}} {{app.user.name}} | {{app.user.email}}</span></p>
+                                    <p class="fw-normal mb-0 border-bottom">Dirección: <span class="fw-light">{{app.user.getHealthCenter().address}}</span></p>
+                                    <p class="fw-normal mb-0 border-bottom">Teléfono: <span class="fw-light">{{app.user.getHealthCenter().phonenumber}}</span></p>
+                                    <p class="fw-normal mb-0 border-bottom">Día de entrega asociado (determinado por administradora): <span class="fw-light">{{app.user.getHealthCenter().shipmentDay}}</span></p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                     <li class="dropdown profile-div relative mt-1">
                     <a href="/logout">
                       <i class="fa-solid fa-person-walking" style="font-size:1.225rem"></i>
@@ -236,43 +436,31 @@
         {% endblock %}
         {% block footer %}
           <footer class="bg-light text-center text-lg-start border-top">
-            <!-- Grid container -->
-            <div class="container p-4">
-              <!--Grid row-->
-              <div class="row">
-                <!--Grid column-->
+            <div class="container p-4 footer-container">
+              <div class="row stylized-row">
                 <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-12 col-sm-12 d-flex align-items-center">
                   <img id="footer-img" src="/images/munilogo.png" alt="foto" style="filter: invert(100%)" height="45">
                 </div>
-                
-
-                <div class="col-xxl-5 col-xl-4 col-lg-4 col-md-12 mb-4 mb-md-0">
+                <div class="col-xxl-5 col-xl-4 col-lg-4 col-md-5 col-sm-6 mb-md-0">
                   <p class="text-uppercase fw-bold mb-1" style="font-size:1rem; color: #3a506b">Sistema UMAD</p>
                   <p style="font-size: .85rem" class="fw-light">
                     Desarrollado en la Municipalidad de La Plata, subdirección ejecutiva de sistemas, dirección de redes y operaciones, 2023.
                   </p>
                 </div>
-                <!--Grid column-->
-                <!--Grid column-->
-                <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-12 mb-4 mb-md-0">
+                <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-5 col-sm-6 mb-md-0 contact-div">
                   <p class="text-uppercase fw-bold mb-1" style="font-size:1rem; color: #3a506b">Contacto</p>
                   <div class="d-flex align-items-center gap-2 fw-light footer-text" style="font-size: .85rem">
-                    <i class="fa-regular fa-envelope"></i><p class="mb-0"><span class="fw-normal pe-1" style="color: #3a506b">Mail:</span> contactoadmin@umad.com</p>
+                    <i class="fa-regular fa-envelope"></i><p class="mb-0"><span class="fw-normal pe-1" style="color: #3a506b">Mail:</span> umadmlp@gmail.com</p>
                   </div>
                   <div class="d-flex align-items-center gap-2 fw-light footer-text" style="font-size: .85rem">
-                    <i class="fa-solid fa-phone"></i><p class="mb-0"><span class="fw-normal pe-1" style="color: #3a506b">Teléfono:</span> 221 512 6712</p>
+                    <i class="fa-solid fa-phone"></i><p class="mb-0"><span class="fw-normal pe-1" style="color: #3a506b">Teléfono:</span> 4510319</p>
                   </div>
                   <div class="d-flex align-items-center gap-2 fw-light footer-text" style="font-size: .85rem">
-                    <i class="fa-regular fa-map"></i><p class="mb-0"><span class="fw-normal pe-1" style="color: #3a506b">Dirección:</span> 505 e/ 261 y 5</p>
+                    <i class="fa-regular fa-map"></i><p class="mb-0"><span class="fw-normal pe-1" style="color: #3a506b">Dirección:</span> 55 e/ 18 y 19 n°1185 1/2</p>
                   </div>
                 </div>
-                <!--Grid column-->
               </div>
-              <!--Grid row-->
             </div>
-            <!-- Grid container -->
-            <!-- Copyright -->
-            <!-- Copyright -->
           </footer>
         {% endblock %}
       </div>

@@ -1,13 +1,9 @@
 {% extends 'base.html.twig' %}
-
+{% block title %}Agregar Muestra | UMAD {% endblock %}
 {% block body %}
-{# <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style> #}
 <div class="gradient-bg">
-  <div class="container w-100 h-100">
-    <div class="d-flex flex-column pt-3 w-100 mh-100 h-100">
+  <div class="container w-100 h-100 overflow-hidden" style="max-height: 100%">
+    <div class="d-flex flex-column pt-3 w-100 h-100" style="max-height: 100%">
     <div class="d-flex justify-content-between align-items-center" style="margin-top:3.5rem; margin-bottom:1.5rem;">
         <div class="d-flex flex-column gap-1">
           <h3 class="mb-0">Agregar Muestras médicas</h3>
@@ -21,12 +17,6 @@
       <div style="height:65%; max-height:65%">
         <form id="elform" action="" method="post" class="d-flex gap-3 mh-100 h-100 ">
           <div class="w-100 h-100 d-flex flex-column justify-content-between bg-white p-4 rounded-3 border">
-              {# <input list="searchable-products">
-              <datalist id="searchable-products">
-                {% for producto in productos %}
-                    <option value="{{producto.id}}">{{producto.name}}</option>
-                  {% endfor %}
-              </datalist> #}
             <div class="d-flex flex-column w-100 h-100 overflow-auto px-3">
               <div class="d-flex justify-content-between gap-3">
                 <div class="d-flex flex-column w-75" id="product-input-div">
@@ -39,7 +29,7 @@
                   </select>
                 </div>
                 <div class="d-flex flex-column w-25" id="quantity-input-div">
-                  <p for="producto" class="d-block mb-1 fw-light" style="">Seleccionar Cantidad</p>
+                  <p for="producto" class="d-block mb-1 fw-light" style="">Cantidad</p>
                   <input required type="number" name="cantidad[]" class="my-1 p-1 quantitys" min="0" style="border-top:none; border-left:none; border-right:none; outline:none;border-bottom: 1px solid grey; font-size:.9rem; height:29px;">
                 </div>
               </div>
@@ -50,18 +40,9 @@
           </div>
         </form>
       </div>
-      <div class="d-flex flex-column text-secondary pt-3 pb-0" style="font-size: .85rem;">
-    <div class="d-flex align-items-center gap-2">
-      <i class="dot"></i>
-      <p class="mb-0">Ayuda:</p>
-    </div>
-    <p class="mb-0 ms-3">- Si pretende solicitar un producto pero se permite recibir otro, especificar en memo. (Ej: solicité un insumo de X laboratorio pero me permito recibir de algún otro)</p>
-    <p class="mb-0 ms-3">- No duplicar productos en el pedido.</p>
-  </div>
     </div>
   </div>
 </div>
-
   <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
   <script type="text/javascript">
 

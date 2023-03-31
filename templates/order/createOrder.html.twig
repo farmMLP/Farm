@@ -1,10 +1,6 @@
 {% extends 'base.html.twig' %}
-
+{% block title %}Solicitar Pedido | UMAD {% endblock %}
 {% block body %}
-{# <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style> #}
 <div class="gradient-bg">
   <div class="container w-100 h-100">
     <div class="d-flex flex-column pt-3 w-100 mh-100 h-100">
@@ -19,7 +15,7 @@
         </div>
       </div>
       <div style="height:65%; max-height:65%">
-        <form id="elform" action="" method="post" class="d-flex gap-3 mh-100 h-100 ">
+        <form id="responsiveForm" action="" method="post" class="d-flex gap-3 mh-100 h-100 ">
           <div class="w-75 h-100 d-flex justify-content-between bg-white p-4 rounded-3 border">
             <div class="d-flex flex-column w-100 h-100 overflow-auto px-3">
               <div class="d-flex justify-content-between gap-3">
@@ -35,7 +31,7 @@
                   </div>   
                 </div>
                 <div class="d-flex flex-column w-25" id="quantity-input-div">
-                  <p for="producto" class="d-block mb-1 fw-light">Seleccionar Cantidad</p>
+                  <p for="producto" class="d-block mb-1 fw-light">Cantidad</p>
                   <input required type="number" name="cantidad[]" class="my-1 p-1 quantitys" min="0" style="border-top:none; border-left:none; border-right:none; outline:none;border-bottom: 1px solid grey; font-size:.9rem; height:29px;">
                 </div>
               </div>
@@ -45,13 +41,13 @@
           </div>
           <div class="d-flex flex-column w-25 gap-2 bg-white p-4 rounded-3 border">
               <div class="d-flex gap-2">
-                <p for="memo" class="d-block mb-1 fw-light">Añadir memo</p>
+                <p for="memo" class="d-block mb-1 fw-light">Memo</p>
                 <div id="count">
                   <span id="current_count">0</span>
                   <span id="maximum_count">/ 250</span>
                 </div>
               </div>
-              <textarea class="form-control rounded-1 h-100" name="memo" id="texto" maxlength="250" placeholder="Agregar memo (notificar cambios de productos, aclaraciones)" style="background-color:transparent; border-color:gray;"></textarea>
+              <textarea class="form-control rounded-1 h-100" name="memo" id="texto" maxlength="250" placeholder="Especificar detalles del pedido." style="background-color:transparent; border-color:gray;"></textarea>
               <input  style="font-size:.95rem;" type="submit" value="Submit"  class="btn btn-outline-primary"/>
           </div>
         </form>
@@ -62,7 +58,6 @@
       <p class="mb-0">Ayuda:</p>
     </div>
     <p class="mb-0 ms-3">- Si pretende solicitar un producto pero se permite recibir otro, especificar en memo. (Ej: solicité un insumo de X laboratorio pero me permito recibir de algún otro)</p>
-    <p class="mb-0 ms-3">- No duplicar productos en el pedido.</p>
     <p class="mb-0 ms-3">- Para agregar un producto es necesario completar los campos anteriores primero.</p>
   </div>
     </div>

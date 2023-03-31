@@ -1,16 +1,21 @@
 {% extends '@!EasyAdmin/page/content.html.twig' %}
 {% block main %}
+<style>
+  @media (max-width: 1400px) {
+    .hidden-column-admin-table {
+      display: none !important;
+    }
+  }
+</style>
 <div class="w-100 h-100">
   <div class="p-0 w-100 h-100 rounded-1">
     <div class="d-flex w-100 justify-content-between align-items-center">
       <h2 class="font-bold mb-0">PEDIDO #{{order.id}}</h2>
-      <h5 class="mb-0"><span class="fw-light">Fecha de Creación:</span> {{order.createdAt | date("d/m/y h:m") }}</h5>
+      <h5 class="mb-0"><span class="fw-light">Fecha de Creación:</span> {{order.createdAt | date("d/m/y h:i") }}</h5>
     </div>    
-    {# <h5 class="mb-0">DATOS DEL CENTRO DE ENTREGA:</h5> #}
     <div class="d-flex flex-column justify-content-between gap-2 mt-3 mb-2">
         <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25)" class="mb-0 pb-2"><span class="fw-normal text-secondary" >Estado: </span>{{order.status.description}}</p>
         <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25)" class="mb-0 pb-2"><span class="fw-normal text-secondary">Solicitado por: </span>{{order.user.name}} {{order.user.lastname}} | {{order.user.email}}</p>
-    {# <p style="font-size: 0.925rem;" class="mb-0"><span class="fw-normal text-secondary" >Estado: </span>{{order.status.description}}</p> #}
         <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25)" class="mb-0 pb-2"><span class="fw-normal text-secondary">Centro de Salud: </span> {{order.healthCenter.name}}</p>
         <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25)" class="mb-0 pb-2"><span class="fw-normal text-secondary">Dirección: </span> {{order.healthCenter.address}}</p>
         <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25)" class="mb-0 pb-2"><span class="fw-normal text-secondary">Teléfono: </span> {{order.healthCenter.phonenumber}}</p>
@@ -31,26 +36,26 @@
         Pedido Aprobado
       </p>
     </div>
-  <table class="w-100 justify-content-evenly text-start datagrid">
+  <table class="w-100 justify-content-evenly text-start">
       <thead class="">
-        <tr style="line-height:3rem; font-size: 0.925rem;">
-          <th scope="col">Producto</th>
-          <th scope="col">Descripcion</th>
-          <th scope="col">Cantidad Solicitada</th>
-          <th scope="col">Stock</th>
-          <th scope="col">Stock de muestra médica</th>
-          <th scope="col">Cantidad enviada</th>
+        <tr style="line-height:3rem; font-size: 0.925rem; border-bottom:1px solid #6c757d;">
+          <th scope="col" class="  header-for-field-text text-">Producto</th>
+          <th scope="col" class="hidden-column-admin-table  header-for-field-text text-">Descripcion</th>
+          <th scope="col" class="  header-for-field-text text-">Solicitado</th>
+          <th scope="col" class="  header-for-field-text text-">Stock</th>
+          <th scope="col" class="  header-for-field-text text-">Stock Muestras</th>
+          <th scope="col" class="  header-for-field-text text-">Cantidad enviada</th>
         </tr>
       </thead>
       <tbody>
         {% for product in products %} 
-            <tr >
-              <td class="px-0">{{product.product.name}}</td>
-              <td class="px-0">{{product.product.description}}</td>
-              <td class="px-0">{{product.quantityRequested}}</td>
-              <td class="px-0">{{product.product.stock}}</td>
-              <td class="px-0">{{medicalSamples.findOneByProduct(product.getProduct().getId()) ? medicalSamples.findOneByProduct(product.getProduct().getId()) : '0'}}</td>
-              <td class="px-0">{{product.quantitySent}}</td>
+            <tr style="border-bottom:1px solid #6c757d;">
+              <td class="px-0 text- field-text" dir="ltr" data-label="Producto">{{product.product.name}}</td>
+              <td class="px-0 text- field-text hidden-column-admin-table" dir="ltr" data-label="Descripcion">{{product.product.description}}</td>
+              <td class="px-0 text- field-text" dir="ltr" data-label="Cantidad Solicitada">{{product.quantityRequested}}</td>
+              <td class="px-0 text- field-text" dir="ltr" data-label="Stock">{{product.product.stock}}</td>
+              <td class="px-0 text- field-text" dir="ltr" data-label="Stock de muestra médica">{{medicalSamples.findOneByProduct(product.getProduct().getId()) ? medicalSamples.findOneByProduct(product.getProduct().getId()) : '0'}}</td>
+              <td class="px-0 text- field-text" dir="ltr" data-label="Cantidad enviada">{{product.quantitySent}}</td>
             </tr>
           {% endfor %}
       </tbody>
@@ -62,56 +67,55 @@
         Pedido Rechazado
       </p>
     </div>
-    <table class="w-100 justify-content-evenly text-start datagrid">
+    <table class="w-100 justify-content-evenly text-start">
       <thead class="">
         <tr style="line-height:3rem; font-size: 0.925rem;">
-          <th scope="col">Producto</th>
-          <th scope="col">Descripcion</th>
-          <th scope="col">Cantidad Solicitada</th>
-          <th scope="col">Stock</th>
-          <th scope="col">Stock de muestra médica</th>
-          {# <th scope="col">Cantidad enviada</th> #}
+        <th class="hidden-column-admin-table">#</th>
+          <th scope="col" class="  header-for-field-text text-">Producto</th>
+          <th scope="col" class="hidden-column-admin-table  header-for-field-text text-">Descripcion</th>
+          <th scope="col" class="  header-for-field-text text-">Solicitado</th>
+          <th scope="col" class="  header-for-field-text text-">Stock</th>
+          <th scope="col" class="  header-for-field-text text-">Stock Muestras</th>
         </tr>
       </thead>
       <tbody>
         {% for product in products %} 
-            <tr >
-              <td class="px-0">{{product.product.name}}</td>
-              <td class="px-0">{{product.product.description}}</td>
-              <td class="px-0">{{product.quantityRequested}}</td>
-              <td class="px-0">{{product.product.stock}}</td>
-              <td class="px-0">{{medicalSamples.findOneByProduct(product.getProduct().getId()) ? medicalSamples.findOneByProduct(product.getProduct().getId()) : '0'}}</td>
+            <tr  style="border-bottom:1px solid #6c757d;">
+              <th scope="row"  class="hidden-column-admin-table"> {{ loop.index }}</th>
+              <td class="px-0 py-1"  dir="ltr" data-label="Producto">{{product.product.name}}</td>
+              <td class="px-0 hidden-column-admin-table"  dir="ltr" data-label="Descripcion">{{product.product.description}}</td>
+              <td class="px-0 py-1"  dir="ltr" data-label="Cantidad Solicitada">{{product.quantityRequested}}</td>
+              <td class="px-0 py-1"  dir="ltr" data-label="Stock">{{product.product.stock}}</td>
+              <td class="px-0 py-1"  dir="ltr" data-label="Stock de muestra médica">{{medicalSamples.findOneByProduct(product.getProduct().getId()) ? medicalSamples.findOneByProduct(product.getProduct().getId()) : '0'}}</td>
             </tr>
           {% endfor %}
       </tbody>
     </table>
 {% else %} <!-- Pedido Recibido -->
 <form action="admin?crudAction=detail&crudControllerFqcn=App%5CController%5CAdmin%5COrdersCrudController&entityId={{order.id}}&referrer=https://127.0.0.1:8000/admin?crudAction%3Dindex%26crudControllerFqcn%3DApp%255CController%255CAdmin%255COrdersCrudController" method="POST">
-    <table class="w-100 justify-content-evenly text-start datagrid">
+    <table class="w-100 justify-content-evenly text-start">
       <thead class="">
-        <tr style="line-height:3rem; font-size: 0.925rem;">
-          <th>#</th>
+        <tr style="line-height:3rem; font-size: 0.925rem; border-bottom:1px solid #6c757d;">
+          <th class="hidden-column-admin-table">#</th>
           <th scope="col">Producto</th>
-          <th scope="col">Descripcion</th>
-          <th scope="col">Cantidad Solicitada</th>
+          <th scope="col" class="hidden-column-admin-table">Descripcion</th>
+          <th scope="col">Solicitado</th>
           <th scope="col">Stock</th>
-          <th scope="col">Stock de muestra médica</th>
-          <th scope="col">Seleccionar cantidad</th>
-          {# <th class="d-none" scope="col">Stock</th> #}
-          {# <th>Catalogo</th> #}
+          <th scope="col">Stock Muestras</th>
+          <th scope="col">A enviar</th>
         </tr>
       </thead>
       <tbody>
 
         {% for product in products %} 
-            <tr id="row-{{loop.index}}">
-              <th scope="row"> {{ loop.index }}</th>
-              <td class="px-0">{{product.product.name}}</td>
-              <td class="px-0">{{product.product.description}}</td>
-              <td class="px-0">{{product.quantityRequested}}</td>
-              <td class="px-0">{{product.product.stock}}</td>
-              <td class="px-0">{{medicalSamples.findOneByProduct(product.getProduct().getId()) ? medicalSamples.findOneByProduct(product.getProduct().getId()) : '0'}}</td>
-              <td class="px-0">
+            <tr id="row-{{loop.index}}" style="border-bottom:1px solid #6c757d;">
+              <th scope="row"  class="hidden-column-admin-table"> {{ loop.index }}</th>
+              <td class="px-0 py-1">{{product.product.name}}</td>
+              <td class="px-0 py-1 hidden-column-admin-table">{{product.product.description}}</td>
+              <td class="px-0 py-1">{{product.quantityRequested}}</td>
+              <td class="px-0 py-1">{{product.product.stock}}</td>
+              <td class="px-0 py-1">{{medicalSamples.findOneByProduct(product.getProduct().getId()) ? medicalSamples.findOneByProduct(product.getProduct().getId()) : '0'}}</td>
+              <td class="px-0 py-1">
                 <select id="contexto-{{loop.index}}" onChange="cambiarValor({{loop.index}})" key="{{loop.index}}" name="contexto[]" class="p-1 rounded-1 d-none" style="border: 1px solid gray">
                   <option value="" style="color:gray">Catálogo</option>
                   <option value="Programa">Programa</option>
@@ -120,7 +124,6 @@
                 <select id="dependantFormField{{loop.index}}" key="{{loop.index}}" name="productos[]" class="p-1 rounded-1 d-none" style="border: 1px solid gray; width:min-content">
                   <option value="">Listado de productos</option>
                 </select>
-                {# <input type="number" name="quantity[]"> #}
                 <input type="number" name="quantity[]" class="p-1" style="width:60px;" min="0">
                 <button class="d-inline p-1" style="outline:none; border: none; border-radius:3px;"
                 type="button" id="action-{{loop.index}}" onClick="agregarSelector({{loop.index}})">Cambiar</button>
@@ -173,16 +176,12 @@
     $(`#contexto-${idx}`).val('');
     $(`#dependantFormField${idx}`).val('');
   }
-
     $('textarea').keyup(function() {    
     var characterCount = $(this).val().length,
         current_count = $('#current_count'),
         maximum_count = $('#maximum_count'),
         count = $('#count');    
         current_count.text(characterCount);        
-});
-
-
+    });
   </script>
-  
 {% endblock %}

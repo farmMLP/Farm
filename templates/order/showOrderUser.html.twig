@@ -1,12 +1,7 @@
 {% extends 'base.html.twig' %}
 
-
+{% block title %}Pedido #{{order.id}} | UMAD{% endblock %}
 {% block body %}
-{# <div class="position-static">
-  <h1 class="">Descripción del pedido</h1>
-  <h3 class="">Pedido realizado el {{order.createdAt | date("d/m/y h:m")}} </h3>
-</div> #}
-
 <div class="gradient-bg">
   <div class="container w-100 h-100">
     <div class="d-flex flex-column h-100 w-100 mt-3">
@@ -20,18 +15,15 @@
           <a href="{{ path('app_home') }}" class="btn btn-outline-dark p-1 rounded-1 fw-light"><i class="fa-solid fa-arrow-left"></i> Inicio</a>
         </div>
       </div>
-      <div class="d-flex gap-3 w-100" style="height:65%; max-height:65%">
-        <div class="table-responsive bg-white rounded-3 border p-3 w-75 h-100">
+      <div class="d-flex gap-3 w-100" id="order-show-container" style="height:65%; max-height:65%">
+        <div class="table-responsive bg-white rounded-3 border p-3 w-75 h-100" id="order-table-container">
           <table class="table table-hover mw-100">
             <thead>
               <tr style="font-size:.9rem">
                 <th scope="col">Producto</th>
                 <th scope="col">Descripcion</th>
-                <th scope="col">Cantidad solicitada</th>
-                <th scope="col">Cantidad recibida</th>
-                {# <th scope="col">Estado</th> #]
-                {# <th scope="col">Centro de salud</th> #}
-                {# <th scope="col">Ver orden</th> #}
+                <th scope="col">Solicitado</th>
+                <th scope="col">Recibido</th>
               </tr>
             </thead>
             <tbody>
@@ -41,35 +33,27 @@
                   <td class="fw-light">{{ product.product.description }}</td>
                   <td class="fw-light">{{ product.quantityRequested }}</td>
                   <td class="fw-light">{{ product.quantitySent ? product.quantitySent : '-' }}</td>
-                  {# <td class="fw-light">{{ order.healthCenter }}</td> #}
                 </tr>
               {% endfor %}
             </tbody>
           </table>
         </div>
-        <div class="w-25 h-100 justify-content-between bg-white d-flex flex-column rounded-3 overflow-hidden">  
+        <div class="w-25 h-100 justify-content-between bg-white d-flex flex-column rounded-3 overflow-hidden"  id="order-detail-container">  
             <div class="d-flex flex-column">
-              <img src="/images/producto.jpg" height="130" alt="imagen producto" style="object-fit:cover">
-              <div class="p-4 d-flex flex-column gap-2 justify-content-center">
-                <div>
-                  <p class="mb-0 fst-normal text-dark" style="font-size: .9rem">Fecha de creación del pedido:</p>
-                  <p class="fw-light mb-0" style="font-size: .85rem">{{order.createdAt | date("d/m/y h:m")}}</p>
+              <img src="/images/producto.jpg" height="130" alt="imagen producto" style="object-fit:cover" id="order-image-detail">
+              <div class="p-4 d-flex flex-column gap-2" style="max-height:100%;">
+                <div id="responsive-detail-container">
+                  <div class="mb-2">
+                    <p class="mb-0 fst-normal text-dark" style="font-size: .9rem">Fecha de creación del pedido:</p>
+                    <p class="fw-light mb-0" style="font-size: .85rem">{{order.createdAt | date("d/m/y h:m")}}</p>
+                  </div>
+                  <div>
+                    <p class="mb-0 fst-normal text-dark" style="font-size: .9rem">Estado: <span class="fw-light">{{ order.status == 'Recibido' ? 'Enviado' : order.status }}</span></p>
+                  </div>
                 </div>
-                <div>
-                  <p class="mb-0 fst-normal text-dark" style="font-size: .9rem">Usuario que solicitó el pedido:</p>
-                  <p class="fw-light mb-0" style="font-size: .85rem">{{order.user.lastname}} {{ order.user.name }} | {{ order.user.email }}</p>
-                </div>
-                <div>
-                  <p class="mb-0 fst-normal text-dark" style="font-size: .9rem">Centro de salud:</p>
-                  <a class="fw-light text-decoration-none" style="font-size: .85rem;" href="/micentro">{{ order.healthCenter }}</a>
-                </div>
-                <div>
+                <div class="h-100" style="max-height: 100%">
                   <p class="mb-1 fst-normal text-dark" style="font-size: .9rem">Memo:</p>
-                  <textarea class="w-100 rounded-1 p-2 fw-light" name="memo" id="texto" rows="2" maxlength="125" style="background-color:transparent; border-color:gray; font-size:0.85rem">{{ order.memo ? order.memo : 'No se detalló un memo.'}}</textarea>
-                </div>
-                <div>
-                  <p class="mb-0 fst-normal text-dark" style="font-size: .9rem">Estado:</p>
-                  <p class="fw-light mb-0" style="font-size: .85rem">{{ order.status == 'Recibido' ? 'Enviado' : order.status }} FALTA PUNTITO</p>
+                  <textarea class="w-100 rounded-1 p-2 fw-light" name="memo" id="texto" maxlength="125" style="background-color:transparent; border-color:gray; font-size:0.85rem; max-height:190px">{{ order.memo ? order.memo : 'No se detalló un memo.'}}</textarea>
                 </div>
               </div>
             </div>

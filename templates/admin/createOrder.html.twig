@@ -1,18 +1,10 @@
 {% extends '@!EasyAdmin/page/content.html.twig' %}
 
-{# {% block title %}Hello UserController!{% endblock %} #}
+ {% block page_title %}Crear Pedido{% endblock %} 
 
 {% block main %}
-{# <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style> #}
 <div class="example-wrapper">
   <form id="elform" action="" method="post">
-    <div class="d-flex justify-content-between align-items-center w-100">
-      <h1>Crear Pedido</h1>
-      <button type="submit" class="btn btn-primary">Crear nuevo pedido</button>
-    </div>
     <div class="mb-3">
       <label for="healthCenter" class="form-label d-block">Seleccionar Centro que solicita el pedido</label>
       <select name="healthCenter" class="p-2 rounded-1" id="healthCenter">
@@ -46,6 +38,9 @@
           <span id="current_count">0</span>
           <span id="maximum_count">/ 250</span>
         </div>
+    </div>
+    <div class="d-flex justify-content-between align-items-center w-100">
+      <button type="submit" class="btn btn-primary">Crear nuevo pedido</button>
     </div>
   </form>
 </div>
