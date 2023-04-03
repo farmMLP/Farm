@@ -6,7 +6,7 @@
 <div class="background-div">
   <div class="w-100 h-100 container">
     <div class="w-100 h-100 d-flex align-items-center justify-content-center">
-      <div class="p-5 bg-white rounded-4 shadow" style="width:30%">
+      <div class="p-5 bg-white rounded-4 shadow" style="min-width:400px; width:30%;">
         <form method="post">
           <div class="d-flex flex-column gap-3">
             {% if error %}
@@ -17,7 +17,7 @@
                     You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
                 </div>
             {% endif %}
-            <h1 class="h3 mb-1 fw-bold">Sign in</h1>
+            <h1 class="h3 mb-1 fw-bold">Login</h1>
             <div>
               <label class="fw-light" for="inputEmail">Email</label>
               <input type="email" value="{{ last_username }}" name="_username" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
@@ -28,13 +28,13 @@
             </div>
             <input type="hidden" name="_csrf_token"
                   value="{{ csrf_token('authenticate') }}">
-            <div class="checkbox mb-3">
+            {# <div class="checkbox mb-3">
                     <label>
                         <input type="checkbox" name="_remember_me"> Remember me
                     </label>
-                </div>
+                </div> #}
             <button class="btn btn-lg btn-primary" type="submit">
-                Sign in
+                Iniciar Sesión
             </button>
           </div>            
         </form>
