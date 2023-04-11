@@ -18,7 +18,7 @@ class Orders
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 512)]
     private ?string $memo = null;
 
     #[ORM\ManyToOne]
