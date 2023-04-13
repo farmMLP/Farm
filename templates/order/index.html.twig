@@ -5,20 +5,20 @@
 {% block body %}
   <div class="gradient-bg">
     <div class="container w-100 h-100" id="orders-div">
-      <div class="w-100 h-100 d-flex flex-column mt-3">
-        <div class="d-flex justify-content-between align-items-center" style="margin-top:3.5rem; margin-bottom:1.5rem;">
+      <div class="w-100 h-100 d-flex flex-column pt-3">
+        <div class="d-flex justify-content-between align-items-center title-header-container">
           <div class="d-flex flex-column gap-1">
             <h3 class="mb-0">Historial de pedidos</h3>
-            <p class="text-secondary mb-0" style="font-size: .9rem">Detalle de pedidos pertenecientes al centro de salud: <a href="{{ path('app_health_index', {'healthcenter' : app.user.getHealthCenter() }) }}">{{app.user.getHealthCenter()}}</a>.</p>
+            <p class="text-secondary mb-0 subtext-header">Detalle de pedidos pertenecientes al centro de salud: <span class="text-dark">{{app.user.healthCenter}}</a>.</p>
           </div>
           <div>
           <a href="{{ path('app_order_new') }}" class="btn btn-primary p-1"><i class="fa-solid fa-plus"></i> Pedido</a>
           </div>
         </div>
-        <div class="table-responsive bg-white rounded-2 border p-3 overflow-hidden" style="height:66%; max-height:66%">
+        <div class="table-responsive bg-white rounded-2 border overflow-hidden stylized-table">
           <table class="table table-hover mw-100">
             <thead>
-              <tr style="font-size:.9rem">
+              <tr class="custom-table-header">
                 <th scope="col">#</th>
                 <th class="">{{ knp_pagination_sortable(pagination, 'Creado', 'a.createdAt') }}</th>
                 <th scope="col" class="memo-cell">Memo</th>
@@ -31,7 +31,7 @@
             {% if pagination %}
               <tbody id="table-body">
                 {% for order in pagination %} 
-                  <tr style="font-size:0.85rem">
+                  <tr class="table-body-text">
                     <td class="fw-light">{{ order.id }}</td>
                     <td class="fw-light">{{ order.createdAt | date("d/m/y h:i") }}</td>
                     <td class="fw-light memo-cell">{{ order.memo ? (order.memo|length > 50 ? order.memo|slice(0,50) ~ '...' : order.memo) : ('No se especificó memo') }}</td>
@@ -52,7 +52,7 @@
           </table>
         </div>
         <div class="d-flex justify-content-between mt-2">
-        <div class="d-flex flex-column text-secondary pb-0" style="font-size: .85rem;">
+        <div class="d-flex flex-column text-secondary pb-0 footer-text">
           <div class="d-flex align-items-center gap-2">
             <i class="dot"></i>
             <p class="mb-0">Ayuda:</p>

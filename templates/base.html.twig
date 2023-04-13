@@ -310,7 +310,10 @@
         font-size: .85rem !important;
       }
     }
-
+      .title-header-container {
+        margin-top: 3.5rem !important;
+        margin-bottom: 1.5rem !important;
+      }
     @media (max-width: 1376px) and (min-width: 701px) {
       .home-div div {
         padding-top: 0 !important;
@@ -320,12 +323,6 @@
         display: flex !important;
         flex-direction: row !important;
         align-items: center !important;
-      }
-      .home-div h1 {
-        font-size: 3rem !important;
-      }
-      .home-div div div p {
-        font-size: 1rem;
       }
       .cards {
         height: 70% !important;
@@ -338,12 +335,6 @@
       }
       .cards div div {
         width: 100% !important;
-      }
-      .cards div div p {
-        font-size: 1rem !important;
-      }
-      .cards div div div p {
-        font-size: .85rem !important;
       }
     }
     .dot {
@@ -359,6 +350,136 @@
     .sortable span {
       float: none !important;
     }
+    .logout-icon {
+      font-size: 1.2rem !important;
+    }
+    .title-header-container h3 .subtext-header{
+        font-size: .9rem !important;
+      }
+    .custom-table-header{
+      font-size: .9rem !important;
+    }
+    .footer-text {
+      font-size: .85rem !important;
+    }
+    .stylized-table {
+      height: 59% !important;
+      max-height: 59% !important;
+    }
+    .medical-table {
+      height: 60% !important;
+      max-height: 60% !important;
+     }
+
+    @media (max-width: 1280px) {
+      .stylized-table {
+            min-height: 63% !important;
+            height: 63% !important;
+            max-height: 63% !important;
+            padding: 5px 16px !important;
+          }
+    }
+    @media (min-width: 1367px) and (max-width: 1600px) {
+      body {
+        font-size: .9rem !important;  
+      }
+      .title-header-container{
+        margin-top: 1rem !important;
+      }
+      .stylized-table{
+        min-height: 70% !important;
+        height: 70% !important;
+      }
+    }
+
+    @media (min-width: 1281px) and (max-width: 1366px) {
+     body {
+      font-size: 13px !important;
+     }
+     .medical-add-btn{
+      font-size: .8rem !important;
+     }
+     #buttonAdd{
+      font-size: .9rem !important;
+     }
+     .footer-container p {
+      font-size: .7rem !important;
+     }
+     .medical-table {
+      height: 70% !important;
+      max-height: 70% !important;
+     }
+     .custom-table-header{
+      font-size: .75rem !important;
+    }
+    .footer-text {
+      font-size: .75rem !important;
+    }
+    .table-body-text{
+      font-size:0.75rem !important;
+    }
+    .table-body-text td {
+      padding: 5px 8px !important;
+    }
+     .cards div div p {
+       font-size: .95rem !important;
+     }
+     .cards div div div p {
+       font-size: .8rem !important;
+     }
+     .home-div h1 {
+        font-size: 2.5rem !important;
+      }
+      .home-div div div p {
+        font-size: .95rem;
+      }
+      .card-link-container {
+        font-size: .8rem !important;
+      }
+      footer p {
+        font-size: .80rem !important;
+      }
+      .title-header-container {
+
+      }
+      .stylized-row {
+        justify-content: center !important;
+      }
+     .logout-icon {
+      font-size: 1rem !important;
+     }
+     #navbar-img {
+      height: 30px !important;
+     }
+     .dropdown-menu-styled {
+      margin-top: 0 !important;
+     }
+     .dropdown-menu-styled a {
+      font-size: .75rem !important;
+     }
+     .title-header-container {
+        margin-top: .25rem !important;
+        margin-bottom: 1rem !important;
+      }
+      .title-header-container h3{
+        font-size: 1.25rem !important;
+      }
+      .title-header-container h3 .subtext-header{
+        font-size: .8rem !important;
+      }
+      .title-header-container a{
+        font-size: .8rem !important;
+      }
+      .stylized-table {
+        min-height: 71% !important;
+        height: 71% !important;
+        max-height: 71% !important;
+        padding: 5px 16px !important;
+      }
+      #order-submit-btn{
+        font-size: .8rem !important;
+      }
+    }
     </style>
     <body style="font-family: 'Roboto', sans-serif; overflow-x: hidden">
       <div class="d-flex flex-column" style="min-height:100vh; min-width: 100vw; height:100vh; max-width:100vw; width:100vw; overflow: hidden;">
@@ -367,7 +488,7 @@
             <div class="d-flex justify-content-between w-100 align-items-center h-100">
               <a class="d-flex gap-2 align-items-center text-decoration-none mt-1" href="{{ path('app_home') }}" style="color:#3a506b;">
                 <img src="/images/munilogowhite.png" alt="Logo de la Municipalidad de La Plata" height="40" id="navbar-img">
-                <p class="mb-0 fw-bold text-title" style="font-size:1.05rem" data-text="UMAD 2023">UMAD 2023</p>
+                <p class="mb-0 fw-bold text-title" style="" data-text="UMAD 2023">UMAD 2023</p>
               </a>
                 <div class="d-flex h-100 align-items-center">
                   <ul class="d-flex gap-3 me-auto mb-0 h-100 align-items-center" style="--bs-scroll-height: 200px; list-style-type:none;">
@@ -387,7 +508,7 @@
                         <img id="arrow-direction-image" src="https://img.icons8.com/external-those-icons-fill-those-icons/256/external-down-arrows-those-icons-fill-those-icons-1.png" height="12" alt="">
                       </div>
                       <div class="dropdown-menu-styled shadow-sm pe-1 ps-1 pb-1 pt-2" style="border-left: 1px solid #e5e5e5; : 1px solid #e5e5e5; border-right: 1px solid #e5e5e5;">
-                        <a class="dropdown-item px-3 pt-1 pb-2 ps-2 pe-2" href="{{ path('app_medical_samples') }}">Listado de muestras médicas</a>
+                        <a class="dropdown-item px-3 pt-0 pb-2 ps-2 pe-2" href="{{ path('app_medical_samples') }}">Listado de muestras médicas</a>
                         <a class="dropdown-item px-3 pb-1 ps-2 pe-2" href="{{ path('app_medical_samples_new') }}">Agregar Muestra médica</a>
                       </div>
                     </li>
@@ -409,7 +530,7 @@
                           <div class="modal-body">
                             <div class="d-flex flex-column w-100 h-100 overflow-auto">
                               <div class="d-flex justify-content-between gap-3">
-                                <div class="w-100 h-100 d-flex flex-column gap-2 bg-white p-4 rounded-3">
+                                <div class="w-100 h-100 d-flex flex-column gap-2 bg-white p-0 rounded-3">
                                     <p class="fw-normal mb-0 border-bottom">Usuario encargado: <span class="fw-light">{{app.user.lastname}} {{app.user.name}} | {{app.user.email}}</span></p>
                                     <p class="fw-normal mb-0 border-bottom">Dirección: <span class="fw-light">{{app.user.getHealthCenter().address}}</span></p>
                                     <p class="fw-normal mb-0 border-bottom">Teléfono: <span class="fw-light">{{app.user.getHealthCenter().phonenumber}}</span></p>
@@ -423,7 +544,7 @@
                     </div>
                     <li class="dropdown profile-div relative mt-1">
                     <a href="/logout">
-                      <i class="fa-solid fa-person-walking" style="font-size:1.225rem"></i>
+                      <i class="fa-solid fa-person-walking logout-icon"></i>
                       <i class="fa-solid fa-arrow-right-from-bracket" id="logout-icon"></i>
                     </a>
                     </li>
@@ -436,18 +557,18 @@
         {% endblock %}
         {% block footer %}
           <footer class="bg-light text-center text-lg-start border-top">
-            <div class="container p-4 footer-container">
+            <div class="container p-3 footer-container">
               <div class="row stylized-row">
                 <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-12 col-sm-12 d-flex align-items-center">
-                  <img id="footer-img" src="/images/munilogo.png" alt="foto" style="filter: invert(100%)" height="45">
+                  <img id="footer-img" src="/images/munilogo.png" alt="foto" style="filter: invert(100%)" height="40">
                 </div>
-                <div class="col-xxl-5 col-xl-4 col-lg-4 col-md-5 col-sm-6 mb-md-0">
+                <div class="col-xxl-5 col-xl-4 col-lg-4 col-md-5 col-sm-6">
                   <p class="text-uppercase fw-bold mb-1" style="font-size:1rem; color: #3a506b">Sistema UMAD</p>
-                  <p style="font-size: .85rem" class="fw-light">
+                  <p style="font-size: .85rem" class="fw-light mb-0">
                     Desarrollado en la Municipalidad de La Plata, subdirección ejecutiva de sistemas, dirección de redes y operaciones, 2023.
                   </p>
                 </div>
-                <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-5 col-sm-6 mb-md-0 contact-div">
+                <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-5 col-sm-6 contact-div">
                   <p class="text-uppercase fw-bold mb-1" style="font-size:1rem; color: #3a506b">Contacto</p>
                   <div class="d-flex align-items-center gap-2 fw-light footer-text" style="font-size: .85rem">
                     <i class="fa-regular fa-envelope"></i><p class="mb-0"><span class="fw-normal pe-1" style="color: #3a506b">Mail:</span> umadmlp@gmail.com</p>
@@ -466,4 +587,3 @@
       </div>
     </body>
 </html>
-<!--  redireccion de urls, pantalla de login/register, centro de salud no obligatorio en usuario, preguntar si hay multiples admin, editar usuario en admin -->

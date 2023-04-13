@@ -4,10 +4,10 @@
 <div class="gradient-bg">
   <div class="container w-100 h-100">
     <div class="d-flex flex-column pt-3 w-100 mh-100 h-100">
-    <div class="d-flex justify-content-between align-items-center" style="margin-top:3.5rem; margin-bottom:1.5rem;">
+    <div class="d-flex justify-content-between align-items-center title-header-container">
         <div class="d-flex flex-column gap-1">
           <h3 class="mb-0">Crear Pedido</h3>
-          <p class="text-secondary mb-0" style="font-size: .9rem">Seleccione qué insumos se necesitan y su correspondiente cantidad.</p>
+          <p class="text-secondary mb-0 subtext-header">Seleccione qué insumos se necesitan y su correspondiente cantidad.</p>
         </div>
         <div class="d-flex justify-content-end gap-2" >
           <a href="{{ path('app_order') }}" style="font-size:.95rem;" class="btn btn-outline-dark p-1 rounded-1 fw-light"><i class="fa-regular fa-eye"></i> Pedidos</a>
@@ -16,7 +16,7 @@
       </div>
       <div style="height:65%; max-height:65%">
         <form id="responsiveForm" action="" method="post" class="d-flex gap-3 mh-100 h-100 ">
-          <div class="w-75 h-100 d-flex justify-content-between bg-white p-4 rounded-3 border">
+          <div class="w-75 h-100 d-flex justify-content-between bg-white pt-3 pb-3 rounded-3 border">
             <div class="d-flex flex-column w-100 h-100 overflow-auto px-3">
               <div class="d-flex justify-content-between gap-3">
                 <div class="d-flex flex-column w-75" >
@@ -48,11 +48,11 @@
                 </div>
               </div>
               <textarea class="form-control rounded-1 h-100" name="memo" id="texto" maxlength="250" placeholder="Especificar detalles del pedido." style="background-color:transparent; border-color:gray;"></textarea>
-              <input  style="font-size:.95rem;" type="submit" value="Submit"  class="btn btn-outline-primary"/>
+              <input  style="font-size:.95rem;" type="submit" value="Submit"  class="btn btn-outline-primary" id="order-submit-btn"/>
           </div>
         </form>
       </div>
-      <div class="d-flex flex-column text-secondary pt-3 pb-0" style="font-size: .85rem;">
+      <div class="d-flex flex-column text-secondary pt-3 pb-0 footer-text" style="font-size: .85rem;">
     <div class="d-flex align-items-center gap-2">
       <i class="dot"></i>
       <p class="mb-0">Ayuda:</p>
@@ -71,7 +71,6 @@
     function oldValue(value){
       let filter = document.getElementById('searchInput1');
       previousValue = value;
-      console.log('VALOR ANTERIOR: ', previousValue)
     }
 
     var products = [];
@@ -121,7 +120,7 @@
       newProduct = products.find((product)=> product.id == selectedValue);
       if (previousValue !== "") {
         oldProduct = products.find((product) => product.id == previousValue);
-        console.log('Anterior producto del Select 1', oldProduct);
+        {/* console.log('Anterior producto del Select 1', oldProduct); */}
         selectedValues.splice(0,1,newProduct);
         updatedProducts.push(oldProduct);
       } else {
@@ -132,11 +131,10 @@
           return e.id != selectedValue;
         }
       );
-      console.log(selectedValues);
+      {/*console.log(selectedValues);
       console.log(updatedProducts, 'Array de Productos disponibles');
-      console.log(products);
+      console.log(products); */}
       selectElements.forEach(function(select,idx) {
-          console.log('ESTOY REMAPEANDO')
           select.innerHTML = `<select onfocus="oldValue(this.value)" required onclick="updateArray(this)" name="producto[]" class="p-1 w-100 fw-light my-1 products" style="border: 1px solid gray; font-size:.9rem; border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none;"> ${updatedProducts.map((e,idx)=>`<option value="${e.id}">${e.name}</option>`)}<option value="${selectedValues[idx].id}" selected>${selectedValues[idx].name}</option></select>`
         })
     }
@@ -150,9 +148,9 @@ function updateArray(selectElement){
         
         if (previousValue !== "") {
           oldProduct = products.find((product) => product.id == previousValue);
-          console.log(oldProduct, 'PRODUCTO ANTERIOR')
+          {/*console.log(oldProduct, 'PRODUCTO ANTERIOR')*/}
           let index = selectedValues.findIndex(el => el.id === oldProduct.id);
-          console.log('INDICE DE MI PRODUCTO ANTERIOR EN EL ARRAY DE PRODUCTOS SELECECIONADOS', index)
+          {/*console.log('INDICE DE MI PRODUCTO ANTERIOR EN EL ARRAY DE PRODUCTOS SELECCIONADOS', index)*/}
           //selectedValues = selectedValues.filter(function(element){
           //  return element.id != oldProduct.id;
           // })
@@ -162,7 +160,7 @@ function updateArray(selectElement){
         } else {
           selectedValues.push(newProduct);
         }
-        console.log(selectedValues, 'Productos Seleccionados')
+        {/*console.log(selectedValues, 'Productos Seleccionados')*/}
         // Call the useData function with the selected value
         updatedProducts = updatedProducts.filter(
           function(element){
@@ -170,8 +168,8 @@ function updateArray(selectElement){
             return element.id != selectedValue;
           }
         );
-        console.log(updatedProducts, 'Array de Productos disponibles');
-        console.log(products, 'Array de productos completos');
+        {/*console.log(updatedProducts, 'Array de Productos disponibles');
+        console.log(products, 'Array de productos completos');*/}
         selectElements.forEach(function(select,idx) {
           select.innerHTML = `<select onfocus="oldValue(this.value)" required onclick="updateArray(this)" name="producto[]" class="p-1 w-100 fw-light my-1 products" style="border: 1px solid gray; font-size:.9rem; border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none;"> ${updatedProducts.map((e,idx)=>`<option value="${e.id}">${e.name}</option>`)}<option value="${selectedValues[idx].id}" selected>${selectedValues[idx].name}</option></select>`
         })

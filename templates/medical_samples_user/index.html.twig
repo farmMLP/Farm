@@ -15,17 +15,17 @@
   <div class="gradient-bg">
     <div class="container w-100 h-100">
       <div class="w-100 h-100 d-flex flex-column mt-3">
-        <div class="d-flex justify-content-between align-items-center" style="margin-top:3.5rem; margin-bottom:1.5rem;">
+        <div class="d-flex justify-content-between align-items-center title-header-container">
           <div class="d-flex flex-column gap-1">
             <h3 class="mb-0">Muestras médicas</h3>
-            <p class="text-secondary mb-0" style="font-size: .9rem">Listado de muestras médicas pertenecientes al centro de salud <a href="{{ path('app_health_index', {'healthcenter' : app.user.getHealthCenter() }) }}">{{app.user.healthCenter}}</a>.</p>
+            <p class="text-secondary mb-0 subtext-header">Listado de muestras médicas pertenecientes al centro de salud: <span class="text-dark">{{app.user.healthCenter}}</span>.</p>
           </div>
           <a href="{{ path('app_medical_samples_new') }}" style="font-size:.95rem" class="btn btn-primary p-1"><i class="fa-solid fa-plus"></i> Muestra Medica</a>
         </div>
-        <div class="table-responsive bg-white rounded-2 border p-3" style="height:65%; max-height:65%">
+        <div class="table-responsive bg-white rounded-2 border p-3 medical-table">
           <table class="table table-hover mw-100">
             <thead>
-              <tr style="font-size:.9rem">
+              <tr class="custom-table-header">
                 <th scope="col">#</th>
                 <th scope="col">Stock</th>
                 <th scope="col">Vencimiento</th>
@@ -34,9 +34,9 @@
                 {# <th scope="col">Centro de salud</th> #}
               </tr>
             </thead>
-            <tbody>
+            <tbody >
                {% for sample in pagination %} 
-                <tr style="font-size:0.85rem">
+                <tr class="table-body-text">
                   <td class="fw-light">{{ sample.id}}</td>
                   <td class="fw-light">{{ sample.stock }}</td>
                   <td class="fw-light">{{ sample.expirationDate | date("d/m/y h:m") }}</td>
@@ -50,15 +50,21 @@
                {% endfor %} 
             </tbody>
           </table>
-        {{knp_pagination_render(pagination)}}    
+            
         </div>
-        <div class="d-flex flex-column text-secondary pt-3 pb-0" style="font-size: .85rem;">
-          <div class="d-flex align-items-center gap-2">
-            <i class="dot"></i>
-            <p class="mb-0">Ayuda:</p>
+        <div class="d-flex justify-content-between gap-2 pt-3">
+          <div class="d-flex flex-column text-secondary pb-0 footer-text">
+            <div class="d-flex align-items-center gap-2">
+              <i class="dot"></i>
+              <p class="mb-0">Ayuda:</p>
+            </div>
+            <p class="mb-0 ms-3">- La administración de las muestras médicas (stock y productos) es responsabilidad del encargado del centro.</p>
+            {# <p class="mb-0 ms-3">- Para eliminar una muestra médica, contactá con el encargado del centro.</p> #}
           </div>
-          <p class="mb-0 ms-3">- La administración de las muestras médicas (stock y productos) es responsabilidad del encargado del centro.</p>
-          {# <p class="mb-0 ms-3">- Para eliminar una muestra médica, contactá con el encargado del centro.</p> #}
+          <div>
+           {{knp_pagination_render(pagination)}}
+          </div>
+       
         </div>
       </div>
     </div>
