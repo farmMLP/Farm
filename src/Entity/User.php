@@ -36,10 +36,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $lastname = null;
 
     #[ORM\Column]
-    private ?int $dni = null;
+    private ?string $dni = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?HealthCenter $healthCenter = null;
 
     public function getId(): ?int
@@ -136,12 +136,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getDni(): ?int
+    public function getDni(): ?string
     {
         return $this->dni;
     }
 
-    public function setDni(int $dni): self
+    public function setDni(string $dni): self
     {
         $this->dni = $dni;
 

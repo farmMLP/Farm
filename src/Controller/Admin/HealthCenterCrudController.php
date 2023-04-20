@@ -70,7 +70,7 @@ class HealthCenterCrudController extends AbstractCrudController
             // IdField::new('id'),
             TextField::new('name', 'Nombre del Centro de salud'),
             TextField::new('address', 'Dirección'),
-            NumberField::new('phonenumber', 'Teléfono'),
+            TextField::new('phonenumber', 'Teléfono'),
             AssociationField::new('user', 'Usuario encargado del centro'),
             AssociationField::new('shipmentDay', 'Dia de entrega asociado al centro')
         ];

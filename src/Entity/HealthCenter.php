@@ -22,7 +22,7 @@ class HealthCenter
     private ?string $address = null;
 
     #[ORM\Column]
-    private ?int $phonenumber = null;
+    private ?string $phonenumber = null;
 
     #[ORM\OneToMany(mappedBy: 'healthCenter', targetEntity: Orders::class, orphanRemoval: true)]
     private Collection $orders;
@@ -77,12 +77,12 @@ class HealthCenter
         return $this;
     }
 
-    public function getPhonenumber(): ?int
+    public function getPhonenumber(): ?string
     {
         return $this->phonenumber;
     }
 
-    public function setPhonenumber(int $phonenumber): self
+    public function setPhonenumber(string $phonenumber): self
     {
         $this->phonenumber = $phonenumber;
 

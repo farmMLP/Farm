@@ -53,12 +53,9 @@ class UserCrudController extends AbstractCrudController
       ->update(Crud::PAGE_INDEX,Action::EDIT,function(Action $action){
         return $action->setIcon('fa fa-edit')->addCssClass('btn btn-success')->setLabel('Editar');
         })
-      ->update(Crud::PAGE_INDEX,Action::DELETE,function(Action $action){
-        return $action->setIcon('fa fa-trash')->addCssClass('btn btn-danger text-white')->setLabel('Eliminar');
-      })
-      ->update(Crud::PAGE_DETAIL,Action::DELETE,function(Action $action){
-        return $action->setIcon('fa fa-trash')->addCssClass('btn btn-danger text-white')->setLabel('Eliminar');
-      })
+      ->remove(Crud::PAGE_INDEX,Action::DELETE
+      )
+      ->remove(Crud::PAGE_DETAIL,Action::DELETE)
       ->update(Crud::PAGE_DETAIL,Action::INDEX,function(Action $action){
         return $action->setIcon('fa fa-eye')->setLabel('Volver');
       })
@@ -80,7 +77,7 @@ class UserCrudController extends AbstractCrudController
             EmailField::new('email', 'Email'),
             TextField::new('name', 'Nombre'),
             TextField::new('lastname', 'Apellido'),
-            NumberField::new('dni', 'DNI'),
+            TextField::new('dni', 'DNI'),
             TextField::new('password', 'Contraseña')->hideOnIndex(),
             AssociationField::new('healthCenter','Centro de salud')
         ];
