@@ -29,17 +29,6 @@ class UserController extends AbstractController
         $this->em= $em;
      
     }
-    #[Route('/profile', name: 'app_user_asda')]
-    public function index(): Response
-    {
-        if ($this->isGranted('ROLE_ADMIN')) {
-               return $this->redirectToRoute('admin');
-        }   
-        return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
-        ]);
-    }
-
     //     #[Route('/pedido', name: 'app_pedido')]
     // public function pedido(Request $request,ManagerRegistry $doctrine): Response
     // {

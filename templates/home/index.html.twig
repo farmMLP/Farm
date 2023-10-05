@@ -11,7 +11,21 @@
       </div>
     </div>
     <div class="d-flex align-items-center gap-4 cards" style="width:57%; height:25%;">
-      <div class="rounded-2 d-flex flex-column justify-content-end home-buttons shadow-sm" style="width:100%; height:100%; background-color: #00b4d8; position:relative;">
+    {% if is_granted('ROLE_ADMIN') %}
+      <div class="rounded-2 d-flex flex-column justify-content-end home-buttons shadow-sm" style="width:50%; height:100%; position:relative;">
+        <div style="position: absolute; top:0; left: 0; z-index: 0; object-position: 50% 80%; width:100%; height:100%; object-fit:cover; background-color: gray;"></div>
+        <div class="d-flex flex-column p-2" style="background-color: rgba(0,0,0,.25); z-index:10;">
+          <p class="text-white mb-0 card-title" style="font-weight:500;">Panel Administrador</p>
+          <div style="font-size:0.85rem;" class="text-white fw-light d-flex flex-column gap-1">
+            <p class="mb-0" style="font-size:.85rem; line-height:1.05rem; text-shadow: 1px 1px 2px grey">Gestioná el sistema a partir del panel.</p>
+            <div class="d-flex gap-2 w-100 justify-content-end card-link-container">
+              <a href="{{ path('admin') }}" class="text-white fw-bold link-buttons" style="padding-right:.25rem; padding-left:.25rem">Ir al panel</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% elseif is_granted('ROLE_USER') %}
+      <div class="rounded-2 d-flex flex-column justify-content-end home-buttons shadow-sm" style="width:100%; height:100%; position:relative;">
         <img src="/images/pedido1.jpg" alt="foto pedido" style="position: absolute; top:0; left: 0; z-index: 0; object-position: 50% 80%; width:100%; height:100%; object-fit:cover">
         <div class="d-flex flex-column p-2" style="background-color: rgba(0,0,0,.25); z-index:10;">
           <p class="text-white mb-0 card-title" style="font-weight:500;">Pedidos</p>
@@ -37,6 +51,7 @@
           </div>
         </div>
       </div>
+      {% endif %}
       {# <div class="rounded-2 d-flex flex-column justify-content-end home-buttons shadow-sm" style="width:100%; height:100%; background-color: #415a77; position:relative;">
         <img src="/images/perfil.jpg" alt="foto pedido" style="position: absolute; top:0; left: 0; z-index: 0; object-position: 50% 100%; width:100%; height:100%; object-fit:cover";>
         <div class="d-flex flex-column p-2" style="background-color: rgba(0,0,0,.25); z-index:10;">
