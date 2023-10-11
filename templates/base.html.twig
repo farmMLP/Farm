@@ -69,7 +69,6 @@
     }
     .dropdown:hover .dropdown-menu-styled a:hover {
       text-decoration:underline;
-      
     }
     .dropdown>div>img {
       transition: all .25s ease-in-out;
@@ -403,7 +402,7 @@
       font-size: .9rem !important;
      }
      .footer-container p {
-      font-size: .7rem !important;
+      font-size: .8rem !important;
      }
      .medical-table {
       height: 70% !important;
@@ -493,6 +492,9 @@
                 <div class="d-flex h-100 align-items-center">
                 {% if is_granted('ROLE_ADMIN') %}
                   <ul class="d-flex gap-3 me-auto mb-0 h-100 align-items-center" style="--bs-scroll-height: 200px; list-style-type:none;">
+                    <li class="p-1" style="background-color: #444444; border-radius: 1rem">
+                      <a href="/admin" class="text-white">Panel Administrador</a>
+                    </li>
                     <li class="h-100 d-flex align-items-center">
                       <p type="button" class="mb-0" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         {{app.user.getHealthCenter()}} ({{app.user}})
@@ -521,12 +523,11 @@
                       </div>
                     </div>
                     <li class="dropdown profile-div relative mt-1">
-                    <a href="/logout">
-                      <i class="fa-solid fa-person-walking logout-icon"></i>
-                      <i class="fa-solid fa-arrow-right-from-bracket" id="logout-icon"></i>
-                    </a>
+                      <a href="/logout">
+                        <i class="fa-solid fa-person-walking logout-icon"></i>
+                        <i class="fa-solid fa-arrow-right-from-bracket" id="logout-icon"></i>
+                      </a>
                     </li>
-                  </ul>
                   </ul>
                 {% elseif is_granted('ROLE_USER') %}
                   <ul class="d-flex gap-3 me-auto mb-0 h-100 align-items-center" style="--bs-scroll-height: 200px; list-style-type:none;">
