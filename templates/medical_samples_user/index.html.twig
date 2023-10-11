@@ -22,7 +22,7 @@
           </div>
           <a href="{{ path('app_medical_samples_new') }}" style="font-size:.95rem" class="btn btn-primary p-1"><i class="fa-solid fa-plus"></i> Muestra Medica</a>
         </div>
-        <div class="table-responsive bg-white rounded-2 border p-3 medical-table">
+        <div class="table-responsive bg-white rounded-2 border medical-table">
           <table class="table table-hover mw-100">
             <thead>
               <tr class="custom-table-header">
@@ -31,7 +31,6 @@
                 <th scope="col">Vencimiento</th>
                 <th scope="col">Centro de salud</th>
                 <th scope="col">Producto</th>
-                {# <th scope="col">Centro de salud</th> #}
               </tr>
             </thead>
             <tbody >
@@ -42,10 +41,6 @@
                   <td class="fw-light">{{ sample.expirationDate | date("d/m/y h:m") }}</td>
                   <td class="fw-light">{{ sample.healthCenter }}</td>
                   <td class="fw-light">{{ sample.product.name }}</td>
-                  {# <td class="fw-light">{{ order.healthCenter }}</td> #}
-                  {# <td>
-                  <a href="{{ path('app_order_show', {'id': order.id}) }}" class="d-flex w-100justify-content-center">Ver</a>
-                  </td> #}
                 </tr>
                {% endfor %} 
             </tbody>
