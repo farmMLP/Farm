@@ -131,9 +131,11 @@
     }
 
     @media (max-width: 991px) {
+
       div>div>div>div>a {
         font-size: .85rem !important;
       }
+
       h3 {
         font-size:1.4rem !important;  
       }
@@ -314,6 +316,29 @@
         margin-bottom: 1.5rem !important;
       }
     @media (max-width: 1376px) and (min-width: 701px) {
+      .actions-btn {
+        font-size: .9rem !important;
+      }
+      #responsive-detail-container div p {
+        font-size: .8rem !important;
+      }
+      #responsive-detail-memo-container div p, #responsive-detail-memo-container div textarea {
+        font-size: .8rem !important;
+      }
+      .help-below-list-container {
+        font-size: .75rem !important;
+        padding-top: 5px !important;
+      }
+      .show-order-header {
+        margin-top: 2rem !important;
+        margin-bottom: .75rem !important;
+      }
+      #show-order-title {
+        font-size: 1.2rem !important;
+      }
+      .main-title-home {
+        font-size: 2.5rem !important;
+      }
       .home-div div {
         padding-top: 0 !important;
         
@@ -562,8 +587,8 @@
                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                       <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
-                          <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">{{app.user.getHealthCenter()}}</h1>
+                          <div class="modal-header py-2 px-3">
+                            <h5 class="modal-title" id="exampleModalLabel">{{app.user.getHealthCenter()}}</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                           </div>
                           <div class="modal-body">

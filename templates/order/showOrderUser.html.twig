@@ -4,22 +4,22 @@
 {% block body %}
 <div class="gradient-bg">
   <div class="container w-100 h-100">
-    <div class="d-flex flex-column h-100 w-100 mt-3">
-      <div class="d-flex justify-content-between align-items-center" style="margin-top:3.5rem; margin-bottom:1.5rem;">
-        <div class="d-flex flex-column gap-1">
-          <h3 class="mb-0">Pedido #{{order.id}}</h3>
+    <div class="d-flex flex-column h-100 w-100">
+      <div class="d-flex justify-content-between align-items-center show-order-header" style="margin-top:3.5rem; margin-bottom:1.5rem;">
+        <div class="d-flex flex-column">
+          <p class="mb-0 fs-5 fw-bold" id="show-order-title">Pedido #{{order.id}}</p>
           <p class="text-secondary mb-0" style="font-size: .9rem">Detalle de productos del pedido.</p>
         </div>
         <div class="d-flex justify-content-end gap-2" >
-          <a href="{{ path('app_order') }}" class="btn btn-outline-dark p-1 rounded-1 fw-light"><i class="fa-regular fa-eye"></i> Pedidos</a>
-          <a href="{{ path('app_home') }}" class="btn btn-outline-dark p-1 rounded-1 fw-light"><i class="fa-solid fa-arrow-left"></i> Inicio</a>
+          <a href="{{ path('app_order') }}" class="btn btn-outline-dark p-1 rounded-1 fw-light actions-btn"><i class="fa-regular fa-eye"></i> Pedidos</a>
+          <a href="{{ path('app_home') }}" class="btn btn-outline-dark p-1 rounded-1 fw-light actions-btn"><i class="fa-solid fa-arrow-left"></i> Inicio</a>
         </div>
       </div>
       <div class="d-flex gap-3 w-100" id="order-show-container" style="height:65%; max-height:65%">
-        <div class="table-responsive bg-white rounded-3 border p-3 w-75 h-100" id="order-table-container">
+        <div class="table-responsive bg-white rounded-3 border p-2 w-75 h-100" id="order-table-container">
           <table class="table table-hover mw-100">
             <thead>
-              <tr style="font-size:.9rem">
+              <tr class="custom-table-header">
                 <th scope="col">Producto</th>
                 <th scope="col">Descripcion</th>
                 <th scope="col">Solicitado</th>
@@ -41,9 +41,9 @@
         <div class="w-25 h-100 justify-content-between bg-white d-flex flex-column rounded-3 overflow-hidden"  id="order-detail-container">  
             <div class="d-flex flex-column">
               <img src="/images/producto.jpg" height="130" alt="imagen producto" style="object-fit:cover" id="order-image-detail">
-              <div class="p-4 d-flex flex-column gap-2" style="max-height:100%;">
+              <div class="p-2 d-flex flex-column gap-2" id="responsive-detail-memo-container" style="max-height:100%;">
                 <div id="responsive-detail-container">
-                  <div class="mb-2">
+                  <div class="">
                     <p class="mb-0 fst-normal text-dark" style="font-size: .9rem">Fecha de creación del pedido:</p>
                     <p class="fw-light mb-0" style="font-size: .85rem">{{order.createdAt | date("d/m/y h:m")}}</p>
                   </div>
@@ -52,7 +52,7 @@
                   </div>
                 </div>
                 <div class="h-100" style="max-height: 100%">
-                  <p class="mb-1 fst-normal text-dark" style="font-size: .9rem">Memo:</p>
+                  <p class="mb-1 text-dark" style="font-size: .9rem">Memo:</p>
                   <textarea class="w-100 rounded-1 p-2 fw-light" name="memo" id="texto" maxlength="125" style="background-color:transparent; border-color:gray; font-size:0.85rem; max-height:190px">{{ order.memo ? order.memo : 'No se detalló un memo.'}}</textarea>
                 </div>
               </div>
@@ -61,7 +61,7 @@
       </div>
     </div>
   </div>
-  <div class="d-flex flex-column text-secondary pt-3 pb-0" style="font-size: .85rem;">
+  <div class="d-flex flex-column text-secondary pt-3 pb-0 help-below-list-container"  style="font-size: .85rem;">
     <div class="d-flex align-items-center gap-2">
       <i class="dot"></i>
       <p class="mb-0">Ayuda:</p>
