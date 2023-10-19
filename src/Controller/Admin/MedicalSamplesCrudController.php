@@ -11,6 +11,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 
 class MedicalSamplesCrudController extends AbstractCrudController
 {
@@ -71,10 +72,12 @@ class MedicalSamplesCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->hideOnForm(),
-            AssociationField::new('healthCenter', 'Centro médico de la muestra médica'),
-            AssociationField::new('product', 'Producto de la muestra'),
+            AssociationField::new('healthCenter', 'Centro médico'),
+            AssociationField::new('product', 'Producto'),
             NumberField::new('stock', 'Stock'),
-            DateTimeField::new('expirationDate', 'Fecha de vencimiento'),
+            DateField::new('expirationDate', 'Fecha de vencimiento'),
+            DateField::new('modifiedAt', 'Fecha de modificacion'),
+            DateField::new('createdAt', 'Fecha de carga')
         ];
     }
 

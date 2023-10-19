@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\MedicalSamplesRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MedicalSamplesRepository::class)]
@@ -26,6 +27,12 @@ class MedicalSamples
     #[ORM\ManyToOne(inversedBy: 'medicalSamples')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Products $product = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $modifiedAt = null;
 
     public function getId(): ?int
     {
@@ -96,5 +103,29 @@ class MedicalSamples
     
     public function __toString(){
       return $this->getStock();
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getModifiedAt(): ?\DateTimeInterface
+    {
+        return $this->modifiedAt;
+    }
+
+    public function setModifiedAt(?\DateTimeInterface $modifiedAt): self
+    {
+        $this->modifiedAt = $modifiedAt;
+
+        return $this;
     }
 }

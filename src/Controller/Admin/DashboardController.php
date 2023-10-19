@@ -1,4 +1,8 @@
 <?php
+// EL FOR DEL CLIENT NO ANDA COMO DEBERIA. SETEA EN TRUE EL ULTIMO VALOR EVALUADO. POR SER REQUIRED LOS INPUTS PARECE FUNCIONAR. PERO SI SE HACE UNA REQUEST PASA IGUAL., EL IF DE VENCIMIENTOS ACA ABAJO NO PARECE ANDAR.
+// VER VISUALIZACION DE FECHA DE VENCIMIENTO Y carga EN ADMIN/MUESTRASMEDICAS.
+// REORGANIZAR DETAIL DE PEDIDOS EN ADMIN. MUCHO ESPACIO VACÍO.
+// AGREGAR LISTADO DE MEUSTRAS MEDICAS EN EL CENTRO DE SALUD DESDE EL ADMIN PARA VERLAS AGRUPADAS.
 
 namespace App\Controller\Admin;
 
@@ -13,6 +17,7 @@ use App\Entity\HealthCenter;
 use App\Entity\MedicalSamples;
 use App\Entity\Batch;
 use App\Entity\Orders;
+use Symfony\Component\Security\Core\Security;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 
@@ -56,6 +61,9 @@ class DashboardController extends AbstractDashboardController
         // Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
         // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
         //
+        // if (in_array('ROLE_USER', $this->getUser()->getRoles(), true)) {
+        //     return $this->redirectToRoute('admin/dashboard.html.twig');
+        // }
         return $this->render('admin/dashboard.html.twig');
     }
 

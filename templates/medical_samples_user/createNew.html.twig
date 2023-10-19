@@ -32,6 +32,10 @@
                   <p for="producto" class="d-block mb-1 fw-light" style="">Cantidad</p>
                   <input required type="number" name="cantidad[]" class="my-1 p-1 quantitys" min="0" style="border-top:none; border-left:none; border-right:none; outline:none;border-bottom: 1px solid grey; font-size:.9rem; height:29px;">
                 </div>
+                <div class="d-flex flex-column gap-1" id="vencimientos-input-div">
+                  <p class="mb-0">Vencimiento:</p>
+                  <input type="date" name="vencimiento[]" required id="vencimiento" class="border-none p-1 vencimientos">
+                </div>
               </div>
               <p id="messageText" style="font-size: .85rem;" class="text-secondary mb-0"></p>
               <p type="button" id="buttonAdd" class="stylized-btn mt-2">Agregar otra muestra</p>
@@ -51,11 +55,21 @@
     let productBool = false;
     const quantitys = document.querySelectorAll('.quantitys');
     let quantityBool = false;
+    const vencimientos = document.querySelectorAll('.vencimientos');
+    let vencimientosBool = false;
+    
     for (const product of products) {
       if (product.value.trim() === '') {
         productBool = false;
       } else {
         productBool = true;
+      }
+    }
+    for (const vencimiento of vencimientos) {
+      if (vencimiento.value.trim() === '') {
+        vencimientosBool = false;
+      } else {
+        vencimientosBool = true;
       }
     }
     for (const quantity of quantitys) {
@@ -65,7 +79,7 @@
         quantityBool = true;
       }
     }
-    if (quantityBool && productBool){
+    if (quantityBool && productBool && vencimientosBool){
       return true
     } else {
       return false
@@ -74,12 +88,13 @@
 
   const buttonAdd = document.getElementById('buttonAdd');
   const messageText = document.getElementById('messageText');
+  
   buttonAdd.addEventListener('click', () => {
     if (valuesAreSetted()) {
       messageText.innerHTML = '';
       add();
     } else {
-      messageText.innerHTML = 'Completá la fila anterior para agregar otro producto al pedido.'
+      messageText.innerHTML = 'Completá la fila anterior para agregar otra muestra médica.'
     }
   });
 
@@ -88,6 +103,9 @@
     '<select required name="producto[]" class="p-1 w-100 fw-light my-1 products" style="border: 1px solid gray; font-size:.9rem; border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none;"><option value="" style="color:gray">Seleccione un producto</option>{% for producto in productos %}<option value="{{producto.id}}">{{producto.name}}</option>{% endfor %}</select>');
     $('#quantity-input-div').append(
       '<input required type="number" name="cantidad[]" class="my-1 p-1 quantitys" style="border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none; font-size:.9rem; height:29px;">'
+    )
+    $('#vencimientos-input-div').append(
+      '<input type="date" name="vencimiento[]" required id="vencimiento" class="border-none p-1 vencimientos">'
     )
   }
 

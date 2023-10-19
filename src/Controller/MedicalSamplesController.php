@@ -46,29 +46,22 @@ class MedicalSamplesController extends AbstractController
     public function create(Security $security, Request $request, ProductsRepository $productsRepository): Response
     {
         if ($request->isMethod('POST')){
-          // id de productos
-          // dd($request->request->all()['producto']);
-          // cantidades
-          //  dd($request->request->all()['cantidad']);
           $quantitys = $request->request->all()['cantidad'];
           $products = $request->request->all()['producto'];
-          if ((isset($request->request->all()['cantidad']) && (isset($request->request->all()['producto'])))) {
-            
+          $vencimientos = $request->request->all()['vencimiento'];
+          if ((isset($request->request->all()['cantidad']) && (isset($request->request->all()['producto'])) && (isset($request->request->all()['vencimiento'])))) {
             foreach($products as $key => $value){
-              $medicalSample = $this->MedicalSamplesRepository->findIfExistsByHealthCenter($security->getUser()->getHealthCenter(), $value);
-              if($medicalSample){
-                $medicalSample->addStock($quantitys[$key]);
-                $this->MedicalSamplesRepository->save($medicalSample,true);
-              } else {
-                $samples= new MedicalSamples();
-                $samples->setStock($quantitys[$key]);
-                $samples->setExpirationDate(new \DateTimeImmutable);
-                $samples->setHealthCenter($security->getUser()->getHealthCenter());
-                $product = $productsRepository->findOneById($products[$key]);
-                $samples->setProduct($product);
-                $this->MedicalSamplesRepository->save($samples , true);  
-              }
+              $samples= new MedicalSamples();
+              $samples->setStock($quantitys[$key]);
+              $samples->setExpirationDate(new \Datetimeimmutable($vencimientos[$key]));
+              $samples->setCreatedAt(new \DateTimeImmutable);
+              $samples->setModifiedAt(new \DateTimeImmutable);
+              $samples->setHealthCenter($security->getUser()->getHealthCenter());
+              $product = $productsRepository->findOneById($products[$key]);
+              $samples->setProduct($product);
+              $this->MedicalSamplesRepository->save($samples , true);  
             }
+            $this->redirectToRoute('app_medical_samples');
           }   
         }
         $products = $productsRepository->findAll();
@@ -81,23 +74,49 @@ class MedicalSamplesController extends AbstractController
     public function show(Request $request, MedicalSamplesRepository $MedicalSamplesRepository, ProductsRepository $productsRepository, Security $sec, $id): Response
     {
        $samples=$MedicalSamplesRepository->findOneById($id);
-
        if($samples){
-
         if($samples->getHealthCenter() == $sec->getUser()->getHealthCenter()){
             return $this->render('medical_samples_user/showSamples.html.twig', [
                 'sample'=>$samples     
             ]);
-
+        } else {
+          return $this->render('order/error.html.twig'); 
         }
-            else{
-            return $this->render('order/error.html.twig'); 
-            }
-
-    }
-    else{
+      } else {
         return $this->render('order/error.html.twig'); 
+      }
     }
-}
 
+  #[Route('muestra/{id}/update', name: 'updateStock', methods: ['POST'])]
+  public function updateStock(Request $request, $id, Security $security){
+    if($request->isMethod('POST')){
+      $sample = $this->MedicalSamplesRepository->findOneById($id);
+      if($security->getUser()){
+        if($sample->getHealthCenter()->getId() == $security->getUser()->getHealthCenter()->getId()){
+          $stock = $request->request->get('stockQuantity');
+          $sample->setStock($stock);
+          $this->MedicalSamplesRepository->save($sample,true);
+        } else {
+          return $this->render('order/error.html.twig');
+        }
+      }
+      return $this->redirectToRoute('app_medical_samples');
+    }
+  }
+  #[Route('muestra/{id}/delete', name: 'deleteSample', methods: ['POST'])]
+  public function deleteSample(Request $request, $id, Security $security){
+    if($request->isMethod('POST')){
+      if($security->getUser()){
+        $sample = $this->MedicalSamplesRepository->findOneById($id);
+        if($sample->getHealthCenter()->getId() == $security->getUser()->getHealthCenter()->getId()){
+          $this->em->remove($sample);
+          $this->em->flush();
+        } else {
+          //test
+          return $this->render('order/error.html.twig');
+        }
+      }
+      return $this->redirectToRoute('app_medical_samples');
+    }
+  }
 }

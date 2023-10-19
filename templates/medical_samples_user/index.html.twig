@@ -29,18 +29,27 @@
                 <th scope="col">#</th>
                 <th scope="col">Stock</th>
                 <th scope="col">Vencimiento</th>
-                <th scope="col">Centro de salud</th>
+                <th scope="col">Fecha de carga</th>
+                <th scope="col">Fecha Modificación</th>
                 <th scope="col">Producto</th>
+                <th scope="col" class="text-center">Acciones</th>
               </tr>
             </thead>
             <tbody >
                {% for sample in pagination %} 
-                <tr class="table-body-text">
-                  <td class="fw-light">{{ sample.id}}</td>
-                  <td class="fw-light">{{ sample.stock }}</td>
-                  <td class="fw-light">{{ sample.expirationDate | date("d/m/y h:m") }}</td>
-                  <td class="fw-light">{{ sample.healthCenter }}</td>
+                <tr class="table-body-text" id="row-{{loop.index}}">
+                  <td class="fw-light" id="sample-{{ loop.index }}" data-sample-id="{{sample.id}}">{{ sample.id}}</td>
+                  <td class="fw-light" id="stock-{{loop.index}}" data-stock={{sample.stock}}>{{ sample.stock }}</td>
+                  <td class="fw-light">{{ sample.expirationDate | date("d/m/Y") }}</td>
+                  <td class="fw-light">{{ sample.createdAt | date("d/m/Y") }}</td>
+                  <td class="fw-light">{{ sample.modifiedAt ? (date("d/m/Y")) : 'No hubo modificación.' }}</td>
                   <td class="fw-light">{{ sample.product.name }}</td>
+                  <td class="d-flex justify-content-center gap-1" id="actions-{{loop.index}}">
+                    <button class="btn btn-success p-0 btn-sm px-1 editBtn" id="editBtn-{{loop.index}}" data-target="stock-{{loop.index}}" onClick="showEdit({{loop.index}})" style="font-size: .8rem">editar</button>
+                    <form action="{{path('deleteSample', { 'id': sample.id })}}" method="POST">
+                      <button class="btn btn-danger p-0 btn-sm px-1" type="submit" style="font-size: .8rem"><i class="fa fa-trash"></i></button>
+                    </form>
+                  </td>
                 </tr>
                {% endfor %} 
             </tbody>
@@ -59,10 +68,44 @@
           <div>
            {{knp_pagination_render(pagination)}}
           </div>
-       
         </div>
       </div>
     </div>
   </div>
+  <script type="text/javascript">
+    {# const editBtns = document.querySelectorAll('.editBtn'); #}
+    {# for(editBtn in editBtns) {
+      editBtn.addEventListener('click', ()=>{
+        console.log('editar');
+      })
+    } #}
+{# $(document).ready(function() {
+    $('.editBtn').click(function() {
+        // Get the row ID
+        //target no deberia traer stock. deberia concatenar yo sea stock, sea actions div con el id traido para poder reemplazar los elementos correctamente.
+        const tableCell = document.querySelector(`#${$(this).data('target')}`);
+          tableCell.innerHTML = '<input type="number" class="d-flex p-0 border-0" style="outline: 1px solid gray"></input>';
+        console.log($(this));
+        $(this).replace = '<button class="btn btn-secondary">go back</button>';
+    });
+}); #}
+  function showEdit(index) {
+    const tdactions = document.querySelector(`#actions-${index}`);
+    const stockInput = document.querySelector(`#stock-${index}`);
+    const stockValue = document.querySelector(`#stock-${index}`).getAttribute('data-stock');
+    const sampleId = document.querySelector(`#sample-${index}`).getAttribute('data-sample-id');
+    
+    stockInput.innerHTML = `<form class="d-flex gap-1" method="POST" action="muestra/${sampleId}/update"><input type="number" placeholder="${stockValue}" name="stockQuantity" class="d-flex p-0 border-0" style="outline: 1px solid gray"></input><button type="submit" class="btn btn-primary p-0 btn-sm px-1" style="font-size: .8rem"><i class="fa-solid fa-check"></i></button></form>`;
+    tdactions.innerHTML = `<button class="btn btn-success p-0 btn-sm px-1 editBtn" id="editBtn-${index}" data-target="stock-${index}" onClick="undoEdit(${index})" style="font-size: .8rem">cancelar</button><form action="muestra/${sampleId}/delete" method="POST"> <button class="btn btn-danger p-0 btn-sm px-1" type="submit" style="font-size: .8rem"><i class="fa fa-trash"></i></button> </form>`
+  }
+  function undoEdit(index){
+    const tdactions = document.querySelector(`#actions-${index}`);
+    const stockInput = document.querySelector(`#stock-${index}`);
+    const stockValue = document.querySelector(`#stock-${index}`).getAttribute('data-stock');
+    const sampleId = document.querySelector(`#sample-${index}`).getAttribute('data-sample-id');
 
+    stockInput.innerHTML = `<td class="fw-light" id="stock-${index}" data-stock=${stockValue}>${stockValue}</td>`;
+    tdactions.innerHTML = `<button class="btn btn-success p-0 btn-sm px-1 editBtn" id="editBtn-${index}" data-target="stock-${index}" onClick="showEdit(${index})" style="font-size: .8rem">editar</button><form action="muestra/${sampleId}/delete" method="POST"> <button class="btn btn-danger p-0 btn-sm px-1" type="submit" style="font-size: .8rem"><i class="fa fa-trash"></i></button> </form>`
+  }
+  </script>
 {% endblock %}
