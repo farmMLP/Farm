@@ -1,0 +1,57 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+{%block page_title %} {{healthCenter.name}} {% endblock %}
+{% block main %}
+<style>
+.accordion-header button::after {
+  mix-blend-mode: difference !important; 
+  color: grey !important;
+}
+</style>
+<div class="accordion" id="accordionFlushExample">
+  <div class="accordion-item bg-transparent border-0">
+    <h2 class="accordion-header" id="flush-headingOne">
+      <button class="accordion-button px-3 py-2 rounded-top shadow-none" style="background-color: #555555; mix-blend-mode: difference; color: #cccccc;" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+        Ver información del centro
+      </button>
+    </h2>
+    <div id="flush-collapseOne" class="accordion-collapse collapse show" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body py-1 px-3">
+        <div class="d-flex flex-column justify-content-between gap-2 mt-3 mb-2">
+        <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25); color: #bbbbbb; mix-blend-mode: difference" class="mb-0 pb-2"><span class="fw-semibold">Encargado: </span>{{healthCenter.getUser().lastname}} {{healthCenter.getUser().name}}</p>
+        <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25); color: #bbbbbb; mix-blend-mode: difference" class="mb-0 pb-2"><span class="fw-semibold">Direccion: </span>{{healthCenter.address}}</p>
+        <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25); color: #bbbbbb; mix-blend-mode: difference" class="mb-0 pb-2"><span class="fw-semibold">Teléfono: </span>{{healthCenter.phonenumber}}</p>
+        <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25); color: #bbbbbb; mix-blend-mode: difference" class="mb-0 pb-2"><span class="fw-semibold">Dia de entrega asociado: </span>{{healthCenter.shipmentDay}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mt-2">
+  <h5>Lista de Muestras médicas</h5>
+  <table class="table" style="color: #cccccc; mix-blend-mode: difference">
+    <thead>
+      <tr>
+        <th scope="col">Producto</th>
+        <th scope="col">Carga</th>
+        <th scope="col">Vencimiento</th>
+        <th scope="col">Stock</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% if medicalSamples == null %}
+      <tr>
+        <td colspan="4">No hay muestras médicas cargadas.</td>
+      </tr>
+    {% else %}
+      {% for sample in medicalSamples %}
+      <tr style="color: #aaaaaa; mix-blend-mode: difference">
+        <td>{{sample.product.name}}</td>
+        <td>{{sample.createdAt | date("d/m/Y")}}</td>
+        <td>{{sample.expirationDate | date("d/m/Y")}}</td>
+        <td>{{sample.stock}}</td>
+      </tr>
+      {% endfor %}
+    {% endif %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

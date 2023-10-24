@@ -76,7 +76,7 @@ class ProductsCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id')->hideOnForm(),
+            //IdField::new('id')->hideOnForm(),
             TextField::new('name', 'Nombre del producto'),
             TextField::new('description', 'Descripción'),
             NumberField::new('stock', 'Stock')

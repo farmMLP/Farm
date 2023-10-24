@@ -13,6 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use App\Repository\ProductsRepository;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use App\Repository\BatchRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -82,13 +83,13 @@ class BatchCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id')->hideOnForm(),
+            //IdField::new('id')->hideOnForm(),
             AssociationField::new('user', 'Usuario'),
             AssociationField::new('product', 'Producto'),
             NumberField::new('quantity', 'Cantidad'),
-            DateTimeField::new('createdAt', 'Fecha de ingreso')->setTimezone('America/Argentina/Buenos_Aires'),
-            DateTimeField::new('expirationDate', 'Fecha de vencimiento')->setFormat('long'),
-            TextField::new('code', 'Código de lote'),
+            DateField::new('createdAt', 'Carga')->setTimezone('America/Argentina/Buenos_Aires'),
+            DateField::new('expirationDate', 'Vencimiento'),
+            TextField::new('code', 'Código'),
         ];
     }
   

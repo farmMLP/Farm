@@ -7,13 +7,23 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use Symfony\Component\HttpFoundation\Response;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use App\Entity\HealthCenter;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use App\Repository\HealthCenterRepository;
+use App\Repository\MedicalSamplesRepository;
 
 class HealthCenterCrudController extends AbstractCrudController
 {
+    public function __construct(EntityManagerInterface $em, HealthCenterRepository $healthCenterRepository, MedicalSamplesRepository $medicalSamples){
+      $this->em = $em;
+      $this->healthCenterRepository = $healthCenterRepository;
+      $this->medicalSamplesRepository = $medicalSamples;
+    }
+
     public static function getEntityFqcn(): string
     {
         return HealthCenter::class;
@@ -68,12 +78,22 @@ class HealthCenterCrudController extends AbstractCrudController
     {
         return [
             // IdField::new('id'),
-            TextField::new('name', 'Nombre del Centro de salud'),
+            TextField::new('name', 'Centro de salud'),
             TextField::new('address', 'Dirección'),
             TextField::new('phonenumber', 'Teléfono'),
-            AssociationField::new('user', 'Usuario encargado del centro'),
-            AssociationField::new('shipmentDay', 'Dia de entrega asociado al centro')
+            AssociationField::new('user', 'Encargado'),
+            AssociationField::new('shipmentDay', 'Dia de entrega')
         ];
     }
     
+    public function detail(AdminContext $context): Response {
+      $healthCenterId = $context->getRequest()->query->get('entityId');
+      $healthCenter = $this->healthCenterRepository->findOneById($healthCenterId);
+      $medicalSamples = $this->medicalSamplesRepository->findByHealthCenter($healthCenterId);
+      return $this->render('admin/healthCenter.html.twig',
+      [
+        'healthCenter' => $healthCenter,
+        'medicalSamples' => $medicalSamples
+      ]);
+    }
 }

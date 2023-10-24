@@ -3,15 +3,6 @@
 {% block title %}Muestras Médicas | UMAD {% endblock %}
 
 {% block body %}
-<style>
-.dot {
-  height: 6px;
-  width: 6px;
-  background-color: grey;
-  border-radius: 50%;
-  display: inline-block;
-}
-</style>
   <div class="gradient-bg">
     <div class="container w-100 h-100">
       <div class="w-100 h-100 d-flex flex-column mt-3">
@@ -23,14 +14,14 @@
           <a href="{{ path('app_medical_samples_new') }}" style="font-size:.95rem" class="btn btn-primary p-1"><i class="fa-solid fa-plus"></i> Muestra Medica</a>
         </div>
         <div class="table-responsive bg-white rounded-2 border medical-table">
-          <table class="table table-hover mw-100">
+          <table class="table table-hover mw-100 mb-0">
             <thead>
               <tr class="custom-table-header">
                 <th scope="col">#</th>
                 <th scope="col">Stock</th>
-                <th scope="col">Vencimiento</th>
                 <th scope="col">Fecha de carga</th>
                 <th scope="col">Fecha Modificación</th>
+                <th scope="col">Vencimiento</th>
                 <th scope="col">Producto</th>
                 <th scope="col" class="text-center">Acciones</th>
               </tr>
@@ -40,12 +31,12 @@
                 <tr class="table-body-text" id="row-{{loop.index}}">
                   <td class="fw-light" id="sample-{{ loop.index }}" data-sample-id="{{sample.id}}">{{ sample.id}}</td>
                   <td class="fw-light" id="stock-{{loop.index}}" data-stock={{sample.stock}}>{{ sample.stock }}</td>
-                  <td class="fw-light">{{ sample.expirationDate | date("d/m/Y") }}</td>
                   <td class="fw-light">{{ sample.createdAt | date("d/m/Y") }}</td>
-                  <td class="fw-light">{{ sample.modifiedAt ? (date("d/m/Y")) : 'No hubo modificación.' }}</td>
+                  <td class="fw-light">{{ sample.modifiedAt ? sample.modifiedAt | date("d/m/Y") : 'No hubo modificación.' }}</td>
+                  <td class="fw-light">{{ sample.expirationDate | date("d/m/Y") }}</td>
                   <td class="fw-light">{{ sample.product.name }}</td>
                   <td class="d-flex justify-content-center gap-1" id="actions-{{loop.index}}">
-                    <button class="btn btn-success p-0 btn-sm px-1 editBtn" id="editBtn-{{loop.index}}" data-target="stock-{{loop.index}}" onClick="showEdit({{loop.index}})" style="font-size: .8rem">editar</button>
+                    <button class="btn btn-secondary p-0 btn-sm px-1 editBtn" id="editBtn-{{loop.index}}" data-target="stock-{{loop.index}}" onClick="showEdit({{loop.index}})" style="font-size: .8rem">editar</button>
                     <form action="{{path('deleteSample', { 'id': sample.id })}}" method="POST">
                       <button class="btn btn-danger p-0 btn-sm px-1" type="submit" style="font-size: .8rem"><i class="fa fa-trash"></i></button>
                     </form>
@@ -96,7 +87,7 @@
     const sampleId = document.querySelector(`#sample-${index}`).getAttribute('data-sample-id');
     
     stockInput.innerHTML = `<form class="d-flex gap-1" method="POST" action="muestra/${sampleId}/update"><input type="number" placeholder="${stockValue}" name="stockQuantity" class="d-flex p-0 border-0" style="outline: 1px solid gray"></input><button type="submit" class="btn btn-primary p-0 btn-sm px-1" style="font-size: .8rem"><i class="fa-solid fa-check"></i></button></form>`;
-    tdactions.innerHTML = `<button class="btn btn-success p-0 btn-sm px-1 editBtn" id="editBtn-${index}" data-target="stock-${index}" onClick="undoEdit(${index})" style="font-size: .8rem">cancelar</button><form action="muestra/${sampleId}/delete" method="POST"> <button class="btn btn-danger p-0 btn-sm px-1" type="submit" style="font-size: .8rem"><i class="fa fa-trash"></i></button> </form>`
+    tdactions.innerHTML = `<button class="btn btn-secondary p-0 btn-sm px-1 editBtn" id="editBtn-${index}" data-target="stock-${index}" onClick="undoEdit(${index})" style="font-size: .8rem">cancelar</button><form action="muestra/${sampleId}/delete" method="POST"> <button class="btn btn-danger p-0 btn-sm px-1" type="submit" style="font-size: .8rem"><i class="fa fa-trash"></i></button> </form>`
   }
   function undoEdit(index){
     const tdactions = document.querySelector(`#actions-${index}`);
@@ -105,7 +96,7 @@
     const sampleId = document.querySelector(`#sample-${index}`).getAttribute('data-sample-id');
 
     stockInput.innerHTML = `<td class="fw-light" id="stock-${index}" data-stock=${stockValue}>${stockValue}</td>`;
-    tdactions.innerHTML = `<button class="btn btn-success p-0 btn-sm px-1 editBtn" id="editBtn-${index}" data-target="stock-${index}" onClick="showEdit(${index})" style="font-size: .8rem">editar</button><form action="muestra/${sampleId}/delete" method="POST"> <button class="btn btn-danger p-0 btn-sm px-1" type="submit" style="font-size: .8rem"><i class="fa fa-trash"></i></button> </form>`
+    tdactions.innerHTML = `<button class="btn btn-secondary p-0 btn-sm px-1 editBtn" id="editBtn-${index}" data-target="stock-${index}" onClick="showEdit(${index})" style="font-size: .8rem">editar</button><form action="muestra/${sampleId}/delete" method="POST"> <button class="btn btn-danger p-0 btn-sm px-1" type="submit" style="font-size: .8rem"><i class="fa fa-trash"></i></button> </form>`
   }
   </script>
 {% endblock %}
