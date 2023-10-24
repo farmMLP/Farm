@@ -1,44 +1,84 @@
 {% extends '@!EasyAdmin/page/content.html.twig' %}
+{% block content_header %}
+  <style>
+  .content-header {
+    padding: 0 !important;
+  }
+  </style>
+{% endblock %}
 {% block main %}
 <style>
+  :root {
+    --body-bg: #f1f1f1;
+  }
+  .content-wrapper {
+    padding: 0 1rem 0 1rem !important;
+  }
   @media (max-width: 1400px) {
     .hidden-column-admin-table {
       display: none !important;
     }
   }
+  .accordion-header button::after {
+    color: black !important;
+  }
 </style>
+<div class="accordion mt-4" id="accordionFlushExample">
+  <div class="accordion-item bg-transparent" style="border: 1px solid #6c757d; border-bottom-left-radius: 0 !important; border-bottom-right-radius: 0 !important">
+    <h2 class="accordion-header"  id="flush-headingOne">
+      <button class="accordion-button px-3 py-2 rounded-top shadow-none" style="background-color: #343a40 !important" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+        <div class="d-flex w-100 justify-content-between align-items-center">
+          <div class="d-flex gap-2 align-items-center">
+            <h5 class="mb-0" style="color: #ffffff; font-weight: 500">Pedido #{{order.id}}</h5>
+            {% if order.getStatus().getId() == "2" or order.getStatus().getId() == "3" %}
+              <a href="{{ path('pedidos_pdf', {'id': order.id}) }}" class="btn btn-primary ps-1 pe-1 pt-1 pb-1 rounded-1 btn-sm"><i class="fa-solid fa-arrow-down"></i> PDF</a>
+            {% endif %}
+          </div>
+        <p class="mb-0 pe-2" style="font-weight: 500; color:white;" >Solicitado: {{order.createdAt | date("d/m/y h:i") }}</p>
+      </div>    
+      </button>
+    </h2>
+    <div id="flush-collapseOne" class="accordion-collapse collapse show" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body py-1 px-3">
+        <div class="d-flex flex-column justify-content-between gap-2 mt-3 mb-2">
+          {% if order.status.description == "Aprobado" %}
+          <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25); color: #25a244;" class="mb-0 pb-2 fw-bold">Estado:
+            {{order.status.description}}
+          </p>
+          {% elseif order.status.description == "Recibido" %}
+          <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25); color: #bbbbbb;" class="mb-0 pb-2"><span class="fw-semibold">Estado: </span>
+            {{order.status.description}}
+          </p>
+          {% elseif order.status.description == "Rechazado" %}
+          <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25); color: #ef233c;" class="mb-0 pb-2 fw-bold">Estado:
+            {{order.status.description}}
+          </p>
+          {% endif %}
+          <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25); color: #bbbbbb; mix-blend-mode: difference" class="mb-0 pb-2"><span class="fw-semibold">Solicitado por: </span>{{order.user.name}} {{order.user.lastname}} | {{order.user.email}}</p>
+          <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25); color: #bbbbbb; mix-blend-mode: difference" class="mb-0 pb-2"><span class="fw-semibold">Centro de Salud: </span>{{order.healthCenter.name}} | {{order.healthCenter.address}} | {{order.healthCenter.phonenumber}}</p>
+          <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25); color: #bbbbbb; mix-blend-mode: difference" class="mb-0 pb-2"><span class="fw-semibold">Día de entrega: </span>{{order.healthCenter.shipmentDay}}</p>
+          <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25); color: #bbbbbb; mix-blend-mode: difference" class="mb-0 pb-2"><span class="fw-semibold">Memo</p>
+          <textarea disabled id="textarea" class="form-control" style="background-color:transparent; border: 1px solid rgba(124, 124, 124, 0.25)">{{order.memo}}</textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="w-100 h-100">
   <div class="p-0 w-100 h-100 rounded-1">
-    <div class="d-flex w-100 justify-content-between align-items-center">
-      <div class="d-flex gap-2 align-items-center">
-        <h2 class="font-bold mb-0">PEDIDO #{{order.id}}</h2>
-        <a href="{{ path('pedidos_pdf', {'id': order.id}) }}" class="btn btn-primary ps-1 pe-1 pt-1 pb-1 rounded-1" style="font-size:1rem"><i class="fa-solid fa-arrow-down"></i> PDF</a>
-      </div>
-      <h5 class="mb-0"><span class="fw-light">Fecha de Creación:</span> {{order.createdAt | date("d/m/y h:i") }}</h5>
-    </div>    
-    <div class="d-flex flex-column justify-content-between gap-2 mt-3 mb-2">
-        <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25)" class="mb-0 pb-2"><span class="fw-normal text-secondary" >Estado: </span>{{order.status.description}}</p>
-        <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25)" class="mb-0 pb-2"><span class="fw-normal text-secondary">Solicitado por: </span>{{order.user.name}} {{order.user.lastname}} | {{order.user.email}}</p>
-        <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25)" class="mb-0 pb-2"><span class="fw-normal text-secondary">Centro de Salud: </span> {{order.healthCenter.name}}</p>
-        <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25)" class="mb-0 pb-2"><span class="fw-normal text-secondary">Dirección: </span> {{order.healthCenter.address}}</p>
-        <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25)" class="mb-0 pb-2"><span class="fw-normal text-secondary">Teléfono: </span> {{order.healthCenter.phonenumber}}</p>
-        <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25)" class="mb-0 pb-2"><span class="fw-normal text-secondary">Dia de entrega: </span> {{order.healthCenter.shipmentDay}}</p>
-        <label for="textarea" class="text-secondary">Memo: </label>
-    <textarea disabled id="textarea" class="form-control" style="background-color:transparent; border: 1px solid rgba(124, 124, 124, 0.25)">{{order.memo}}</textarea>
-    </div>
-  <h2 class="mt-4">PRODUCTOS DEL PEDIDO</h2>
+  <h5 class="mt-4">Productos Solicitados</h5>
   {% if not error %}
     <div class="alert alert-dismissible fade show" role="alert" style="background-color: #ef233c; padding: .5rem; color:white; border-radius: .25rem;">
       <p class="mb-0">Cantidad enviada no válida, verificá que los stocks y los valores sean correctos.</p>
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="height:auto;"></button>
     </div>
   {% endif %}
-{% if order.getStatus().getId() == '2' %} <!-- Pedido Autorizado -->
-    <div class="my-2" style="background-color: green; border-radius: .25rem; padding:.5rem; color:white">
+  {% if order.getStatus().getId() == '2' %} <!-- Pedido Autorizado -->
+    {# <div class="my-2" style="background-color: green; border-radius: .25rem; padding:.5rem; color:white">
       <p class="mb-0">
         Pedido Aprobado
       </p>
-    </div>
+    </div> #}
   <table class="w-100 justify-content-evenly text-start">
       <thead class="">
         <tr style="line-height:3rem; font-size: 0.925rem; border-bottom:1px solid #6c757d;">
@@ -62,14 +102,14 @@
             </tr>
           {% endfor %}
       </tbody>
-    </table>
+  </table>
   
 {% elseif order.getStatus().getId() == '3' %} <!-- Pedido Rechazado -->
-    <div class="my-2" style="background-color: #ef233c; border-radius: .25rem; padding:.5rem; color:white">
+    {# <div class="my-2" style="background-color: #ef233c; border-radius: .25rem; padding:.5rem; color:white">
       <p class="mb-0">
         Pedido Rechazado
       </p>
-    </div>
+    </div> #}
     <table class="w-100 justify-content-evenly text-start">
       <thead class="">
         <tr style="line-height:3rem; font-size: 0.925rem;">
@@ -95,7 +135,7 @@
       </tbody>
     </table>
 {% else %} <!-- Pedido Recibido -->
-<form action="admin?crudAction=detail&crudControllerFqcn=App%5CController%5CAdmin%5COrdersCrudController&entityId={{order.id}}&referrer=https://127.0.0.1:8000/admin?crudAction%3Dindex%26crudControllerFqcn%3DApp%255CController%255CAdmin%255COrdersCrudController" method="POST">
+<form action="admin?crudAction=detail&crudControllerFqcn=App%5CController%5CAdmin%5COrdersCrudController&entityId={{order.id}}&referrer=https://127.0.0.1:8000/admin?crudAction%3Dindex%26crudControllerFqcn%3DApp%255CController%255CAdmin%255COrdersCrudController" class="mb-3" method="POST">
     <table class="w-100 justify-content-evenly text-start">
       <thead class="">
         <tr style="line-height:3rem; font-size: 0.925rem; border-bottom:1px solid #6c757d;">
@@ -128,7 +168,7 @@
                   <option value="">Listado de productos</option>
                 </select>
                 <input type="number" name="quantity[]" class="p-1" style="width:60px;" min="0">
-                <button class="d-inline p-1" style="outline:none; border: none; border-radius:3px;"
+                <button class="d-inline p-1" style="outline:none; border: none; border-radius:3px; background-color: #333333; color: #cccccc; mix-blend-mode: difference"
                 type="button" id="action-{{loop.index}}" onClick="agregarSelector({{loop.index}})">Cambiar</button>
                 <button class="d-none p-1" style="outline:none; border: none; border-radius:3px;" type="button" id="revert-{{loop.index}}"
                 onClick="cancelarCambio({{loop.index}})">Cancelar</button>

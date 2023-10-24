@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 
 class MedicalSamplesCrudController extends AbstractCrudController
 {
@@ -27,6 +28,14 @@ class MedicalSamplesCrudController extends AbstractCrudController
       ->setPageTitle('edit','Editar muestra médica')
       ->setPageTitle('detail','Muestra médica')
       ->setPageTitle('new', 'Crear nueva Muestra médica');
+    }
+
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add('expirationDate')
+            ->add('healthCenter')
+        ;
     }
 
     public function configureActions(Actions $actions): Actions
@@ -71,6 +80,14 @@ class MedicalSamplesCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
+            // IdField::new('id')->hideOnForm(),
+            AssociationField::new('healthCenter', 'Centro médico'),
+            AssociationField::new('product', 'Producto'),
+            NumberField::new('stock', 'Stock'),
+            DateField::new('createdAt', 'Carga'),
+            DateField::new('modifiedAt', 'Modificacion')->onlyOnDetail(),
+            DateField::new('expirationDate', 'Vencimiento')
+            /*
             IdField::new('id')->hideOnForm(),
             AssociationField::new('healthCenter', 'Centro médico'),
             AssociationField::new('product', 'Producto'),
@@ -78,6 +95,7 @@ class MedicalSamplesCrudController extends AbstractCrudController
             DateField::new('expirationDate', 'Fecha de vencimiento'),
             DateField::new('modifiedAt', 'Fecha de modificacion'),
             DateField::new('createdAt', 'Fecha de carga')
+            */
         ];
     }
 

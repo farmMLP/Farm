@@ -21,7 +21,7 @@
               <div class="d-flex justify-content-between gap-3">
                 <div class="d-flex flex-column w-75" id="product-input-div">
                   <p for="producto" class="d-block fw-light mb-1" style="">Añadir Muestras</p>
-                  <select required name="producto[]" class="my-1 p-1 w-100 fw-light products" style="border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none; font-size: .9rem" id="product">
+                  <select required name="producto[]" class="my-1 p-1 w-100 fw-light products" style="border-top:none; border-left:none; border-right:none; border-bottom: 1px solid grey; outline:none; font-size: .85rem" id="product">
                     <option value="" style="color:gray;">Seleccione un producto</option>
                     {% for producto in productos %}
                       <option value="{{producto.id}}" style="">{{producto.name}}</option>
@@ -37,17 +37,16 @@
                   <input type="date" name="vencimiento[]" required id="vencimiento" class="border-none p-1 vencimientos">
                 </div>
               </div>
-              <p id="messageText" style="font-size: .85rem;" class="text-secondary mb-0"></p>
-              <p type="button" id="buttonAdd" class="stylized-btn mt-2">Agregar otra muestra</p>
+              <p id="messageText" style="font-size: .8rem;" class="text-secondary mb-0"></p>
+              <p type="button" id="buttonAdd" class="stylized-btn mt-2" style="font-size: .8rem !important;">Agregar otra muestra</p>
             </div>
-            <input type="submit" value="Submit"  class="btn btn-outline-primary medical-add-btn"/>
+            <input type="submit" value="Cargar muestras"  class="btn btn-outline-primary medical-add-btn"/>
           </div>
         </form>
       </div>
     </div>
   </div>
 </div>
-  <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
   <script type="text/javascript">
 
   function valuesAreSetted(){

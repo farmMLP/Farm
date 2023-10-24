@@ -27,17 +27,21 @@
     padding-right: 1rem !important;
   }
 }
+@media (max-width: 1366px) {
+  #admin-text h1 {
+    font-size: 3rem !important;
+  }
+}
 </style>
 <div class="overflow-hidden" style="height:94.5vh">
-  <div class="p-0 relative overflow-hidden" style="height:94.5vh">
-    <h1 style="position:absolute; font-weight: 700; font-size: 5rem; top: 13%; left: 300px; text-shadow: 1px 1px 3px grey; color:white;" class="admin-text">UMAD</h1>
-    <p class="position-absolute text-white admin-text" style="top: 28%; left: 300px; font-weight: 400; font-size: 1.05rem; text-shadow: 1px 1px 1px #343434; width:35%">Bienvenido al panel de <span class="fw-bold">administrador</span> del sistema UMAD 2023.
+  <div class="p-0 relative overflow-hidden" style="height:94.5vh" id="admin-text">
+    <h1 style="position:absolute; font-weight: 700; font-size: 5rem; top: 13%; left: 300px;color: #bbbbbb; mix-blend-mode: difference;">UMAD</h1>
+    <p class="position-absolute admin-text" style="top: 28%; left: 300px; color: #cccccc; mix-blend-mode: difference; width:35%">Bienvenido al panel de <span class="fw-bold">administrador</span> del sistema UMAD 2023.
     Desde aquí se podrá realizar cualquier modificación en cuanto a la base de datos del sistema. Tanto como autorizar/rechazar pedidos, cargar lotes de productos, generar usuarios y centros de salud para los clientes, etc.</p>
     {# <img src="https://images.unsplash.com/photo-1533090161767-e6ffed986c88?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2069&q=80" alt="dasda" style="object-fit: cover; height:100%; width: 100%; object-position: right bottom;" class="absolute"> #}
   </div>
   
   <footer class="position-absolute bottom-0 d-flex gap-1 align-items-center mb-1" style="left: -6px">
-    
     <img src="/images/munilogo2.png" alt="logo municipalidad" style="width:auto; height:50px;">
   </footer>
 </div>

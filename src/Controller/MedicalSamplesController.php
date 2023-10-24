@@ -61,7 +61,7 @@ class MedicalSamplesController extends AbstractController
               $samples->setProduct($product);
               $this->MedicalSamplesRepository->save($samples , true);  
             }
-            $this->redirectToRoute('app_medical_samples');
+            return $this->redirectToRoute('app_medical_samples');
           }   
         }
         $products = $productsRepository->findAll();
@@ -95,6 +95,7 @@ class MedicalSamplesController extends AbstractController
         if($sample->getHealthCenter()->getId() == $security->getUser()->getHealthCenter()->getId()){
           $stock = $request->request->get('stockQuantity');
           $sample->setStock($stock);
+          $sample->setModifiedAt(new \DateTimeImmutable);
           $this->MedicalSamplesRepository->save($sample,true);
         } else {
           return $this->render('order/error.html.twig');
