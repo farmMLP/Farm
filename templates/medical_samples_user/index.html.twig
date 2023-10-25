@@ -13,7 +13,7 @@
           </div>
           <a href="{{ path('app_medical_samples_new') }}" style="font-size:.95rem" class="btn btn-primary p-1"><i class="fa-solid fa-plus"></i> Muestra Medica</a>
         </div>
-        <div class="table-responsive bg-white rounded-2 border medical-table">
+        <div class="table-responsive bg-white rounded-2 border medical-table stylized-table">
           <table class="table table-hover mw-100 mb-0">
             <thead>
               <tr class="custom-table-header">
@@ -37,9 +37,24 @@
                   <td class="fw-light">{{ sample.product.name }}</td>
                   <td class="d-flex justify-content-center gap-1" id="actions-{{loop.index}}">
                     <button class="btn btn-secondary p-0 btn-sm px-1 editBtn" id="editBtn-{{loop.index}}" data-target="stock-{{loop.index}}" onClick="showEdit({{loop.index}})" style="font-size: .8rem">editar</button>
-                    <form action="{{path('deleteSample', { 'id': sample.id })}}" method="POST">
-                      <button class="btn btn-danger p-0 btn-sm px-1" type="submit" style="font-size: .8rem"><i class="fa fa-trash"></i></button>
-                    </form>
+                    <button type="button" class="btn btn-danger p-0 btn-sm px-1" data-bs-toggle="modal" data-bs-target="#deleteModal-{{loop.index}}"><i class="fa fa-trash"></i></button>
+                    <div class="modal fade" id="deleteModal-{{loop.index}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                        <div class="d-flex flex-column align-items-center p-2">
+                          <p class="mb-0">Seguro que desea eliminar?</p>
+                          <div class="d-flex gap-2 align-items-center">
+                            <form action="{{path
+                              ('deleteSample', { 'id': sample.id })}}" method="POST">
+                              <!-- agregar alerta por si se misclickeó-->
+                              <button class="btn btn-danger p-1 btn-sm px-1" type="submit" style="font-size: .8rem">Eliminar</button>
+                            </form>
+                          <button type="button" class="btn btn-sm btn-secondary p-1 px-1" style="font-size: .8rem" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   </td>
                 </tr>
                {% endfor %} 
@@ -64,39 +79,27 @@
     </div>
   </div>
   <script type="text/javascript">
-    {# const editBtns = document.querySelectorAll('.editBtn'); #}
-    {# for(editBtn in editBtns) {
-      editBtn.addEventListener('click', ()=>{
-        console.log('editar');
-      })
-    } #}
-{# $(document).ready(function() {
-    $('.editBtn').click(function() {
-        // Get the row ID
-        //target no deberia traer stock. deberia concatenar yo sea stock, sea actions div con el id traido para poder reemplazar los elementos correctamente.
-        const tableCell = document.querySelector(`#${$(this).data('target')}`);
-          tableCell.innerHTML = '<input type="number" class="d-flex p-0 border-0" style="outline: 1px solid gray"></input>';
-        console.log($(this));
-        $(this).replace = '<button class="btn btn-secondary">go back</button>';
-    });
-}); #}
   function showEdit(index) {
     const tdactions = document.querySelector(`#actions-${index}`);
     const stockInput = document.querySelector(`#stock-${index}`);
     const stockValue = document.querySelector(`#stock-${index}`).getAttribute('data-stock');
     const sampleId = document.querySelector(`#sample-${index}`).getAttribute('data-sample-id');
+    const editBtn = document.querySelector(`#editBtn-${index}`)
+
+    console.log(editBtn);
     
-    stockInput.innerHTML = `<form class="d-flex gap-1" method="POST" action="muestra/${sampleId}/update"><input type="number" placeholder="${stockValue}" name="stockQuantity" class="d-flex p-0 border-0" style="outline: 1px solid gray"></input><button type="submit" class="btn btn-primary p-0 btn-sm px-1" style="font-size: .8rem"><i class="fa-solid fa-check"></i></button></form>`;
-    tdactions.innerHTML = `<button class="btn btn-secondary p-0 btn-sm px-1 editBtn" id="editBtn-${index}" data-target="stock-${index}" onClick="undoEdit(${index})" style="font-size: .8rem">cancelar</button><form action="muestra/${sampleId}/delete" method="POST"> <button class="btn btn-danger p-0 btn-sm px-1" type="submit" style="font-size: .8rem"><i class="fa fa-trash"></i></button> </form>`
+    stockInput.innerHTML = `<form class="d-flex gap-1" method="POST" action="muestra/${sampleId}/update"><input type="number" placeholder="${stockValue}" required name="stockQuantity" class="d-flex p-0 border-0" style="outline: 1px solid gray; width:50px"></input><button type="submit" class="btn btn-primary p-0 btn-sm px-1" style="font-size: .8rem"><i class="fa-solid fa-check"></i></button></form>`;
+    editBtn.outerHTML = `<button class="btn btn-secondary p-0 btn-sm px-1 editBtn" id="editBtn-${index}" data-target="stock-${index}" onClick="undoEdit(${index})" style="font-size: .8rem">cancelar</button>`
   }
   function undoEdit(index){
+    const editBtn = document.querySelector(`#editBtn-${index}`)
     const tdactions = document.querySelector(`#actions-${index}`);
     const stockInput = document.querySelector(`#stock-${index}`);
     const stockValue = document.querySelector(`#stock-${index}`).getAttribute('data-stock');
     const sampleId = document.querySelector(`#sample-${index}`).getAttribute('data-sample-id');
 
     stockInput.innerHTML = `<td class="fw-light" id="stock-${index}" data-stock=${stockValue}>${stockValue}</td>`;
-    tdactions.innerHTML = `<button class="btn btn-secondary p-0 btn-sm px-1 editBtn" id="editBtn-${index}" data-target="stock-${index}" onClick="showEdit(${index})" style="font-size: .8rem">editar</button><form action="muestra/${sampleId}/delete" method="POST"> <button class="btn btn-danger p-0 btn-sm px-1" type="submit" style="font-size: .8rem"><i class="fa fa-trash"></i></button> </form>`
+    editBtn.outerHTML = `<button class="btn btn-secondary p-0 btn-sm px-1 editBtn" id="editBtn-${index}" data-target="stock-${index}" onClick="showEdit(${index})" style="font-size: .8rem">editar</button>`
   }
   </script>
 {% endblock %}
