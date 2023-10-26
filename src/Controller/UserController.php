@@ -1,6 +1,4 @@
 <?php
-// EL FOR DEL CLIENT NO ANDA COMO DEBERIA. SETEA EN TRUE EL ULTIMO VALOR EVALUADO. POR SER REQUIRED LOS INPUTS PARECE FUNCIONAR. PERO SI SE HACE UNA REQUEST PASA IGUAL., EL IF DE VENCIMIENTOS ACA ABAJO NO PARECE ANDAR.
-// BORRAR
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,7 +13,6 @@ use App\Entity\HealthCenter;
 use App\Entity\ProductsByOrder;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-
 
 class UserController extends AbstractController
 {

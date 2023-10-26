@@ -62,6 +62,13 @@ class Batch
         return $this;
     }
 
+    public function subQuantity(int $quantity): self
+    {
+        $this->quantity = $this->quantity - $quantity;
+
+        return $this;
+    }
+
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;

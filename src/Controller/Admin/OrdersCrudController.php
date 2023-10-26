@@ -27,7 +27,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
-
+use App\Repository\BatchRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 use App\Repository\OrdersRepository;
 use App\Repository\ProductsByOrderRepository;
@@ -43,14 +43,14 @@ class OrdersCrudController extends AbstractCrudController
 
     private $em;
 
-    public function __construct(EntityManagerInterface $em, OrdersRepository $orders, ProductsByOrderRepository $products, StatusRepository $status, MedicalSamplesRepository $medicalSamples, ProductsRepository $allProducts){
+    public function __construct(EntityManagerInterface $em, OrdersRepository $orders, ProductsByOrderRepository $products, StatusRepository $status, MedicalSamplesRepository $medicalSamples, ProductsRepository $allProducts, BatchRepository $allBatchs){
       $this->em= $em;
       $this->orders = $orders;
       $this->products = $products;
       $this->status = $status;
       $this->medicalSamples = $medicalSamples;
       $this->allProducts = $allProducts;
-      // $this->request = $request;
+      $this->allBatchs = $allBatchs;
     }
 
     public function configureCrud(Crud $crud): Crud
@@ -120,7 +120,7 @@ class OrdersCrudController extends AbstractCrudController
             // veo todos los contextos (catálogos) se eligieron en el formulario
             $catalog = $context->getRequest()->request->all()['contexto'];
             // veo todos los productos que se setearon (al haber cambio de producto, aquellos inputs que se dejaron default van a estar 'vacios')
-            $productosGENERAL = $context->getRequest()->request->all()['productos'];
+            $batchsSelected = $context->getRequest()->request->all()['productos'];
               // por cada input de cantidad (es el que tengo asegurado de tener lleno y con valores seteados)
               foreach ($context->getRequest()->request->all()['quantity'] as $key => $value)
               {
@@ -130,23 +130,12 @@ class OrdersCrudController extends AbstractCrudController
                   break;              
                 } else 
                 {
-                  // si se seleccionó el catálogo del programa o no se seleccionó ninguno (es decir, usó el input default, se evalua el stock del programa)
-                  if($catalog[$key] === 'Programa' || !$catalog[$key])
+                  // si se seleccionó el catálogo del programa
+                  if($catalog[$key] === 'Programa')
                   {
-                    // si no se eligió un producto, es decir que se usó el input default
-                    if (!$productosGENERAL[$key]) {
-                      // si el stock que se posee del producto solicitado en el pedido es menor al valor que se seteó, corto y envío mensaje de error ($auxiliar)
-                      if ($products[$key]->getProduct()->getStock() < $value){ 
-                        $auxiliar = false;
-                        break;
-                      } else {
-                        // seteo cantidad enviada en caso de que el valor esté bien
-                        $products[$key]->setQuantitySent($value);
-                      }
-                    } else {
-                      // si se seleccionó un producto por parte del programa, evalúo stock
-                      if ($this->allProducts->findOneById($productosGENERAL[$key])->getStock() < $value){ 
-                        // si el stock que se posee del producto que yo cambié es menor al valor que se seteó, corto y envío mensaje de error ($auxiliar)
+                      // si se seleccionó un lote por parte del programa, evalúo stock
+                      if ($this->allBatchs->findOneById($batchsSelected[$key])->getQuantity() < $value){ 
+                        // si el stock que se posee del lote que yo cambié es menor al valor que se seteó, corto y envío mensaje de error ($auxiliar)
                         $auxiliar = false;
                         break;
                       } else {
@@ -154,11 +143,11 @@ class OrdersCrudController extends AbstractCrudController
                         $products[$key]->setQuantitySent($value);
                       }
                     }
-                  } else 
+                  else 
                   // si el catálogo elegido no es programa ni nulo, entonces es muestra médica
                   {
                     // si se seleccionó un producto de una muestra médica, evalúo stock
-                    if ($medicalSamples->findOneById($productosGENERAL[$key])->getStock() < $value){ 
+                    if ($medicalSamples->findOneById($batchsSelected[$key])->getStock() < $value){ 
                       // si el stock que se posee del producto elegido de la muestra médica es menor al valor que se seteó, corto y envío mensaje de error ($auxiliar)
                       $auxiliar = false;
                       break;
@@ -173,20 +162,17 @@ class OrdersCrudController extends AbstractCrudController
             if ($auxiliar) {
               foreach ($context->getRequest()->request->all()['quantity'] as $key => $value){
                 // según sea catalogo: Programa o muestra médica o nulo, cambio los stocks
-                if($catalog[$key]=='Programa' || !$catalog[$key]){
-                  // si no se eligió producto, se usó el input default, seteo el stock según el producto solicitado
-                  if (!$productosGENERAL[$key]) {
-                    $products[$key]->getProduct()->subStock($value);
-                  } else {
-                    // seteo stocks en el producto que yo cambié
-                    $changedProduct = $this->allProducts->findOneById($productosGENERAL[$key]);
-                    $changedProduct->subStock($value);
-                    $this->allProducts->save($changedProduct,true);
-                  }
-                  $this->products->save($products[$key], true);
+                if($catalog[$key]=='Programa'){
+                    // seteo stocks en el producto y lote que yo cambié
+                    $batch = $this->allBatchs->findOneById($batchsSelected[$key]);
+                    $product = $batch->getProduct();
+                    $batch->subQuantity($value);
+                    $product->subStock($value);
+                    $this->allBatchs->save($batch,true);
+                    $this->allProducts->save($product, true);
                 } else {
                   // seteo stocks en la muestra médica que yo indiqué
-                  $medicalSample=$medicalSamples->findOneById($productosGENERAL[$key]);
+                  $medicalSample=$medicalSamples->findOneById($batchsSelected[$key]);
                   $medicalSample->subStock($value);
                   $medicalSamples->save($medicalSample,true);
                 }
@@ -195,7 +181,7 @@ class OrdersCrudController extends AbstractCrudController
               // concateno strings para el memo
               $oldMemo = $order->getMemo();
               $updatedMemo = $context->getRequest()->request->get('memo');
-              $order->setMemo($oldMemo. "\r\n" . "Rta: " . $updatedMemo);
+              $order->setMemo($oldMemo. "\r\n" . "RTA: " .  "\r\n" . $updatedMemo);
               $order->setStatus($this->status->findOneById(2));
               $this->orders->save($order, true);
               return $this->redirect('admin?crudAction=index&crudControllerFqcn=App%5CController%5CAdmin%5COrdersCrudController');
@@ -205,7 +191,7 @@ class OrdersCrudController extends AbstractCrudController
                 "products" => $products,
                 "error" => $auxiliar,
                 "medicalSamples" => $medicalSamples,
-                "allProducts" => $this->allProducts
+                "allBatchs" => $this->allBatchs
               ]);
             }
           }        
@@ -228,7 +214,7 @@ class OrdersCrudController extends AbstractCrudController
         "products" => $products,
         "error" => $auxiliar,
         "medicalSamples" => $medicalSamples,
-        "allProducts" => $this->allProducts
+        "allBatchs" => $this->allBatchs
       ]);
     }
     
