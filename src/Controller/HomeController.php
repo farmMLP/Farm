@@ -17,5 +17,6 @@ class HomeController extends AbstractController
             'controller_name' => 'HomeController',
         ]);
     }
-
+    // agregar fecha de actualizacion a lote, mantener stock original y ver cuanto queda en campos diferentes para tener mejor integridad de info
+    // ver tema tablas pedidos. tengo que enviar ubn lote, pero posiblemente tenga que enviar más de un lote por producto en pedido. implica nuevas relaciones, nuevas tablas.
 }

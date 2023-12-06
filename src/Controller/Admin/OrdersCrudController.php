@@ -27,9 +27,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
-use App\Repository\BatchRepository;
+
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 use App\Repository\OrdersRepository;
+use App\Repository\BatchRepository;
 use App\Repository\ProductsByOrderRepository;
 use App\Repository\MedicalSamplesRepository;
 
@@ -51,6 +52,7 @@ class OrdersCrudController extends AbstractCrudController
       $this->medicalSamples = $medicalSamples;
       $this->allProducts = $allProducts;
       $this->allBatchs = $allBatchs;
+      // $this->request = $request;
     }
 
     public function configureCrud(Crud $crud): Crud
@@ -65,7 +67,7 @@ class OrdersCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm(),
             AssociationField::new('user', 'Usuario')->hideOnForm(),
             DateTimeField::new('createdAt', 'Fecha de solicitud')->setTimezone('America/Argentina/Buenos_Aires'),
-            //TextField::new('memo', 'Memo'),
+            TextField::new('memo', 'Memo'),
             TextField::new('healthCenter', 'Centro de salud'),
             AssociationField::new('status','Estado')
         ];
@@ -108,113 +110,109 @@ class OrdersCrudController extends AbstractCrudController
       $orderId = $context->getRequest()->query->get('entityId');
       $order = $this->orders->findOneById($orderId);
       $products = $this->products->findByPetition($orderId);
-      $auxiliar=true;
-      $medicalSamples = $this->medicalSamples;
+      // no tengo que enviar un array vacio por defecto a la página, tal vez conviene resetear el valor post submit.
+      $auxiliar=[];
+      $valuesAreOK=true;
       
       if ($context->getRequest()->isMethod('POST')){
-        // dd($context->getRequest()->request->all());
         // veo qué botón se clickeó, si se autorizó o rechazó
         if ($context->getRequest()->request->all()['action'] === "Autorizar") {
-          // evalúo que todas las cantidades estén seteadas
-          if (isset($context->getRequest()->request->all()['quantity'])) {
-            // veo todos los contextos (catálogos) se eligieron en el formulario
-            $catalog = $context->getRequest()->request->all()['contexto'];
-            // veo todos los productos que se setearon (al haber cambio de producto, aquellos inputs que se dejaron default van a estar 'vacios')
-            $batchsSelected = $context->getRequest()->request->all()['productos'];
-              // por cada input de cantidad (es el que tengo asegurado de tener lleno y con valores seteados)
-              foreach ($context->getRequest()->request->all()['quantity'] as $key => $value)
-              {
-                // si el valor es nulo, corto y envío mensaje de error ($auxiliar)
-                if ($value == null || $value < 0) {
-                  $auxiliar= false;
-                  break;              
-                } else 
-                {
-                  // si se seleccionó el catálogo del programa
-                  if($catalog[$key] === 'Programa')
-                  {
-                      // si se seleccionó un lote por parte del programa, evalúo stock
-                      if ($this->allBatchs->findOneById($batchsSelected[$key])->getQuantity() < $value){ 
-                        // si el stock que se posee del lote que yo cambié es menor al valor que se seteó, corto y envío mensaje de error ($auxiliar)
-                        $auxiliar = false;
-                        break;
-                      } else {
-                        // seteo cantidad enviada en caso de que el valor esté bien
-                        $products[$key]->setQuantitySent($value);
-                      }
-                    }
-                  else 
-                  // si el catálogo elegido no es programa ni nulo, entonces es muestra médica
-                  {
-                    // si se seleccionó un producto de una muestra médica, evalúo stock
-                    if ($medicalSamples->findOneById($batchsSelected[$key])->getStock() < $value){ 
-                      // si el stock que se posee del producto elegido de la muestra médica es menor al valor que se seteó, corto y envío mensaje de error ($auxiliar)
-                      $auxiliar = false;
-                      break;
-                    } else {
-                      // seteo cantidad enviada en caso de que el valor esté bien
-                      $products[$key]->setQuantitySent($value);
-                    }
+          $productsSelected = $context->getRequest()->request->all()['cantproductos'];
+          
+          // FOR PARA EVALUAR CANTIDADES ANTES DE HACER ALGO.
+
+          foreach ($productsSelected as $key => $value){
+            if(array_key_exists('batchs', $value)){
+              $batchs = $value['batchs'];
+              $quantitys = $value['quantitys'];
+              foreach ($batchs as $keyBatch => $idBatch){
+                $selectedBatch = $this->allBatchs->findOneById($idBatch);
+                if(!($quantitys[$keyBatch] <= $selectedBatch->getQuantity())){
+                  $valuesAreOK = false;
+                  return $this->render('admin/showOrder.html.twig', [
+                    "order" => $order,
+                    "products" => $products,
+                    "error" => $valuesAreOK,
+                    "medicalSamples" => $this->medicalSamples,
+                    "allProducts" => $this->allProducts,
+                    "allBatchs" => $this->allBatchs->findAll()
+                  ]);
+                }
+              }
+              $products[$key]->setQuantitySent($value['totalQuantity'][0]);
+              $this->products->save($products[0], true);
+            } else { 
+              // value[] es la muestra medica seleccionada con su stock actual.
+              // value['muestramedica'] tiene el id de la muestra seleccionada.
+              // value['quantity'] es el stock que tiene la muestra medica seleccionada.
+              $medicalSample = $this->medicalSamples->findOneById($value['muestramedica']);
+              // EVALUO STOCK Y MANTENGO AUXILIAR
+              if (!($value['quantity'] <= $medicalSample->getStock())){
+                  // array_push($auxiliar, "invalido");
+                  $valuesAreOK = false;
+                  return $this->render('admin/showOrder.html.twig', [
+                    "order" => $order,
+                    "products" => $products,
+                    "error" => $valuesAreOK,
+                    "medicalSamples" => $this->medicalSamples,
+                    "allProducts" => $this->allProducts,
+                    "allBatchs" => $this->allBatchs->findAll()
+                  ]);
+              }
+            }
+          }
+          // FOR PARA ACTUALIZAR VALORES EN CASO DE QUE LO VALORES SEAN CORRECTOS.
+            foreach ($productsSelected as $key => $value){
+              if(array_key_exists('batchs', $value)){
+                // value[] puede poseer un array de lotes y cantidades.
+                $batchs = $value['batchs'];
+                $quantitys = $value['quantitys'];
+                foreach ($batchs as $keyBatch => $idBatch){
+                  $selectedBatch = $this->allBatchs->findOneById($idBatch);
+                  $product = $selectedBatch->getProduct();
+                  if($quantitys[$keyBatch] <= $selectedBatch->getQuantity()){
+                    $selectedBatch->subQuantity($quantitys[$keyBatch]);
+                    $product->subStock($quantitys[$keyBatch]);
+                    $this->allProducts->save($product, true);
+                    $this->allBatchs->save($selectedBatch,true);
                   }
                 }
+                $products[$key]->setQuantitySent($value['totalQuantity'][0]);
+                $this->products->save($products[$key], true);
+              } else {
+                // value[] es la muestra medica seleccionada con su stock actual.
+                // value['muestramedica'] tiene el id de la muestra seleccionada.
+                // value['quantity'] es el stock que tiene la muestra medica seleccionada.
+                $medicalSample = $this->medicalSamples->findOneById($value['muestramedica']);
+                $medicalSample->subStock($value['quantity']);
+                $this->medicalSamples->save($medicalSample, true);
+                $products[$key]->setQuantitySent($value['quantity']);
+                $this->products->save($products[$key], true);
               }
-            // si las cantidades estaban correctas
-            if ($auxiliar) {
-              foreach ($context->getRequest()->request->all()['quantity'] as $key => $value){
-                // según sea catalogo: Programa o muestra médica o nulo, cambio los stocks
-                if($catalog[$key]=='Programa'){
-                    // seteo stocks en el producto y lote que yo cambié
-                    $batch = $this->allBatchs->findOneById($batchsSelected[$key]);
-                    $product = $batch->getProduct();
-                    $batch->subQuantity($value);
-                    $product->subStock($value);
-                    $this->allBatchs->save($batch,true);
-                    $this->allProducts->save($product, true);
-                } else {
-                  // seteo stocks en la muestra médica que yo indiqué
-                  $medicalSample=$medicalSamples->findOneById($batchsSelected[$key]);
-                  $medicalSample->subStock($value);
-                  $medicalSamples->save($medicalSample,true);
-                }
-              }
-              // seteo estado de aprobado (2)
-              // concateno strings para el memo
-              $oldMemo = $order->getMemo();
-              $updatedMemo = $context->getRequest()->request->get('memo');
-              $order->setMemo($oldMemo. "\r\n" . "RTA: " .  "\r\n" . $updatedMemo);
-              $order->setStatus($this->status->findOneById(2));
-              $this->orders->save($order, true);
-              return $this->redirect('admin?crudAction=index&crudControllerFqcn=App%5CController%5CAdmin%5COrdersCrudController');
-            } else {
-              return $this->render('admin/showOrder.html.twig', [
-                "order" => $order,
-                "products" => $products,
-                "error" => $auxiliar,
-                "medicalSamples" => $medicalSamples,
-                "allBatchs" => $this->allBatchs
-              ]);
             }
-          }        
-        } else {
-
-          
-          // seteo valor rechazado (3)
-          // concateno strings para el memo
+            $oldMemo = $order->getMemo();
+            $updatedMemo = $context->getRequest()->request->get('memo');
+            $order->setMemo($oldMemo. "\r\n" . "RTA: " . $updatedMemo);
+            $order->setStatus($this->status->findOneById(2));
+            $this->orders->save($order, true);
+            return $this->redirect('admin?crudAction=index&crudControllerFqcn=App%5CController%5CAdmin%5COrdersCrudController');
+        } else if ($context->getRequest()->request->all()['action'] === "Rechazar") {
+          // pedido rechazado
           $oldMemo = $order->getMemo();
           $updatedMemo = $context->getRequest()->request->get('memo');
-          $order->setMemo($oldMemo." --- ". " \r\n ".$updatedMemo);
+          $order->setMemo($oldMemo. "\r\n" . "RTA: " .$updatedMemo);
           $order->setStatus($this->status->findOneById(3));
           $this->orders->save($order, true);
           return $this->redirect('admin?crudAction=index&crudControllerFqcn=App%5CController%5CAdmin%5COrdersCrudController');
-        }
+        }  
       }
-      
       return $this->render('admin/showOrder.html.twig', [
         "order" => $order,
         "products" => $products,
-        "error" => $auxiliar,
-        "medicalSamples" => $medicalSamples,
-        "allBatchs" => $this->allBatchs
+        "error" => $valuesAreOK,
+        "medicalSamples" => $this->medicalSamples,
+        "allProducts" => $this->allProducts,
+        "allBatchs" => $this->allBatchs->findAll()
       ]);
     }
     

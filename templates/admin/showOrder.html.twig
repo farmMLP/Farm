@@ -46,7 +46,7 @@
             {{order.status.description}}
           </p>
           {% elseif order.status.description == "Recibido" %}
-          <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25); color: #bbbbbb;" class="mb-0 pb-2"><span class="fw-semibold">Estado: </span>
+          <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25); color: #8f8f8f;" class="mb-0 pb-2"><span class="fw-semibold">Estado: </span>
             {{order.status.description}}
           </p>
           {% elseif order.status.description == "Rechazado" %}
@@ -58,7 +58,7 @@
           <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25); color: #bbbbbb; mix-blend-mode: difference" class="mb-0 pb-2"><span class="fw-semibold">Centro de Salud: </span>{{order.healthCenter.name}} | {{order.healthCenter.address}} | {{order.healthCenter.phonenumber}}</p>
           <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25); color: #bbbbbb; mix-blend-mode: difference" class="mb-0 pb-2"><span class="fw-semibold">Día de entrega: </span>{{order.healthCenter.shipmentDay}}</p>
           <p style="font-size: 0.9rem; border-bottom: 1px solid rgba(124, 124, 124, 0.25); color: #bbbbbb; mix-blend-mode: difference" class="mb-0 pb-2"><span class="fw-semibold">Memo</p>
-          <textarea disabled id="textarea" rows="4" class="form-control" style="background-color:transparent; border: 1px solid rgba(124, 124, 124, 0.25)">{{order.memo}}</textarea>
+          <textarea disabled id="textarea" class="form-control" style="background-color:transparent; border: 1px solid rgba(124, 124, 124, 0.25)">{{order.memo}}</textarea>
         </div>
       </div>
     </div>
@@ -86,7 +86,7 @@
           <th scope="col" class="hidden-column-admin-table  header-for-field-text text-">Descripcion</th>
           <th scope="col" class="  header-for-field-text text-">Solicitado</th>
           <th scope="col" class="  header-for-field-text text-">Stock</th>
-          {# <th scope="col" class="  header-for-field-text text-">Stock Muestras</th> #}
+          <th scope="col" class="  header-for-field-text text-">Stock Muestras</th>
           <th scope="col" class="  header-for-field-text text-">Cantidad enviada</th>
         </tr>
       </thead>
@@ -97,7 +97,7 @@
               <td class="px-0 text- field-text hidden-column-admin-table" dir="ltr" data-label="Descripcion">{{product.product.description}}</td>
               <td class="px-0 text- field-text" dir="ltr" data-label="Cantidad Solicitada">{{product.quantityRequested}}</td>
               <td class="px-0 text- field-text" dir="ltr" data-label="Stock">{{product.product.stock}}</td>
-              {# <td class="px-0 text- field-text" dir="ltr" data-label="Stock de muestra médica">{{medicalSamples.findOneByProduct(product.getProduct().getId()) ? medicalSamples.findOneByProduct(product.getProduct().getId()) : '0'}}</td> #}
+              <td class="px-0 text- field-text" dir="ltr" data-label="Stock de muestra médica">{{medicalSamples.findOneByProduct(product.getProduct().getId()) ? medicalSamples.findOneByProduct(product.getProduct().getId()) : '0'}}</td>
               <td class="px-0 text- field-text" dir="ltr" data-label="Cantidad enviada">{{product.quantitySent}}</td>
             </tr>
           {% endfor %}
@@ -118,23 +118,25 @@
           <th scope="col" class="hidden-column-admin-table  header-for-field-text text-">Descripcion</th>
           <th scope="col" class="  header-for-field-text text-">Solicitado</th>
           <th scope="col" class="  header-for-field-text text-">Stock</th>
-          {# <th scope="col" class="  header-for-field-text text-">Stock Muestras</th> #}
+          <th scope="col" class="  header-for-field-text text-">Stock Muestras</th>
         </tr>
       </thead>
       <tbody>
         {% for product in products %} 
             <tr  style="border-bottom:1px solid #6c757d;">
-              <th scope="row"  class="hidden-column-admin-table"> {{ loop.index }}</th>
+              <th scope="row"  class="hidden-column-admin-table"> {{ loop.index0 }}</th>
               <td class="px-0 py-1"  dir="ltr" data-label="Producto">{{product.product.name}}</td>
               <td class="px-0 hidden-column-admin-table"  dir="ltr" data-label="Descripcion">{{product.product.description}}</td>
               <td class="px-0 py-1"  dir="ltr" data-label="Cantidad Solicitada">{{product.quantityRequested}}</td>
               <td class="px-0 py-1"  dir="ltr" data-label="Stock">{{product.product.stock}}</td>
-              {# <td class="px-0 py-1"  dir="ltr" data-label="Stock de muestra médica">{{medicalSamples.findOneByProduct(product.getProduct().getId()) ? medicalSamples.findOneByProduct(product.getProduct().getId()) : '0'}}</td> #}
+              <td class="px-0 py-1"  dir="ltr" data-label="Stock de muestra médica">{{medicalSamples.findOneByProduct(product.getProduct().getId()) ? medicalSamples.findOneByProduct(product.getProduct().getId()) : '0'}}</td>
             </tr>
           {% endfor %}
       </tbody>
     </table>
 {% else %} <!-- Pedido Recibido -->
+
+
 <form action="admin?crudAction=detail&crudControllerFqcn=App%5CController%5CAdmin%5COrdersCrudController&entityId={{order.id}}&referrer=https://127.0.0.1:8000/admin?crudAction%3Dindex%26crudControllerFqcn%3DApp%255CController%255CAdmin%255COrdersCrudController" class="mb-3" method="POST">
     <table class="w-100 justify-content-evenly text-start">
       <thead class="">
@@ -144,44 +146,93 @@
           <th scope="col" class="hidden-column-admin-table">Descripcion</th>
           <th scope="col">Solicitado</th>
           <th scope="col">Stock</th>
-          {# <th scope="col">Stock Muestras</th> #}
+          <th scope="col">Stock Muestras</th>
           <th scope="col">A enviar</th>
         </tr>
       </thead>
       <tbody>
-
         {% for product in products %} 
-            <tr id="row-{{loop.index}}" style="border-bottom:1px solid #6c757d;">
-              <th scope="row"  class="hidden-column-admin-table"> {{ loop.index }}</th>
+            <tr id="row-{{loop.index0}}" style="border-bottom:1px solid #6c757d;">
+              <th scope="row"  class="hidden-column-admin-table"> {{ loop.index0 }}</th>
               <td class="px-0 py-1">{{product.product.name}}</td>
               <td class="px-0 py-1 hidden-column-admin-table">{{product.product.description}}</td>
               <td class="px-0 py-1">{{product.quantityRequested}}</td>
               <td class="px-0 py-1">{{product.product.stock}}</td>
-              {# <td class="px-0 py-1">{{medicalSamples.findOneByProduct(product.getProduct().getId()) ? medicalSamples.findOneByProduct(product.getProduct().getId()) : '0'}}</td> #}
+              <td class="px-0 py-1">{{medicalSamples.findOneByProduct(product.getProduct().getId()) ? medicalSamples.findOneByProduct(product.getProduct().getId()) : '0'}}</td>
               <td class="px-0 py-1">
-                <select id="contexto-{{loop.index}}" onChange="cambiarValor({{loop.index}})" key="{{loop.index}}" name="contexto[]" class="p-1 rounded-1" style="border: 1px solid gray">
+                {# <select id="contexto-{{loop.index0}}" onChange="cambiarValor({{loop.index0}})" key="{{loop.index0}}" name="contexto[]" class="p-1 rounded-1 d-none" style="border: 1px solid gray">
+                  <option value="" style="color:gray">Catálogo</option>
+                  <option value="Programa">Programa</option>
+                  <option value="muestramedica">Muestra medica</option>
+                </select> #}
+                <select id="contexto-{{loop.index0}}" onChange="cambiarValor({{loop.index0}})" key="{{loop.index0}}" name="cantproductos[]" class="p-1 rounded-1 d-none" style="border: 1px solid gray">
                   <option value="" style="color:gray">Catálogo</option>
                   <option value="Programa">Programa</option>
                   <option value="muestramedica">Muestra medica</option>
                 </select>
-                <select required id="dependantFormField{{loop.index}}" key="{{loop.index}}" name="productos[]" class="p-1 rounded-1" style="border: 1px solid gray; width:min-content">
-                  <option value="">Seleccionar Producto</option>
+                <select id="dependantFormField{{loop.index0}}" key="{{loop.index0}}" class="p-1 rounded-1 d-none" style="border: 1px solid gray; width:min-content">
+                  <option value="">Listado de productos</option>
                 </select>
-                <input type="number" name="quantity[]" class="p-1" style="width:60px;" min="0">
-                {# <button class="d-inline p-1" style="outline:none; border: none; border-radius:3px; background-color: #333333; color: #cccccc; mix-blend-mode: difference"
-                type="button" id="action-{{loop.index}}" onClick="agregarSelector({{loop.index}})">Cambiar</button> #}
-                <button class="d-none p-1" style="outline:none; border: none; border-radius:3px;" type="button" id="revert-{{loop.index}}"
-                onClick="cancelarCambio({{loop.index}})">Cancelar</button>
+                {# <input type="number" name="quantity[]" class="p-1" style="width:60px;" min="0">
+                <button class="d-inline p-1" style="outline:none; border: none; border-radius:3px; background-color: #333333; color: #cccccc; mix-blend-mode: difference"
+                type="button" id="action-{{loop.index0}}" onClick="agregarSelector({{loop.index0}})">Cambiar</button>
+                <button class="d-none p-1" style="outline:none; border: none; border-radius:3px;" type="button" id="revert-{{loop.index0}}"
+                onClick="cancelarCambio({{loop.index0}})">Cancelar</button> #}
+                <!-- Button trigger modal -->
+                <div id="inputDiv-{{loop.index0}}" class="d-flex gap-1">
+                  <button type="button" class="btn btn-primary shadow-none" data-bs-toggle="modal" data-bs-target="#modal-{{loop.index0}}">
+                    Seleccionar Lotes
+                  </button>
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="modal-{{loop.index0}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Seleccionar Lotes</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <p class="d-flex w-100 m-0 fw-semibold pt-1" style="padding-left: 20px; padding-right: 20px">Nombre | Stock | Vencimiento | Lote </p>
+                        <div class="modal-body w-100" id="batchsDiv-{{loop.index0}}">
+                          <div class="d-flex align-items-center gap-2" id="select-{{loop.index0}}">
+                            {# <select name="batchs-{{loop.index0}}[]" class="w-100"> #}
+
+                            <select name="cantproductos[{{loop.index0}}][batchs][]" class="w-100">
+
+                            <option value="" style="color:gray">Seleccionar Lote</option>
+                            {% for batch in allBatchs %}
+                              <option id="dependant-option-{{loop.index0}}" value="{{batch.id}}">{{batch.product.name[:25] }} | {{batch.quantity}} | {{ batch.expirationDate | date("d/m/y") }} | {{ batch.id }}</option>
+                              {# <input type="quantityBatch[]" type="number"> #}
+                            {% endfor %}
+                            </select>
+                            <input name="cantproductos[{{loop.index0}}][quantitys][]" type="number" class="batchsQuantitys-{{loop.index0}} m-0 p-0" style="width:60px">
+                            <button type="button" class="btn btn-danger" onClick="deleteSelectBtn({{loop.index0}})">delete</button>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" onClick="addSelectBatch({{loop.index0}})">Agregar</button>
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                          <button type="button" class="btn btn-primary" onClick="setQuantity({{loop.index0}})">Confirmar</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <button class="d-inline p-1" style="outline:none; border: none; border-radius:3px; background-color: #333333; color: #cccccc; mix-blend-mode: difference"
+                  type="button" id="action-{{loop.index0}}" onClick="ChangeButton({{loop.index0}})">Ver Muestras</button>
+                  <div id="inputQuantity-{{loop.index0}}"></div>
+                </div>
               </td>
             </tr>
           {% endfor %}
       </tbody>
     </table>
+    <div style="position: relative;">
     <textarea type="text" placeholder="Agregar memo (notificar cambios de productos, aclaraciones)" name="memo" id="textarea" maxlength="250" class="d-block w-100 my-3 p-2 rounded-2"></textarea>
-      <div id="count">
+      <div id="count" class="position-absolute" style="top: 1%; right: 1%;">
         <span id="current_count">0</span>
         <span id="maximum_count">/ 250</span>
       </div>
+    </div>
     <button class="btn btn-info" value="Autorizar" name="action">Autorizar</button>
     <button class="btn btn-danger" value="Rechazar" name="action">Rechazar</button>
     <a href="{{ path('pedidos_pdf', {'id': order.id}) }}" class="text-white btn btn-success"><i class="fa-solid fa-arrow-down"></i> PDF</a>
@@ -194,12 +245,44 @@
   <script type="text/javascript">
   function cambiarValor(idx){
     if ($(`#contexto-${idx}`).val() == 'muestramedica'){
-      $(`#dependantFormField${idx}`).html('<option value="" style="color:gray">Seleccionar Muestra</option>{% for medicalSample in medicalSamples.findByHealthCenter(1) %}<option id="dependant-option-{{loop.index}}" value="{{medicalSample.id}}">{{medicalSample.product.name}} | Stock: {{medicalSample.stock}}</option>{% endfor %}')
+
+      $(`#dependantFormField${idx}`).html('<option value="" style="color:gray">Seleccionar producto</option>{% for medicalSample in medicalSamples.findByHealthCenter(1) %}<option id="dependant-option-{{loop.index0}}" value="{{medicalSample.id}}">{{medicalSample.product.name}} | Stock: {{medicalSample.stock}}</option>{% endfor %}')
     } else {
-      $(`#dependantFormField${idx}`).html('<option value="" style="color:gray">Seleccionar Lote</option>{% for batch in allBatchs.findAll() %}<option id="dependant-option-{{loop.index}}" value="{{batch.id}}">{{batch.product.name}} | Stock: {{batch.quantity}} | Vto: {{ batch.expirationDate | date("d/m/y") }} | Cod: {{ batch.id }}</option>{% endfor %}')
+
+      $(`#dependantFormField${idx}`).html('<option value="" style="color:gray">Seleccionar producto</option>{% for product in allProducts.findAll() %}<option id="dependant-option-{{loop.index0}}" value="{{product.id}}">{{product.name}} | Stock: {{product.stock}}</option>{% endfor %}')
     } 
   }
-  {# function agregarSelector(idx){
+
+  function ChangeButton(idx) {
+    const inputDiv = document.querySelector(`#inputDiv-${idx}`);
+    inputDiv.innerHTML = `<select name="cantproductos[${idx}][muestramedica]"><option value="" style="color:gray">Seleccionar muestra</option>{% for medicalSample in medicalSamples.findByHealthCenter(1) %}<option id="dependant-option-{{loop.index0}}" value="{{medicalSample.id}}">{{medicalSample.product.name}} | Stock: {{medicalSample.stock}}</option>{% endfor %}</select><input type="number" name="cantproductos[${idx}][quantity]" class="p-1" style="width:60px;" min="0"><button type="button" onClick="setLotesBtn(${idx})">ver lotes</button>`
+  }
+
+  function setLotesBtn(idx) {
+    const inputDiv = document.querySelector(`#inputDiv-${idx}`);
+    inputDiv.innerHTML = `<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"> Seleccionar Lotes </button> <!-- Modal --> <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"> <div class="modal-dialog modal-dialog-centered"> <div class="modal-content"> <div class="modal-header"> <h5 class="modal-title" id="exampleModalLabel">Seleccionar Lotes</h5> <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> </div> <div class="modal-body"> <div class="d-flex align-items-center gap-2"> <select name="batchs[]"> <option value="" style="color:gray">Seleccionar Lote</option> {% for batch in allBatchs %} <option id="dependant-option-{{loop.index0}}" value="{{batch.id}}">{{batch.product.name[:25] }} | Stock: {{batch.quantity}} | Vto: {{ batch.expirationDate | date("d/m/y") }} | Cod: {{ batch.id }}</option> {# <input type="quantityBatch[]" type="number"> #} {% endfor %} </select> <input type="quantityBatch[]" type="number"> </div> </div> <div class="modal-footer"> <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> <button type="button" class="btn btn-primary">Save changes</button> </div> </div> </div> </div> <button class="d-inline p-1" style="outline:none; border: none; border-radius:3px; background-color: #333333; color: #cccccc; mix-blend-mode: difference" type="button" id="action-${idx}" onClick="ChangeButton(${idx})">Ver Muestras</button>`
+  }
+
+  function addSelectBatch(idx) {
+    const batchSelects = document.querySelector(`#batchsDiv-${idx}`);
+    const lastSelect = batchSelects.lastElementChild.id;
+    let lastId = lastSelect.slice(7)
+    lastId++;
+    batchSelects.innerHTML += `<div class="d-flex align-items-center gap-2" id="select-${lastId}"> <select name="cantproductos[${idx}][batchs][]" class="w-100"> <option value="" style="color:gray">Seleccionar Lote</option> {% for batch in allBatchs %} <option id="dependant-option-${lastId}" value="{{ batch.id }}"}>{{batch.product.name[:25] }} | {{batch.quantity}} | {{ batch.expirationDate | date("d/m/y") }} | {{ batch.id }}</option> {# <input type="quantityBatch[]" type="number"> #} {% endfor %} </select> <input name="cantproductos[${idx}][quantitys][]" type="number" class="batchsQuantitys-${idx} m-0 p-0" style="width:60px"><button type="button" class="btn btn-danger" onClick="deleteSelectBtn(${lastId})">delete</button></div>`
+  }
+
+  function setQuantity(idx) {
+    const quantityInput = document.querySelector(`#inputQuantity-${idx}`);
+    const batchQuantitys = document.querySelectorAll(`.batchsQuantitys-${idx}`);
+
+    console.log(batchQuantitys);
+    let quantity=0;
+    
+    batchQuantitys.forEach((element) => quantity+= +element.value);
+    quantityInput.innerHTML = `<input type="number" name="cantproductos[${idx}][totalQuantity][]" class="p-1" style="width:60px;" min="0" value="${quantity}">`
+  }
+
+  function agregarSelector(idx){
     $(`#row-${idx}`).addClass('text-body');
     $(`#contexto-${idx}`).removeClass('d-none');
     $(`#dependantFormField${idx}`).removeClass('d-none');
@@ -217,7 +300,7 @@
     $(`#action-${idx}`).removeClass('d-none');
     $(`#contexto-${idx}`).val('');
     $(`#dependantFormField${idx}`).val('');
-  } #}
+  }
     $('textarea').keyup(function() {    
     var characterCount = $(this).val().length,
         current_count = $('#current_count'),
@@ -225,5 +308,12 @@
         count = $('#count');    
         current_count.text(characterCount);        
     });
+
+    function deleteSelectBtn(idx){
+      const div = document.querySelector(`#select-${idx}`)
+      console.log(div);
+      console.log('CARLOS')
+      div.outerHTML = "";
+    }
   </script>
 {% endblock %}

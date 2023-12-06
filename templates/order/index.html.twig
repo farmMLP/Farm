@@ -12,24 +12,24 @@
             <p class="text-secondary mb-0 subtext-header">Detalle de pedidos pertenecientes al centro de salud: <span class="text-dark">{{app.user.healthCenter}}</a>.</p>
           </div>
           <div>
-          <a href="{{ path('app_order_new') }}" class="btn btn-primary p-1"><i class="fa-solid fa-plus"></i> Pedido</a>
+            <a href="{{ path('app_order_new') }}" class="btn btn-primary p-1"><i class="fa-solid fa-plus"></i> Pedido</a>
           </div>
         </div>
         <div class="table-responsive bg-white rounded-2 border overflow-hidden stylized-table">
+
           <table class="table table-hover mw-100">
             <thead>
               <tr class="custom-table-header">
                 <th scope="col">#</th>
-                <th class="">{{ knp_pagination_sortable(pagination, 'Creado', 'a.createdAt') }}</th>
+                <th class="sortable-item"><div class="d-flex">{{ knp_pagination_sortable(pagination, 'Creado', 'a.createdAt') }}</div></th>
                 <th scope="col" class="memo-cell">Memo</th>
                 <th scope="col">Usuario</th>
-                <th  class="">{{ knp_pagination_sortable(pagination, 'Estado', 'e.description') }}</th>
+                <th class="sortable-item"><div class="d-flex">{{ knp_pagination_sortable(pagination, 'Estado', 'e.description') }}</div></th>
                 <th scope="col">Ver orden</th>
               </tr>
             </thead>
-            <div id="notification"></div>
-            {% if pagination %}
-              <tbody id="table-body">
+            <tbody id="table-body">
+              {% if pagination.items != null %}
                 {% for order in pagination %} 
                   <tr class="table-body-text">
                     <td class="fw-light">{{ order.id }}</td>
@@ -45,22 +45,24 @@
                     </td>
                   </tr>
                 {% endfor %}
-              </tbody>
-              {% else %}
-                <p>No se encontró ningún pedido. Puede ser que no se haya realizado ninguno o que no hay pedidos que cumplan con el filtro.</p>
+              {# {% else %}
+                <tr class="table-body-text w-100">
+                  <p class="text-sm m-auto ">No se encontró ningún pedido. Puede ser que no se haya realizado ninguno o que no hay pedidos que cumplan con el filtro.</p>
+                </tr> #}
               {% endif %}
+            </tbody>
           </table>
         </div>
         <div class="d-flex justify-content-between mt-2">
-        <div class="d-flex flex-column text-secondary pb-0 footer-text">
-          <div class="d-flex align-items-center gap-2">
-            <i class="dot"></i>
-            <p class="mb-0">Ayuda:</p>
+          <div class="d-flex flex-column text-secondary pb-0 footer-text">
+            <div class="d-flex align-items-center gap-2">
+              <i class="dot"></i>
+              <p class="mb-0">Ayuda:</p>
+            </div>
+            <p class="mb-0 ms-3">- En caso de querer cancelar un pedido, contactar con la administradora y solicitar un pedido nuevo.</p>
+            <p class="mb-0 ms-3">- Por cuestiones de integridad de la información, no es posible editar los pedidos.</p>
           </div>
-          <p class="mb-0 ms-3">- En caso de querer cancelar un pedido, contactar con la administradora y solicitar un pedido nuevo.</p>
-          <p class="mb-0 ms-3">- Por cuestiones de integridad de la información, no es posible editar los pedidos.</p>
-        </div>
-        {{knp_pagination_render(pagination)}}
+          {{knp_pagination_render(pagination)}}
         </div> 
       </div>
     </div>

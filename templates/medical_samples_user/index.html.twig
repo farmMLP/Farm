@@ -29,13 +29,13 @@
             <tbody >
                {% for sample in pagination %} 
                 <tr class="table-body-text" id="row-{{loop.index}}">
-                  <td class="fw-light" id="sample-{{ loop.index }}" data-sample-id="{{sample.id}}">{{ sample.id}}</td>
-                  <td class="fw-light" id="stock-{{loop.index}}" data-stock={{sample.stock}}>{{ sample.stock }}</td>
-                  <td class="fw-light">{{ sample.createdAt | date("d/m/Y") }}</td>
-                  <td class="fw-light">{{ sample.modifiedAt ? sample.modifiedAt | date("d/m/Y") : 'No hubo modificación.' }}</td>
-                  <td class="fw-light">{{ sample.expirationDate | date("d/m/Y") }}</td>
-                  <td class="fw-light">{{ sample.product.name }}</td>
-                  <td class="d-flex justify-content-center gap-1" id="actions-{{loop.index}}">
+                  <td style="vertical-align: middle" class="fw-light" id="sample-{{ loop.index }}" data-sample-id="{{sample.id}}">{{ sample.id}}</td>
+                  <td style="vertical-align: middle" class="fw-light" id="stock-{{loop.index}}" data-stock={{sample.stock}}>{{ sample.stock }}</td>
+                  <td style="vertical-align: middle" class="fw-light">{{ sample.createdAt | date("d/m/Y") }}</td>
+                  <td style="vertical-align: middle" class="fw-light">{{ sample.modifiedAt ? sample.modifiedAt | date("d/m/Y") : 'No hubo modificación.' }}</td>
+                  <td style="vertical-align: middle" class="fw-light">{{ sample.expirationDate | date("d/m/Y") }}</td>
+                  <td style="vertical-align: middle" class="fw-light">{{ sample.product.name }}</td>
+                  <td style="vertical-align: middle" class="d-flex justify-content-center gap-1" id="actions-{{loop.index}}">
                     <button class="btn btn-secondary p-0 btn-sm px-1 editBtn" id="editBtn-{{loop.index}}" data-target="stock-{{loop.index}}" onClick="showEdit({{loop.index}})" style="font-size: .8rem">editar</button>
                     <button type="button" class="btn btn-danger p-0 btn-sm px-1" data-bs-toggle="modal" data-bs-target="#deleteModal-{{loop.index}}"><i class="fa fa-trash"></i></button>
                     <div class="modal fade" id="deleteModal-{{loop.index}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
