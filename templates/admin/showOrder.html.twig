@@ -185,7 +185,7 @@
                   </button>
 
                   <!-- Modal -->
-                  <div class="modal fade" id="modal-{{loop.index0}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal fade" id="modal-{{loop.index0}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                       <div class="modal-content">
                         <div class="modal-header">
@@ -197,7 +197,7 @@
                           <div class="d-flex align-items-center gap-2" id="select-{{loop.index0}}">
                             {# <select name="batchs-{{loop.index0}}[]" class="w-100"> #}
 
-                            <select name="cantproductos[{{loop.index0}}][batchs][]" class="w-100">
+                            <select required name="cantproductos[{{loop.index0}}][batchs][]" class="w-100">
 
                             <option value="" style="color:gray">Seleccionar Lote</option>
                             {% for batch in allBatchs %}
@@ -212,12 +212,12 @@
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" onClick="addSelectBatch({{loop.index0}})">Agregar</button>
                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                          <button type="button" class="btn btn-primary" onClick="setQuantity({{loop.index0}})">Confirmar</button>
+                          <button type="button" class="btn btn-primary" onClick="setQuantity({{loop.index0}})" data-bs-dismiss="modal" aria-label="Close">Confirmar</button>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <button class="d-inline p-1" style="outline:none; border: none; border-radius:3px; background-color: #333333; color: #cccccc; mix-blend-mode: difference"
+                  <button class="d-inline px-2 py-1 fw-light" style="outline:none; border: none; border-radius:3px; background-color: #202020; color: #cccccc; mix-blend-mode: difference"
                   type="button" id="action-{{loop.index0}}" onClick="ChangeButton({{loop.index0}})">Ver Muestras</button>
                   <div id="inputQuantity-{{loop.index0}}"></div>
                 </div>
@@ -227,12 +227,13 @@
       </tbody>
     </table>
     <div style="position: relative;">
-    <textarea type="text" placeholder="Agregar memo (notificar cambios de productos, aclaraciones)" name="memo" id="textarea" maxlength="250" class="d-block w-100 my-3 p-2 rounded-2"></textarea>
+      <textarea type="text" placeholder="Agregar memo (notificar cambios de productos, aclaraciones)" name="memo" id="textarea" maxlength="250" class="d-block w-100 my-3 p-2 rounded-2"></textarea>
       <div id="count" class="position-absolute" style="top: 1%; right: 1%;">
         <span id="current_count">0</span>
         <span id="maximum_count">/ 250</span>
       </div>
     </div>
+    <p class="fw-normal py-1 px-2 border rounded-2 border-secondary">Para autorizar el pedido, se debe completar el formulario. &#40;En caso de no querer enviar algo, enviar cantidad 0 y especificar en memo.&#41;</p>
     <button class="btn btn-info" value="Autorizar" name="action">Autorizar</button>
     <button class="btn btn-danger" value="Rechazar" name="action">Rechazar</button>
     <a href="{{ path('pedidos_pdf', {'id': order.id}) }}" class="text-white btn btn-success"><i class="fa-solid fa-arrow-down"></i> PDF</a>
@@ -255,12 +256,12 @@
 
   function ChangeButton(idx) {
     const inputDiv = document.querySelector(`#inputDiv-${idx}`);
-    inputDiv.innerHTML = `<select name="cantproductos[${idx}][muestramedica]"><option value="" style="color:gray">Seleccionar muestra</option>{% for medicalSample in medicalSamples.findByHealthCenter(1) %}<option id="dependant-option-{{loop.index0}}" value="{{medicalSample.id}}">{{medicalSample.product.name}} | Stock: {{medicalSample.stock}}</option>{% endfor %}</select><input type="number" name="cantproductos[${idx}][quantity]" class="p-1" style="width:60px;" min="0"><button type="button" onClick="setLotesBtn(${idx})">ver lotes</button>`
+    inputDiv.innerHTML = `<select required name="cantproductos[${idx}][muestramedica]"><option value="" style="color:gray">Seleccionar muestra</option>{% for medicalSample in medicalSamples.findByHealthCenter(1) %}<option id="dependant-option-{{loop.index0}}" value="{{medicalSample.id}}">{{medicalSample.product.name}} | Stock: {{medicalSample.stock}}</option>{% endfor %}</select><input type="number" name="cantproductos[${idx}][quantity]" class="p-1" style="width:60px;" min="0"><button type="button" class="p-1 fw-light" style="outline:none; border: none; border-radius:3px; background-color: #333333; color: #cccccc; mix-blend-mode: difference" onClick="setLotesBtn(${idx})">Ver lotes</button>`
   }
 
   function setLotesBtn(idx) {
     const inputDiv = document.querySelector(`#inputDiv-${idx}`);
-    inputDiv.innerHTML = `<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"> Seleccionar Lotes </button> <!-- Modal --> <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"> <div class="modal-dialog modal-dialog-centered"> <div class="modal-content"> <div class="modal-header"> <h5 class="modal-title" id="exampleModalLabel">Seleccionar Lotes</h5> <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> </div> <div class="modal-body"> <div class="d-flex align-items-center gap-2"> <select name="batchs[]"> <option value="" style="color:gray">Seleccionar Lote</option> {% for batch in allBatchs %} <option id="dependant-option-{{loop.index0}}" value="{{batch.id}}">{{batch.product.name[:25] }} | Stock: {{batch.quantity}} | Vto: {{ batch.expirationDate | date("d/m/y") }} | Cod: {{ batch.id }}</option> {# <input type="quantityBatch[]" type="number"> #} {% endfor %} </select> <input type="quantityBatch[]" type="number"> </div> </div> <div class="modal-footer"> <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> <button type="button" class="btn btn-primary">Save changes</button> </div> </div> </div> </div> <button class="d-inline p-1" style="outline:none; border: none; border-radius:3px; background-color: #333333; color: #cccccc; mix-blend-mode: difference" type="button" id="action-${idx}" onClick="ChangeButton(${idx})">Ver Muestras</button>`
+    inputDiv.innerHTML = `<div id="inputDiv-${idx}" class="d-flex gap-1"> <button type="button" class="btn btn-primary shadow-none" data-bs-toggle="modal" data-bs-target="#modal-${idx}"> Seleccionar Lotes </button> <!-- Modal --> <div class="modal fade" id="modal-${idx}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"> <div class="modal-dialog modal-dialog-centered"> <div class="modal-content"> <div class="modal-header"> <h5 class="modal-title" id="exampleModalLabel">Seleccionar Lotes</h5> <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> </div> <p class="d-flex w-100 m-0 fw-semibold pt-1" style="padding-left: 20px; padding-right: 20px">Nombre | Stock | Vencimiento | Lote </p> <div class="modal-body w-100" id="batchsDiv-${idx}"> <div class="d-flex align-items-center gap-2" id="select-${idx}"><select required name="cantproductos[${idx}][batchs][]" class="w-100"> <option value="" style="color:gray">Seleccionar Lote</option> {% for batch in allBatchs %} <option id="dependant-option-{{loop.index0}}" value="{{batch.id}}">{{batch.product.name[:25] }} | {{batch.quantity}} | {{ batch.expirationDate | date("d/m/y") }} | {{ batch.id }}</option> {# <input type="quantityBatch[]" type="number"> #} {% endfor %} </select> <input name="cantproductos[${idx}][quantitys][]" type="number" class="batchsQuantitys-${idx} m-0 p-0" style="width:60px"> <button type="button" class="btn btn-danger" onClick="deleteSelectBtn(${idx})">delete</button> </div> </div> <div class="modal-footer"> <button type="button" class="btn btn-secondary" onClick="addSelectBatch(${idx})">Agregar</button> <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button> <button type="button" class="btn btn-primary" onClick="setQuantity(${idx})">Confirmar</button> </div> </div> </div> </div> <button class="d-inline py-1 fw-light px-2" style="outline:none; border: none; border-radius:3px; background-color: #202020; color: #cccccc; mix-blend-mode: difference" type="button" id="action-${idx}" onClick="ChangeButton(${idx})">Ver Muestras</button> <div id="inputQuantity-${idx}"></div> </div>`
   }
 
   function addSelectBatch(idx) {
@@ -279,7 +280,7 @@
     let quantity=0;
     
     batchQuantitys.forEach((element) => quantity+= +element.value);
-    quantityInput.innerHTML = `<input type="number" name="cantproductos[${idx}][totalQuantity][]" class="p-1" style="width:60px;" min="0" value="${quantity}">`
+    quantityInput.innerHTML = `<input readonly type="number" name="cantproductos[${idx}][totalQuantity][]" class="p-1" style="width:60px;" min="0" value="${quantity}">`
   }
 
   function agregarSelector(idx){
